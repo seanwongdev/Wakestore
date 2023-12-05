@@ -1,6 +1,7 @@
 import Layout from "@/components/layout";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { ReactNode } from "react";
 
 type ComponentWithPageLayout = AppProps & {
   Component: AppProps["Component"] & {
@@ -21,6 +22,4 @@ export default function App({ Component, pageProps }: ComponentWithPageLayout) {
   );
 }
 
-const EmptyLayout = ({ children }: { children: React.ReactNode }) => (
-  <>{children}</>
-);
+const EmptyLayout = ({ children }: { children: ReactNode }) => <>{children}</>;
