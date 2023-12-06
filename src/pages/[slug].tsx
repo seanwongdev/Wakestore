@@ -2,5 +2,7 @@ import { useRouter } from "next/router";
 
 export default function Product() {
   const router = useRouter();
-  return <p>Product: {router.query.slug}</p>;
+  return (
+    <div className="h-screen text-center">Product: {router.query.slug}</div>
+  );
 }
