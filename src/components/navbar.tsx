@@ -12,7 +12,7 @@ const Navbar = () => {
     const fetchHeaderData = async () => {
       const res = await fetch("/api/collection");
       const { collection } = await res.json();
-      console.log(collection);
+
       setData(collection);
     };
     fetchHeaderData();

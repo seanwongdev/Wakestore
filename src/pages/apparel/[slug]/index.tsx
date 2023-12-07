@@ -1,6 +1,6 @@
 import CollectionLayout from "@/components/collectionLayout";
 import pool from "@/database/db";
-import { GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
 interface Product {
@@ -11,7 +11,7 @@ interface Product {
   price: string;
 }
 
-const Wakeboards = ({ products }: { products: Product[] }) => {
+const ApparelCategory = ({ products }: { products: Product[] }) => {
   return (
     <div className="flex justify-evenly flex-wrap">
       {products.map((product) => {
@@ -28,10 +28,15 @@ const Wakeboards = ({ products }: { products: Product[] }) => {
   );
 };
 
-export const getStaticProps = (async () => {
+export const getStaticProps = (async (context) => {
+  const category = "/" + context.params?.slug;
   const client = await pool.connect();
-  const result = await client.query<Product>("SELECT * FROM product_items");
+  const result = await client.query<Product>(
+    "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1",
+    [category]
+  );
   client.release();
+
   return {
     props: {
       products: result.rows.map((product) => ({
@@ -46,5 +51,22 @@ export const getStaticProps = (async () => {
   };
 }) satisfies GetStaticProps;
 
-Wakeboards.PageLayout = CollectionLayout;
-export default Wakeboards;
+export const getStaticPaths = (async () => {
+  const client = await pool.connect();
+  const result = await client.query(
+    "SELECT category_url FROM product_category WHERE product_collection_id = 2"
+  );
+  client.release();
+
+  return {
+    paths: result.rows.map((category) => ({
+      params: {
+        slug: category.category_url.slice(1),
+      },
+    })),
+    fallback: false,
+  };
+}) satisfies GetStaticPaths;
+
+ApparelCategory.PageLayout = CollectionLayout;
+export default ApparelCategory;

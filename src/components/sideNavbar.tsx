@@ -10,19 +10,7 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
     <div className="flex flex-col">
       {data.map((row) => (
         <Link
-          href={
-            "/" +
-            row.collection_name
-              .toLowerCase()
-              .replace(/ /g, "-")
-              .replace(/'/g, "") +
-            "/" +
-            row.category_name
-              .toLowerCase()
-              .replace(/[^\w\s]/g, "")
-              .replace(/ /g, "-")
-              .replace(/'/g, "")
-          }
+          href={row.collection_url + row.category_url}
           key={row.category_id}
           className=""
         >
