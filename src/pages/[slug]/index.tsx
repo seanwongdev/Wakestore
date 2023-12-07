@@ -1,9 +1,5 @@
 import { useRouter } from "next/router";
-import type {
-  InferGetStaticPropsType,
-  GetStaticProps,
-  GetStaticPaths,
-} from "next";
+import type { GetStaticProps, GetStaticPaths } from "next";
 import pool from "@/database/db";
 
 interface Product {
@@ -14,25 +10,27 @@ interface Product {
   price: string;
 }
 
-export default function Product() {
-  const router = useRouter();
+export default function Product(props: Product) {
+  const { name, description, quantity, price } = props;
   return (
-    <div className="h-screen text-center">Product: {router.query.slug}</div>
+    <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
+      <div></div>
+      <div>{name}</div>
+    </div>
   );
 }
 
 export const getStaticProps = (async (context) => {
-  const slug = context.params?.slug;
+  const slug = "/" + context.params?.slug;
+
   const client = await pool.connect();
-  const result = await client.query<Product>(
-    "SELECT * FROM product_items WHERE url = ?",
+  const result = await client.query(
+    "SELECT name, description, quantity, price FROM product_items WHERE url = $1",
     [slug]
   );
-  console.log(result.rows);
+  console.log(result.rows[0]);
   return {
-    props: {
-      product: result.rows,
-    },
+    props: result.rows[0],
     revalidate: 3600,
   };
 }) satisfies GetStaticProps;
