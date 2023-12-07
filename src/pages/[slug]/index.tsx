@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import type { GetStaticProps, GetStaticPaths } from "next";
 import pool from "@/database/db";
+import Button from "@/components/Button";
 
 interface Product {
   name: string;
@@ -15,7 +16,17 @@ export default function Product(props: Product) {
   return (
     <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
       <div></div>
-      <div>{name}</div>
+      <div className="flex flex-col gap-5">
+        <div>{name}</div>
+        <div>{description}</div>
+        <div>{price}</div>
+        <div>
+          <Button type="primary">BUY NOW</Button>
+        </div>
+        <div>
+          <Button type="secondary">ADD TO CART</Button>
+        </div>
+      </div>
     </div>
   );
 }
