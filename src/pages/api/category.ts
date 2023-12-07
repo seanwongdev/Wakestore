@@ -7,8 +7,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const client = await pool.connect();
-  const result = await client.query("SELECT * FROM product_items");
-  const products = result.rows;
+  const result = await client.query(
+    "SELECT * FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id"
+  );
+  const category = result.rows;
   client.release();
-  res.status(200).json({ products });
+
+  res.status(200).json({ category });
 }

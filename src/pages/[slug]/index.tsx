@@ -28,7 +28,7 @@ export const getStaticProps = (async (context) => {
     "SELECT name, description, quantity, price FROM product_items WHERE url = $1",
     [slug]
   );
-  console.log(result.rows[0]);
+  client.release();
   return {
     props: result.rows[0],
     revalidate: 3600,
@@ -38,7 +38,7 @@ export const getStaticProps = (async (context) => {
 export const getStaticPaths = (async () => {
   const client = await pool.connect();
   const result = await client.query("SELECT url FROM product_items");
-
+  client.release();
   return {
     paths: result.rows.map((product) => ({
       params: {

@@ -31,7 +31,7 @@ const Wakeboards = ({ products }: { products: Product[] }) => {
 export const getStaticProps = (async () => {
   const client = await pool.connect();
   const result = await client.query<Product>("SELECT * FROM product_items");
-  console.log(result.rows);
+  client.release();
   return {
     props: {
       products: result.rows.map((product) => ({
