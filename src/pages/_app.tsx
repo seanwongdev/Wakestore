@@ -1,9 +1,9 @@
-import Layout from "@/components/layout";
-import pool from "@/database/db";
-import "@/styles/globals.css";
-import { GetStaticProps } from "next";
 import type { AppProps } from "next/app";
 import { ReactNode } from "react";
+import { SessionProvider } from "next-auth/react";
+
+import Layout from "@/components/layout/layout";
+import "@/styles/globals.css";
 
 type ComponentWithPageLayout = AppProps & {
   Component: AppProps["Component"] & {
@@ -15,15 +15,20 @@ type Category = {
   name: string;
 };
 
-export default function App({ Component, pageProps }: ComponentWithPageLayout) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: ComponentWithPageLayout) {
   const NestedLayout = Component.PageLayout || EmptyLayout;
   return (
     <>
-      <Layout>
-        <NestedLayout>
-          <Component {...pageProps} />
-        </NestedLayout>
-      </Layout>
+      <SessionProvider session={session}>
+        <Layout>
+          <NestedLayout>
+            <Component {...pageProps} />
+          </NestedLayout>
+        </Layout>
+      </SessionProvider>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Category } from "./collectionLayout";
+import { Category } from "./layout/collectionLayout";
 
 interface SideNavbarProps {
   data: Category[];

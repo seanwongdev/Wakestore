@@ -1,4 +1,4 @@
-import CollectionLayout from "@/components/collectionLayout";
+import CollectionLayout from "@/components/layout/collectionLayout";
 import pool from "@/database/db";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
