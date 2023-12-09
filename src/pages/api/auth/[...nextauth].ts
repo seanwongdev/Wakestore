@@ -1,6 +1,5 @@
-import PostgresAdapter from "@auth/pg-adapter";
 import NextAuth from "next-auth/next";
-import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import pool from "../../../database/db";
 
 export const authOptions = {
