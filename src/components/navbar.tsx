@@ -1,13 +1,20 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
+import Button from "./Button";
 
 interface Collection {
   collection_id: number;
   collection_name: string;
 }
 
-const Navbar = () => {
+export interface NavbarProps {
+  onSignup?: () => void;
+  onSignin?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
   const [data, setData] = useState<Collection[]>([]);
+
   useEffect(() => {
     const fetchHeaderData = async () => {
       const res = await fetch("/api/collection");
@@ -31,7 +38,14 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
-      <div>Sign in</div>
+      <div className="space-x-10">
+        <Button type="primary" onClick={onSignin}>
+          Sign in
+        </Button>
+        <Button type="secondary" onClick={onSignup}>
+          Sign up
+        </Button>
+      </div>
     </div>
   );
 };
