@@ -19,10 +19,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setShowSignin((state) => !state);
     document.body.classList.toggle("overflow-hidden", !showSignin);
   };
+  const handleSwapToSignup = () => {
+    setShowSignup((state) => !state);
+    setShowSignin((state) => !state);
+    document.body.classList.toggle("overflow-hidden", !showSignup);
+  };
+  const handleSwapToSignin = () => {
+    setShowSignup((state) => !state);
+    setShowSignin((state) => !state);
+    document.body.classList.toggle("overflow-hidden", !showSignin);
+  };
   return (
     <div>
-      {showSignup && <SignUp onSignup={handleSignup} />}
-      {showSignin && <Signin onSignin={handleSignin} />}
+      {showSignup && (
+        <SignUp onSignup={handleSignup} onSwap={handleSwapToSignin} />
+      )}
+      {showSignin && (
+        <Signin onSignin={handleSignin} onSwap={handleSwapToSignup} />
+      )}
       <Navbar onSignup={handleSignup} onSignin={handleSignin} />
       {children}
       <Footer />

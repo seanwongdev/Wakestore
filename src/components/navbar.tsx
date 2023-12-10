@@ -8,8 +8,8 @@ interface Collection {
 }
 
 export interface NavbarProps {
-  onSignup?: () => void;
-  onSignin?: () => void;
+  onSignup: () => void;
+  onSignin: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
