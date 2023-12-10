@@ -4,6 +4,7 @@ import pool from "../../../database/db";
 import bcrypt from "bcryptjs";
 
 interface User {
+  username: string;
   email: string;
   password: string;
 }
@@ -26,7 +27,6 @@ export const authOptions = {
         const isPasswordMatched = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatched) throw new Error("Invalid Email or Password");
-
         return user;
       },
     }),

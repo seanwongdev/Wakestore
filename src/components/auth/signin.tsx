@@ -11,10 +11,11 @@ interface Signin {
 const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const data = signIn("credentials", {
+    const data = await signIn("credentials", {
       redirect: false,
+
       email,
       password,
     });
@@ -46,6 +47,8 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-md  bg-gray-200 px-4 py-3 text-sm transition-all duration-300"
               ></input>
+
+              <button type="submit"> Sign in</button>
             </div>
           </div>
         </form>

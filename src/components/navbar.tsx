@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState, useEffect, MouseEventHandler } from "react";
 import Button from "./Button";
+import { signOut, useSession } from "next-auth/react";
 
 interface Collection {
   collection_id: number;
@@ -14,6 +15,7 @@ export interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
   const [data, setData] = useState<Collection[]>([]);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -38,14 +40,23 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
           </Link>
         ))}
       </div>
-      <div className="space-x-10">
-        <Button type="primary" onClick={onSignin}>
-          Sign in
-        </Button>
-        <Button type="secondary" onClick={onSignup}>
-          Sign up
-        </Button>
-      </div>
+      {status === "authenticated" ? (
+        <div className="space-x-10">
+          <span>{console.log(session)}</span>
+          <Button type="primary" onClick={() => signOut()}>
+            Log out
+          </Button>
+        </div>
+      ) : (
+        <div className="space-x-10">
+          <Button type="primary" onClick={onSignin}>
+            Sign in
+          </Button>
+          <Button type="secondary" onClick={onSignup}>
+            Sign up
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
