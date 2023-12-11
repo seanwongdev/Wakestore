@@ -9,7 +9,14 @@ export default async function handler(
   const { username, email, password, passwordConfirm } = req.body;
   const created_on = new Date().toLocaleDateString("en-CA");
   const modified_at = new Date().toLocaleDateString("en-CA");
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   try {
+    if (username.length < 3)
+      throw new Error("Your username needs to be min 3 characters");
+
+    if (!emailRegex.test(email))
+      throw new Error("Your email does not appear to be valid");
+
     if (passwordConfirm !== password)
       throw new Error("Your passwords do not match!");
 
