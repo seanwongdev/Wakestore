@@ -2,6 +2,8 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Signin {
   onSignin: () => void;
@@ -15,10 +17,10 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
     e.preventDefault();
     const data = await signIn("credentials", {
       redirect: false,
-
       email,
       password,
     });
+    toast.error(data?.error);
   };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 transition-opacity opacity-100 ">

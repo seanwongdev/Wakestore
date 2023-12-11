@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import GlobalProvider from "@/GlobalProvider";
 
 import Layout from "@/components/layout/layout";
 import "@/styles/globals.css";
@@ -22,13 +23,15 @@ export default function App({
   const NestedLayout = Component.PageLayout || EmptyLayout;
   return (
     <>
-      <SessionProvider session={session}>
-        <Layout>
-          <NestedLayout>
-            <Component {...pageProps} />
-          </NestedLayout>
-        </Layout>
-      </SessionProvider>
+      <GlobalProvider>
+        <SessionProvider session={session}>
+          <Layout>
+            <NestedLayout>
+              <Component {...pageProps} />
+            </NestedLayout>
+          </Layout>
+        </SessionProvider>
+      </GlobalProvider>
     </>
   );
 }

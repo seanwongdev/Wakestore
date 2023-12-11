@@ -42,7 +42,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
       </div>
       {status === "authenticated" ? (
         <div className="space-x-10">
-          <span>{console.log(session)}</span>
+          <span>
+            {session.user.username &&
+              session.user.username[0].toUpperCase() +
+                session.user.username?.slice(1)}
+          </span>
           <Button type="primary" onClick={() => signOut()}>
             Log out
           </Button>
