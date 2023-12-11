@@ -8,8 +8,8 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
   const styles = {
-    primary: "",
-    secondary: "",
+    primary: "font-semibold",
+    secondary: "font-semibold",
   };
 
   return (
