@@ -12,5 +12,6 @@ export default async function handler(
   );
   const products = result.rows;
   client.release();
+
   res.status(200).json({ products });
 }

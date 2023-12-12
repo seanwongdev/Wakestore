@@ -3,7 +3,7 @@ import pool from "@/database/db";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
-interface Product {
+export interface Product {
   name: string;
   url: string;
   description: string;

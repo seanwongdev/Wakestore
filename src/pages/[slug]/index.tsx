@@ -2,8 +2,10 @@ import { useRouter } from "next/router";
 import type { GetStaticProps, GetStaticPaths } from "next";
 import pool from "@/database/db";
 import Button from "@/components/Button";
+import { useCart } from "@/context/CartContext";
 
-interface Product {
+export interface Product {
+  id: number;
   name: string;
   url: string;
   description: string;
@@ -12,7 +14,9 @@ interface Product {
 }
 
 export default function Product(props: Product) {
-  const { name, description, quantity, price } = props;
+  const { increaseCartQuantity } = useCart();
+  const { id, name, description, quantity, price } = props;
+  console.log(id);
   return (
     <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
       <div></div>
@@ -24,7 +28,9 @@ export default function Product(props: Product) {
           <Button type="primary">BUY NOW</Button>
         </div>
         <div>
-          <Button type="secondary">ADD TO CART</Button>
+          <Button onClick={() => increaseCartQuantity(id)} type="secondary">
+            ADD TO CART
+          </Button>
         </div>
       </div>
     </div>
@@ -36,7 +42,7 @@ export const getStaticProps = (async (context) => {
 
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT name, description, quantity, price FROM product_items WHERE url = $1",
+    "SELECT id, name, description, quantity, price FROM product_items WHERE url = $1",
     [slug]
   );
   client.release();

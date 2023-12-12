@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  ChangeEvent,
+  createContext,
+  FormEvent,
+  ReactNode,
+  useContext,
+  useState,
+} from "react";
 import ShoppingCart from "@/components/cart/shoppingCart";
 
 interface CartProviderProps {
@@ -10,6 +17,7 @@ export interface CartContext {
   increaseCartQuantity: (id: number) => void;
   decreaseCartQuantity: (id: number) => void;
   removeFromCart: (id: number) => void;
+  changeCartQuantity: (id: number, value: string) => void;
   toggleCart: () => void;
   cartQuantity: number;
   cartItems: CartItem[];
@@ -56,6 +64,17 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
+  const changeCartQuantity = (id: number, value: string) => {
+    const newQuantity = parseInt(value, 10);
+    if (!isNaN(newQuantity) && newQuantity > 0) {
+      setCartItems((currItems) => {
+        return currItems.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        );
+      });
+    }
+  };
+
   const decreaseCartQuantity = (id: number) => {
     setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id)?.quantity === 1) {
@@ -87,6 +106,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         decreaseCartQuantity,
         removeFromCart,
         isOpen,
+        changeCartQuantity,
       }}
     >
       <ShoppingCart />
