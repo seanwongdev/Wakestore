@@ -4,6 +4,7 @@ import {
   FormEvent,
   ReactNode,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import ShoppingCart from "@/components/cart/shoppingCart";
@@ -19,7 +20,7 @@ export interface CartContext {
   removeFromCart: (id: number) => void;
   changeCartQuantity: (id: number, value: string) => void;
   toggleCart: () => void;
-  cartQuantity: number;
+
   cartItems: CartItem[];
   isOpen: boolean;
 }
@@ -32,6 +33,16 @@ interface CartItem {
 const CartContext = createContext({} as CartContext);
 
 export const CartProvider = ({ children }: CartProviderProps) => {
+  const setCartToState = () => {
+    const { cart } = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart")!)
+      : [];
+    setCartItems(cart);
+  };
+
+  useEffect(() => {
+    setCartToState();
+  }, []);
   const [isOpen, setIsOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
@@ -40,66 +51,67 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     document.body.classList.toggle("overflow-hidden", !isOpen);
   };
 
-  const cartQuantity = cartItems.reduce((acc, cur) => {
-    return acc + cur.quantity;
-  }, 0);
-
   const getItemQuantity = (id: number) => {
     return cartItems.find((item) => item.id === id)?.quantity || 0;
   };
 
   const increaseCartQuantity = (id: number) => {
-    setCartItems((currItems) => {
-      if (!currItems.find((item) => item.id === id)) {
-        return [...currItems, { id, quantity: 1 }];
-      } else {
-        return currItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
+    if (!cartItems.find((item) => item.id === id)) {
+      const newCartItems = [...cartItems, { id, quantity: 1 }];
+      localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+      setCartToState();
+    } else {
+      const newCartItems = cartItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantity: item.quantity + 1 };
+        } else {
+          return item;
+        }
+      });
+      localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+      setCartToState();
+    }
   };
 
   const changeCartQuantity = (id: number, value: string) => {
     const newQuantity = parseInt(value, 10);
     if (!isNaN(newQuantity) && newQuantity > 0) {
-      setCartItems((currItems) => {
-        return currItems.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        );
-      });
+      const newCartItems = cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      );
+      localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+      setCartToState();
     }
   };
 
   const decreaseCartQuantity = (id: number) => {
-    setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === id)?.quantity === 1) {
-        return currItems.filter((item) => item.id !== id);
-      } else {
-        return currItems.map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
+    if (cartItems.find((item) => item.id === id)?.quantity === 1) {
+      const newCartItems = cartItems.filter((item) => item.id !== id);
+      localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+      setCartToState();
+    } else {
+      const newCartItems = cartItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantity: item.quantity - 1 };
+        } else {
+          return item;
+        }
+      });
+      localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+      setCartToState();
+    }
   };
 
   const removeFromCart = (id: number) => {
-    setCartItems((currItems) => currItems.filter((item) => item.id !== id));
+    const newCartItems = cartItems.filter((item) => item.id !== id);
+    localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
+    setCartToState();
   };
 
   return (
     <CartContext.Provider
       value={{
         toggleCart,
-        cartQuantity,
         cartItems,
         getItemQuantity,
         increaseCartQuantity,

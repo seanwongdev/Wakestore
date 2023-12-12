@@ -74,9 +74,9 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
           onClick={toggleCart}
           className="cursor-pointer text-2xl"
         />
-        {cartItems.length > 0 && (
+        {cartItems?.length > 0 && (
           <button className="absolute bottom-[-6px] right-[-16px] rounded-full bg-white h-[18px] w-[18px] text-black font-bold text-xs flex items-center justify-center">
-            {cartItems.length}
+            {cartItems?.length}
           </button>
         )}
       </div>

@@ -39,7 +39,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
       <div className="flex flex-col gap-2 flex-grow ">
         <span>{item?.name}</span>
         <span className="font-bold">
-          {quantity > 1 ? `${quantity} x` : ""} {formatCurrency(item?.price)}
+          {quantity > 1 ? `${quantity} x` : ""} ${item?.price}
         </span>
         <span className="font-semibold relative">
           Quantity: <button></button>

@@ -21,11 +21,11 @@ const ShoppingCart = () => {
     fetchProductData();
   }, []);
 
-  const totalCost = cartItems.reduce(
-    (acc, cur) =>
-      acc + cur.quantity * data.find((item) => item.id === cur.id)?.price,
-    0
-  );
+  // const totalCost = cartItems.reduce(
+  //   (acc, cur) =>
+  //     acc + cur.quantity * data.find((item) => item.id === cur.id)?.price,
+  //   0
+  // );
 
   console.log(cartItems);
   return (
@@ -51,10 +51,10 @@ const ShoppingCart = () => {
             Your Cart
           </span>
           <div className="mt-4 text-gray-500 font-semibold">
-            {cartItems.length} items
+            {cartItems?.length} items
           </div>
 
-          {cartItems.length > 0 ? (
+          {cartItems?.length > 0 ? (
             <>
               <div className="  ">
                 {cartItems.map((item) => (
@@ -68,11 +68,11 @@ const ShoppingCart = () => {
               <div className="flex flex-col gap-2 mt-8">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span>{formatCurrency(totalCost)}</span>
+                  {/* <span>{formatCurrency(totalCost)}</span> */}
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">Grand Total: </span>
-                  <span className="font-bold">{formatCurrency(totalCost)}</span>
+                  {/* <span className="font-bold">{formatCurrency(totalCost)}</span> */}
                 </div>
                 <Button type="primary" onClick={() => {}}>
                   CHECKOUT
