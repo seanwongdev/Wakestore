@@ -35,6 +35,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
     setHeader(name);
   };
 
+  const handleDropdownExit = () => {
+    setHeader("");
+  };
+
   useEffect(() => {
     const fetchHeaderData = async () => {
       const res = await fetch("/api/collection");
@@ -63,6 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
           <NavbarHover
             collection={header}
             onMouseEnter={() => handleDropdownEnter(header)}
+            onMouseExit={handleDropdownExit}
           />
         )}{" "}
       </div>

@@ -11,6 +11,7 @@ export interface Category {
   collection_name: string;
   category_url: string;
   collection_url: string;
+  collection_id: number;
 }
 
 const CollectionLayout: React.FC<LayoutProps> = ({ children }) => {
