@@ -33,7 +33,7 @@ export const getStaticProps = (async (context) => {
   const category = "/" + context.params?.slug;
   const client = await pool.connect();
   const result = await client.query<Product>(
-    "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1",
+    "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1 AND is_deleted = false",
     [category]
   );
   client.release();

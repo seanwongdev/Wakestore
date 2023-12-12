@@ -42,7 +42,7 @@ export const getStaticProps = (async (context) => {
 
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT id, name, description, quantity, price FROM product_items WHERE url = $1",
+    "SELECT id, name, description, quantity, price FROM product_items WHERE url = $1 AND is_deleted = false",
     [slug]
   );
   client.release();
