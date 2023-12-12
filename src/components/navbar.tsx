@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { useCart } from "@/context/CartContext";
+import NavbarHover from "./navbarHover";
 
 interface Collection {
   collection_id: number;
@@ -17,9 +18,22 @@ export interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
+  const [header, setHeader] = useState("");
   const { toggleCart, cartItems } = useCart();
   const [data, setData] = useState<Collection[]>([]);
   const { data: session, status } = useSession();
+
+  const handleMouseEnter = (name: string) => {
+    setHeader(name);
+  };
+
+  const handleMouseExit = () => {
+    setHeader("");
+  };
+
+  const handleDropdownEnter = (name: string) => {
+    setHeader(name);
+  };
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -33,17 +47,24 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
   return (
     <div className="flex justify-between w-full px-20 py-12 bg-gray-800 text-white">
       <span>Logo</span>
-      <div className="flex justify-evenly items-center gap-14 ">
+      <div className="flex justify-evenly items-center gap-14 relative">
         {data.map((row) => (
           <Link
             href={row.collection_name.toLowerCase().replace(/ /g, "-")}
             key={row.collection_id}
             className="font-semibold"
+            onMouseEnter={() => handleMouseEnter(row.collection_name)}
+            onMouseLeave={handleMouseExit}
           >
-            {" "}
             {row.collection_name}
           </Link>
         ))}
+        {header && (
+          <NavbarHover
+            collection={header}
+            onMouseEnter={() => handleDropdownEnter(header)}
+          />
+        )}{" "}
       </div>
 
       <div className="flex items-center space-x-10 relative">
