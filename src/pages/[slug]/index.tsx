@@ -10,7 +10,7 @@ export interface Product {
   url: string;
   description: string;
   quantity: number;
-  price: string;
+  price: number;
 }
 
 export default function Product(props: Product) {
