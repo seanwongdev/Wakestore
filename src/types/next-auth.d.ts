@@ -20,6 +20,7 @@ declare module "next-auth" {
     email?: string;
     password?: string;
     role?: string;
+    img_url?: string;
   }
 
   interface LayoutProps {

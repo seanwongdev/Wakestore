@@ -12,9 +12,9 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   return (
     <>
       <ToastContainer position="bottom-right" />
-      <AuthProvider>
-        <CartProvider>{children}</CartProvider>
-      </AuthProvider>
+      {/* <AuthProvider> */}
+      <CartProvider>{children}</CartProvider>
+      {/* </AuthProvider> */}
     </>
   );
 };

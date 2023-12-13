@@ -3,12 +3,13 @@ import { LayoutProps } from "next-auth";
 import SideProfileNavBar from "../SideProfileBar";
 
 const ProfileLayout: React.FC<LayoutProps> = ({ children }) => {
+  const [user, setUser] = useState("");
   return (
-    <div className="md:grid md:grid-cols-[auto,1fr] gap-5 h-screen">
-      <div>
+    <div className="flex  h-screen w-[91vw] mx-auto mt-10">
+      <div className="w-[280px]">
         <SideProfileNavBar />
       </div>
-      <div>{children}</div>
+      <div className="flex-grow">{children}</div>
     </div>
   );
 };

@@ -1,20 +1,20 @@
-import {
-  ChangeEvent,
-  createContext,
-  FormEvent,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { LayoutProps } from "next-auth";
+// import {
+//   ChangeEvent,
+//   createContext,
+//   FormEvent,
+//   ReactNode,
+//   useContext,
+//   useEffect,
+//   useState,
+// } from "react";
+// import { LayoutProps } from "next-auth";
 
-export interface AuthContext {}
+// export interface AuthContext {}
 
-const AuthContext = createContext({} as AuthContext);
+// const AuthContext = createContext({} as AuthContext);
 
-export const AuthProvider = ({ children }: LayoutProps) => {
-  return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
-};
+// export const AuthProvider = ({ children }: LayoutProps) => {
+//   return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
+// };
 
-export const useAuth = () => useContext(AuthContext);
+// export const useAuth = () => useContext(AuthContext);

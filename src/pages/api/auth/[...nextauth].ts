@@ -24,6 +24,7 @@ export const authOptions = {
       session.user.username = userData.username;
       session.user.email = userData.email;
       session.user.role = userData.role;
+      session.user.image = userData.img_url;
 
       return Promise.resolve(session);
     },
