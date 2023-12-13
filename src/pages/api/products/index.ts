@@ -17,15 +17,26 @@ export default async function handler(
     res.status(200).json({ products });
   }
   if (req.method === "POST") {
-    const {} = req.body;
+    const createdOn = new Date().toLocaleDateString("en-CA");
+    const modifiedAt = new Date().toLocaleDateString("en-CA");
+    const { product } = req.body;
     const client = await pool.connect();
     const result = await client.query(
       "INSERT INTO product_items(name, description, quantity, price, product_category_id, url, created_on, modified_at)  VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
-      []
+      [
+        product.name,
+        product.description,
+        product.quantity,
+        product.price,
+        product.product_category_id,
+        product.url,
+        createdOn,
+        modifiedAt,
+      ]
     );
-    const products = result.rows[0];
+
     client.release();
 
-    res.status(201).json({ products });
+    res.status(201).json({ product });
   }
 }

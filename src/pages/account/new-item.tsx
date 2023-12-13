@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
 import { GetStaticProps } from "next";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 interface Category {
   id: number;
@@ -17,12 +17,29 @@ export default function NewItem({ category }: { category: Category[] }) {
   const [categoryId, setCategoryId] = useState("");
   const [url, setUrl] = useState("");
 
-  const handleSubmit = async () => {
-    const res = await fetch("");
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const product = {
+      name,
+      description,
+      quantity: Number(quantity),
+      price: Number(price),
+      product_category_id: Number(categoryId),
+      url,
+    };
+    const res = await fetch("/api/products", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ product }),
+    });
+    const data = await res.json();
+    console.log(data);
   };
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div className="flex flex-col space-y-2">
             <label htmlFor="product">Product Name</label>
