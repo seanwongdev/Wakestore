@@ -5,7 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { useCart } from "@/context/CartContext";
-import NavbarHover from "./navbarHover";
+import NavbarHover from "./NavbarHover";
 
 interface Collection {
   collection_id: number;
@@ -76,11 +76,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
       <div className="flex items-center space-x-10 relative">
         {status === "authenticated" ? (
           <>
-            <span className="font-semibold">
+            <Link href="/account" className="font-semibold">
               {session.user.username &&
                 session.user.username[0].toUpperCase() +
                   session.user.username?.slice(1)}
-            </span>
+            </Link>
             <Button type="primary" onClick={() => signOut()}>
               Log out
             </Button>

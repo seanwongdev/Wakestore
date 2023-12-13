@@ -1,4 +1,4 @@
-import CollectionLayout from "@/components/layout/collectionLayout";
+import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
@@ -11,7 +11,7 @@ interface Product {
   price: string;
 }
 
-const RidingCategory = ({ products }: { products: Product[] }) => {
+const Category = ({ products }: { products: Product[] }) => {
   return (
     <div className="flex justify-evenly flex-wrap">
       {products.map((product) => {
@@ -20,7 +20,7 @@ const RidingCategory = ({ products }: { products: Product[] }) => {
             key={product.url}
             className="py-4 flex justify-center items-center"
           >
-            <Link href={product.url}>{product.name}</Link>
+            <Link href={`/products${product.url}`}>{product.name}</Link>
           </div>
         );
       })}
@@ -69,5 +69,5 @@ export const getStaticPaths = (async () => {
   };
 }) satisfies GetStaticPaths;
 
-RidingCategory.PageLayout = CollectionLayout;
-export default RidingCategory;
+Category.PageLayout = CollectionLayout;
+export default Category;

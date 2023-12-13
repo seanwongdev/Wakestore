@@ -7,11 +7,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import ShoppingCart from "@/components/cart/shoppingCart";
-
-interface CartProviderProps {
-  children: ReactNode;
-}
+import { LayoutProps } from "next-auth";
+import ShoppingCart from "@/components/cart/ShoppingCart";
 
 export interface CartContext {
   getItemQuantity: (id: number) => number;
@@ -32,7 +29,7 @@ interface CartItem {
 
 const CartContext = createContext({} as CartContext);
 
-export const CartProvider = ({ children }: CartProviderProps) => {
+export const CartProvider = ({ children }: LayoutProps) => {
   const setCartToState = () => {
     const { cart } = localStorage.getItem("cart")
       ? JSON.parse(localStorage.getItem("cart")!)

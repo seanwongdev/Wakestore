@@ -1,12 +1,9 @@
 import { ReactNode, useState } from "react";
-import Navbar from "../navbar";
-import Footer from "../footer";
-import SignUp from "../auth/signup";
-import Signin from "../auth/signin";
-
-interface LayoutProps {
-  children: ReactNode;
-}
+import { LayoutProps } from "next-auth";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
+import SignUp from "../auth/Signup";
+import Signin from "../auth/Signin";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showSignup, setShowSignup] = useState(false);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Category } from "./layout/collectionLayout";
+import { Category } from "./layout/CollectionLayout";
 import Link from "next/link";
 
 interface NavbarHoverProps {

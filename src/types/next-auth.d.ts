@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { ReactNode } from "react";
 
 declare module "next-auth" {
   /**
@@ -19,6 +20,10 @@ declare module "next-auth" {
     email?: string;
     password?: string;
     role?: string;
+  }
+
+  interface LayoutProps {
+    children: ReactNode;
   }
 }
 

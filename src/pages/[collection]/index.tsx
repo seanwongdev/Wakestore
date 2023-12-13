@@ -1,4 +1,4 @@
-import CollectionLayout from "@/components/layout/collectionLayout";
+import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
 import type { GetStaticProps, GetStaticPaths } from "next";
 import { Product } from "../products/[products]";

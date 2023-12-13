@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 import GlobalProvider from "@/GlobalProvider";
 
-import Layout from "@/components/layout/layout";
+import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
 
 type ComponentWithPageLayout = AppProps & {

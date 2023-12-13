@@ -1,9 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
-import SideNavbar from "../sideNavbar";
-
-interface LayoutProps {
-  children: ReactNode;
-}
+import SideNavbar from "../SideNavbar";
+import { LayoutProps } from "next-auth";
 
 export interface Category {
   category_id: number;

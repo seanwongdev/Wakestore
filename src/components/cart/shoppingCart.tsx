@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/context/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
-import CartItems from "./cartItems";
+import CartItems from "./CartItems";
 import Button from "../Button";
 import { Product } from "@/pages/[collection]";
 import { formatCurrency } from "@/utilities/formatCurrency";
