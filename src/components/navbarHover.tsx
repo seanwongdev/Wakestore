@@ -29,7 +29,7 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
 
   return (
     <div
-      className="absolute z-20 top-6  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
+      className="absolute z-20 top-10  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
       style={collectionId ? { left: `${(collectionId - 1) * 30}%` } : {}}
     >
       {data.map((row) =>
@@ -38,7 +38,7 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseExit}
             key={row.category_name}
-            className="flex flex-col p-1.5 "
+            className="flex flex-col p-1.5 hover:underline hover:text-blue-600  "
           >
             <Link href={`${row.collection_url}${row.category_url}`}>
               {row.category_name}
