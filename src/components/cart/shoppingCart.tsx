@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import CartItems from "./cartItems";
 import Button from "../Button";
-import { Product } from "@/pages/[slug]";
+import { Product } from "@/pages/[collection]";
 import { formatCurrency } from "@/utilities/formatCurrency";
 
 const ShoppingCart = () => {

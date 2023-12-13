@@ -11,7 +11,7 @@ interface Product {
   price: string;
 }
 
-const ApparelCategory = ({ products }: { products: Product[] }) => {
+const RidingCategory = ({ products }: { products: Product[] }) => {
   return (
     <div className="flex justify-evenly flex-wrap">
       {products.map((product) => {
@@ -29,7 +29,7 @@ const ApparelCategory = ({ products }: { products: Product[] }) => {
 };
 
 export const getStaticProps = (async (context) => {
-  const category = "/" + context.params?.slug;
+  const category = "/" + context.params?.category;
   const client = await pool.connect();
   const result = await client.query<Product>(
     "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1 AND is_deleted = false",
@@ -54,19 +54,20 @@ export const getStaticProps = (async (context) => {
 export const getStaticPaths = (async () => {
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT category_url FROM product_category WHERE product_collection_id = 2"
+    "SELECT category_url, collection_url FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id"
   );
   client.release();
 
   return {
     paths: result.rows.map((category) => ({
       params: {
-        slug: category.category_url.slice(1),
+        category: category.category_url.slice(1),
+        collection: category.collection_url.slice(1),
       },
     })),
     fallback: false,
   };
 }) satisfies GetStaticPaths;
 
-ApparelCategory.PageLayout = CollectionLayout;
-export default ApparelCategory;
+RidingCategory.PageLayout = CollectionLayout;
+export default RidingCategory;

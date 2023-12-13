@@ -10,6 +10,7 @@ import NavbarHover from "./navbarHover";
 interface Collection {
   collection_id: number;
   collection_name: string;
+  collection_url: string;
 }
 
 export interface NavbarProps {
@@ -54,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
       <div className="flex justify-evenly items-center gap-14 relative">
         {data.map((row) => (
           <Link
-            href={row.collection_name.toLowerCase().replace(/ /g, "-")}
+            href={row.collection_url}
             key={row.collection_id}
             className="font-semibold p-2 hover-underline-animation hover-underline-animation::after hover-underline-animation:hover::after"
             onMouseEnter={() => handleMouseEnter(row.collection_name)}

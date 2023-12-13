@@ -1,6 +1,6 @@
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
-import { Product } from "@/pages/[slug]";
+import { Product } from "@/pages/[collection]";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons/faCaretUp";

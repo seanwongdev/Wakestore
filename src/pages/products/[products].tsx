@@ -38,12 +38,12 @@ export default function Product(props: Product) {
 }
 
 export const getStaticProps = (async (context) => {
-  const slug = "/" + context.params?.slug;
+  const products = "/" + context.params?.products;
 
   const client = await pool.connect();
   const result = await client.query(
     "SELECT id, name, description, quantity, price FROM product_items WHERE url = $1 AND is_deleted = false",
-    [slug]
+    [products]
   );
   client.release();
   return {
@@ -59,7 +59,7 @@ export const getStaticPaths = (async () => {
   return {
     paths: result.rows.map((product) => ({
       params: {
-        slug: product.url.slice(1),
+        products: product.url.slice(1),
       },
     })),
     fallback: false,
