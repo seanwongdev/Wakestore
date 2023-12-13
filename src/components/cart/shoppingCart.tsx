@@ -27,7 +27,6 @@ const ShoppingCart = () => {
   //   0
   // );
 
-  console.log(cartItems);
   return (
     <div>
       <div

@@ -20,7 +20,6 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
       email,
       password,
     });
-    console.log(data);
 
     if (data?.ok) {
       toast.success("Successfully logged in");

@@ -16,7 +16,7 @@ export interface Product {
 export default function Product(props: Product) {
   const { increaseCartQuantity } = useCart();
   const { id, name, description, quantity, price } = props;
-  console.log(id);
+
   return (
     <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
       <div></div>

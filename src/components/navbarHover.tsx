@@ -26,13 +26,11 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
   const collectionId = data.find(
     (item) => item.collection_name === collection
   )?.collection_id;
-  const dropdownPosition = `left-[${
-    collectionId ? (collectionId - 1) * 30 : 0
-  }%]`;
-  console.log(dropdownPosition);
+
   return (
     <div
-      className={`absolute z-20 top-6 ${dropdownPosition} rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray`}
+      className="absolute z-20 top-6  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
+      style={collectionId ? { left: `${(collectionId - 1) * 30}%` } : {}}
     >
       {data.map((row) =>
         row.collection_name === collection ? (

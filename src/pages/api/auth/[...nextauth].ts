@@ -24,7 +24,7 @@ export const authOptions = {
       session.user.username = userData.username;
       session.user.email = userData.email;
       session.user.role = userData.role;
-      console.log(session);
+
       return Promise.resolve(session);
     },
   },
