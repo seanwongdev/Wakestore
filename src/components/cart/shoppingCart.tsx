@@ -6,7 +6,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import CartItems from "./CartItems";
 import Button from "../Button";
 import { Product } from "@/pages/products/[products]";
-import { formatCurrency } from "@/utilities/formatCurrency";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 const ShoppingCart = () => {
   const { isOpen, toggleCart, cartItems } = useCart();

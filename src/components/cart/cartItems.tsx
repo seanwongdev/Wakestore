@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons/faCaretUp";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown";
-import { formatCurrency } from "@/utilities/formatCurrency";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 interface CartItemsProps {
   id: number;
