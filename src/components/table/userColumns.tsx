@@ -3,6 +3,10 @@ import { User } from "next-auth";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons/faPenToSquare";
+import React from "react";
+import Link from "next/link";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -101,5 +105,14 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+  },
+  {
+    id: "edit",
+    header: "Actions",
+    cell: ({ row }) => (
+      <Link href={`/account/all-users/${row.original.id}`}>
+        <FontAwesomeIcon icon={faPenToSquare} />
+      </Link>
+    ),
   },
 ];

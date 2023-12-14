@@ -7,7 +7,7 @@ import { columns as userColumn } from "@/components/table/userColumns";
 
 export default function AllUsers({ users }: { users: User[] }) {
   console.log(users);
-  return <UserTable data={users} columns={userColumn} />;
+  return <UserTable users={users} columns={userColumn} />;
 }
 
 export const getServerSideProps = (async (context) => {

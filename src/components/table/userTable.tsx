@@ -21,23 +21,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  users: TData[];
 }
 
 export function UserTable<TData, TValue>({
   columns,
-  data,
+  users,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
-
+  const [data, setData] = useState(users);
   const table = useReactTable({
     data,
     columns,
@@ -67,6 +67,10 @@ export function UserTable<TData, TValue>({
       method: "DELETE",
       body: JSON.stringify(idsToDelete),
     });
+
+    //error handling: if successful
+    const newUser = data.filter((user) => !idsToDelete.includes(user.id));
+    setData(newUser);
   };
 
   return (

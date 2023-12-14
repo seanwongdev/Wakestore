@@ -6,10 +6,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "PATCH") {
+  if (req.method === "GET") {
+    const { id } = req.query;
     const client = await pool.connect();
     const result = await client.query(
-      "SELECT * FROM product_items WHERE is_deleted = false"
+      "SELECT * FROM users WHERE role = 'user' AND id= $1",
+      [id]
+    );
+    const user = result.rows[0];
+    client.release();
+
+    res.status(200).json({ user });
+  }
+  if (req.method === "PATCH") {
+    const { id } = req.query;
+    const { username, email, role, image_url } = req.body;
+    const modifiedAt = new Date().toLocaleDateString("en-CA");
+    const client = await pool.connect();
+    const result = await client.query(
+      "UPDATE users SET username=$2,email=$3,role=$4, modified_at=$5  WHERE id = $1",
+      [id, username, email, role, modifiedAt]
     );
     const products = result.rows;
     client.release();

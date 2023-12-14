@@ -20,7 +20,7 @@ function EditCell({ getValue, row, column, table }) {
       const productId = row.original.id;
 
       const payload = { ...row.original, [column.id]: value };
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await fetch(`/api/admin/products/${productId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
