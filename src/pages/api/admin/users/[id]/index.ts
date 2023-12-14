@@ -20,16 +20,21 @@ export default async function handler(
   }
   if (req.method === "PATCH") {
     const { id } = req.query;
-    const { username, email, role, image_url } = req.body;
+    const { username, email, role, image_url } = req.body.newUser;
     const modifiedAt = new Date().toLocaleDateString("en-CA");
     const client = await pool.connect();
-    const result = await client.query(
+    await client.query(
       "UPDATE users SET username=$2,email=$3,role=$4, modified_at=$5  WHERE id = $1",
       [id, username, email, role, modifiedAt]
     );
-    const products = result.rows;
+
+    const { rows } = await client.query("SELECT * FROM users where id = $1", [
+      id,
+    ]);
+
+    const user = rows[0];
     client.release();
 
-    res.status(200).json({ products });
+    res.status(200).json({ user });
   }
 }

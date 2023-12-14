@@ -7,16 +7,20 @@ import ProfileLayout from "@/components/layout/ProfileLayout";
 import Button from "@/components/Button";
 
 export default function EditPage({ user }: { user: User }) {
-  const [data, setData] = useState<User>(user);
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [role, setRole] = useState(user.role);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const userId = user.id;
     const newUser = {
       username,
       email,
       role,
     };
-    const res = await fetch("/api/admin/users/[userId]", {
+    const res = await fetch(`/api/admin/users/${userId}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,6 +28,7 @@ export default function EditPage({ user }: { user: User }) {
       body: JSON.stringify({ newUser }),
     });
     const data = await res.json();
+    router.push("/account/all-users");
   };
 
   return (
@@ -37,7 +42,8 @@ export default function EditPage({ user }: { user: User }) {
               type="text"
               id="product"
               placeholder="Hyperlite Wakeboard 2023"
-              defaultValue={data.username}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -46,7 +52,8 @@ export default function EditPage({ user }: { user: User }) {
               className="rounded-md py-2 border border-gray-600 bg-white px-6"
               id="description"
               placeholder="Write your product description here..."
-              defaultValue={data.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -55,7 +62,8 @@ export default function EditPage({ user }: { user: User }) {
             <select
               className="rounded-md py-2 border border-gray-600 bg-white px-6"
               id="category"
-              defaultValue={data.role}
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
             >
               <option value="user">User</option>
               <option value="admin">Admin</option>
