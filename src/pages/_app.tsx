@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
 import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
-import GlobalProvider from "@/GlobalProvider";
+import { ChakraProvider } from "@chakra-ui/react";
 
+import GlobalProvider from "@/GlobalProvider";
 import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
 
@@ -24,13 +25,15 @@ export default function App({
   return (
     <>
       <GlobalProvider>
-        <SessionProvider session={session}>
-          <Layout>
-            <NestedLayout>
-              <Component {...pageProps} />
-            </NestedLayout>
-          </Layout>
-        </SessionProvider>
+        <ChakraProvider>
+          <SessionProvider session={session}>
+            <Layout>
+              <NestedLayout>
+                <Component {...pageProps} />
+              </NestedLayout>
+            </Layout>
+          </SessionProvider>
+        </ChakraProvider>
       </GlobalProvider>
     </>
   );

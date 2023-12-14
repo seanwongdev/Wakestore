@@ -3,6 +3,7 @@ import { ProductAdmin } from "@/pages/account/manage-items";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import EditCell from "./EditCell";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -43,6 +44,7 @@ export const columns: ColumnDef<ProductAdmin>[] = [
   },
   {
     accessorKey: "name",
+    cell: EditCell,
     header: ({ column }) => {
       return (
         <Button
@@ -57,6 +59,7 @@ export const columns: ColumnDef<ProductAdmin>[] = [
   },
   {
     accessorKey: "price",
+    cell: EditCell,
     header: ({ column }) => {
       return (
         <Button
@@ -71,6 +74,7 @@ export const columns: ColumnDef<ProductAdmin>[] = [
   },
   {
     accessorKey: "quantity",
+    cell: EditCell,
     header: ({ column }) => {
       return (
         <Button
@@ -85,6 +89,7 @@ export const columns: ColumnDef<ProductAdmin>[] = [
   },
   {
     accessorKey: "product_category_id",
+    cell: EditCell,
     header: ({ column }) => {
       return (
         <Button
@@ -99,6 +104,7 @@ export const columns: ColumnDef<ProductAdmin>[] = [
   },
   {
     accessorKey: "url",
+    cell: EditCell,
     header: "URL",
   },
   {

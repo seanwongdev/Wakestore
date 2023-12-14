@@ -6,14 +6,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id } = req.query;
   if (req.method === "PATCH") {
+    const idArray = req.body;
+    console.log(idArray);
     const client = await pool.connect();
-    const result = await client.query(
-      "UPDATE product_items SET is_deleted = true WHERE id = $1",
-      [id]
+    await client.query(
+      "UPDATE product_items SET is_deleted = true WHERE id = ANY($1)",
+      [idArray]
     );
-    const products = result.rows[0];
+    const result = await client.query(
+      "SELECT id, is_deleted FROM product_items WHERE id = ANY($1)",
+      [idArray]
+    );
+    const products = result.rows;
     client.release();
 
     res.status(200).json({ products });

@@ -22,23 +22,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React from "react";
+import React, { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  products: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  products,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
-
+  const [data, setData] = useState(products);
   const table = useReactTable({
     data,
     columns,
@@ -54,19 +54,51 @@ export function DataTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
+    meta: {
+      updateData: (rowIndex, columnId, value) =>
+        setData((prev) =>
+          prev.map((row, index) =>
+            index === rowIndex
+              ? {
+                  ...prev[rowIndex],
+                  [columnId]: value,
+                }
+              : row
+          )
+        ),
+    },
   });
+
+  const handleDeleteRows = async () => {
+    const idsToDelete = table
+      .getSelectedRowModel()
+      .rows.map((item) => item.original.id);
+
+    const res = await fetch("/api/products/delete", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+      body: JSON.stringify(idsToDelete),
+    });
+  };
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter products..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex justify-between items-center">
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Filter products..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <Button onClick={handleDeleteRows}>Soft Delete</Button>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -118,7 +150,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
       <div className="flex items-center justify-between space-x-2 py-4">
         <div>
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
