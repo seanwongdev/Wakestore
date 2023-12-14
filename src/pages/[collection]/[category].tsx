@@ -2,6 +2,7 @@ import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import type { GetStaticPaths, GetStaticProps } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Product {
@@ -19,7 +20,18 @@ const Category = ({ products }: { products: Product[] }) => {
       {products.map((product) => {
         return (
           <div key={product.url} className="py-4 flex flex-col justify-center ">
-            <Link href={`/products${product.url}`}>image</Link>
+            <Link href={`/products${product.url}`}>
+              {product.image_url?.length > 0 ? (
+                <Image
+                  width="200"
+                  height="200"
+                  alt="product"
+                  src={product.image_url[0]}
+                ></Image>
+              ) : (
+                <span>Image coming</span>
+              )}
+            </Link>
             <Link href={`/products${product.url}`}>{product.name}</Link>
             <span className="font-semibold">
               {formatCurrency(Number(product.price))}
@@ -48,6 +60,7 @@ export const getStaticProps = (async (context) => {
         url: product.url,
         quantity: product.quantity,
         price: product.price,
+        image_url: product.image_url,
       })),
     },
     revalidate: 3600,

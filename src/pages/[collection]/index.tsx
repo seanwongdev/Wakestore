@@ -4,13 +4,26 @@ import type { GetStaticProps, GetStaticPaths } from "next";
 import { Product } from "../products/[products]";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+import Image from "next/image";
 
 export default function Index({ products }: { products: Product[] }) {
+  console.log(products);
   return (
     <div className="grid grid-cols-3 gap-y-6 ">
       {products.map((item) => (
         <div key={item.id} className="flex flex-col justify-center">
-          <Link href={`/products${item.url}`}>image</Link>
+          <Link href={`/products${item.url}`}>
+            {item.image_url?.length > 0 ? (
+              <Image
+                width="200"
+                height="200"
+                alt="product"
+                src={item.image_url[0]}
+              ></Image>
+            ) : (
+              <span>Image coming</span>
+            )}
+          </Link>
           <Link href={`/products${item.url}`}>{item.name}</Link>
           <span className="font-semibold">
             {formatCurrency(Number(item.price))}
@@ -25,7 +38,7 @@ export const getStaticProps = (async (context) => {
   const collection = "/" + context.params?.collection;
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT id, description, quantity, name, price, url FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id WHERE is_deleted = false AND collection_url = $1 ",
+    "SELECT id, description, quantity, name, price, url, image_url FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id WHERE is_deleted = false AND collection_url = $1 ",
     [collection]
   );
   client.release();
