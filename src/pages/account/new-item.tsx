@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
+import { uploadCloudinary } from "@/lib/utils/upload";
 import { GetStaticProps } from "next";
 import { FormEvent, useState } from "react";
 
@@ -16,32 +17,52 @@ export default function NewItem({ category }: { category: Category[] }) {
   const [price, setPrice] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [url, setUrl] = useState("");
+  const [images, setImages] = useState([]);
+  const [links, setLinks] = useState([]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const product = {
-      name,
-      description,
-      quantity: Number(quantity),
-      price: Number(price),
-      product_category_id: Number(categoryId),
-      url,
-    };
-    const res = await fetch("/api/admin/products", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ product }),
-    });
-    const data = await res.json();
+
+    try {
+      let imgArr = [];
+      for (let i = 0; i < images.length; i++) {
+        const data = await uploadCloudinary(images[i]);
+        imgArr.push(data);
+      }
+
+      const product = {
+        name,
+        description,
+        quantity: Number(quantity),
+        price: Number(price),
+        product_category_id: Number(categoryId),
+        url,
+        image_url: imgArr,
+      };
+
+      const res = await fetch("/api/admin/products", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ product }),
+      });
+      const data = await res.json();
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div className="flex flex-col space-y-2">
-            <label htmlFor="product">Product Name</label>
+            <label
+              htmlFor="product"
+              className="block  text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Product Name
+            </label>
             <input
               className="rounded-md py-2 border border-gray-600 bg-white px-6"
               type="text"
@@ -52,7 +73,12 @@ export default function NewItem({ category }: { category: Category[] }) {
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor="description">Product Description</label>
+            <label
+              htmlFor="description"
+              className="block  text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Product Description
+            </label>
             <textarea
               className="rounded-md py-2 border border-gray-600 bg-white px-6"
               id="description"
@@ -64,7 +90,12 @@ export default function NewItem({ category }: { category: Category[] }) {
           </div>
           <div className="grid grid-cols-3 gap-20">
             <div className="flex flex-col space-y-2">
-              <label htmlFor="quantity">Inventory Quantity</label>
+              <label
+                htmlFor="quantity"
+                className="block  text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Inventory Quantity
+              </label>
               <input
                 className="rounded-md py-2 border border-gray-600 bg-white px-6"
                 type="number"
@@ -75,7 +106,12 @@ export default function NewItem({ category }: { category: Category[] }) {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="price">Price</label>
+              <label
+                htmlFor="price"
+                className="block  text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Price
+              </label>
               <input
                 className="rounded-md py-2 border border-gray-600 bg-white px-6"
                 type="number"
@@ -86,7 +122,12 @@ export default function NewItem({ category }: { category: Category[] }) {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="category">Product Category</label>
+              <label
+                htmlFor="category"
+                className="block  text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Product Category
+              </label>
               <select
                 className="rounded-md py-2 border border-gray-600 bg-white px-6"
                 id="category"
@@ -103,7 +144,12 @@ export default function NewItem({ category }: { category: Category[] }) {
             </div>
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor="url">Product URL</label>
+            <label
+              htmlFor="url"
+              className="block  text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Product URL
+            </label>
             <input
               className="rounded-md py-2 border border-gray-600 bg-white px-6"
               type="text"
@@ -111,6 +157,21 @@ export default function NewItem({ category }: { category: Category[] }) {
               placeholder="/hyperlite-wakeboard"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label
+              className="block  text-sm font-medium text-gray-900 dark:text-white"
+              htmlFor="file_input"
+            >
+              Upload file
+            </label>
+            <input
+              className="block w-full text-sm  text-gray-900 border border-gray-600 rounded-lg file:bg-gray-600 file:rounded-lg file:py-2 file:text-white"
+              id="file_input"
+              type="file"
+              multiple={true}
+              onChange={(e) => setImages(e.target.files)}
             />
           </div>
           <div className="flex justify-end">
@@ -125,7 +186,7 @@ export default function NewItem({ category }: { category: Category[] }) {
 export const getStaticProps = (async () => {
   const client = await pool.connect();
   const { rows } = await client.query("SELECT * FROM product_category");
-
+  client.release();
   return {
     props: {
       category: rows.map((item) => ({

@@ -1,5 +1,6 @@
 import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
@@ -9,18 +10,20 @@ interface Product {
   description: string;
   quantity: number;
   price: string;
+  image_url: string[];
 }
 
 const Category = ({ products }: { products: Product[] }) => {
   return (
-    <div className="flex justify-evenly flex-wrap">
+    <div className="grid grid-cols-3">
       {products.map((product) => {
         return (
-          <div
-            key={product.url}
-            className="py-4 flex justify-center items-center"
-          >
+          <div key={product.url} className="py-4 flex flex-col justify-center ">
+            <Link href={`/products${product.url}`}>image</Link>
             <Link href={`/products${product.url}`}>{product.name}</Link>
+            <span className="font-semibold">
+              {formatCurrency(Number(product.price))}
+            </span>
           </div>
         );
       })}

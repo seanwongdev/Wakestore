@@ -7,7 +7,7 @@ interface SideNavbarProps {
 
 const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-3 font-semibold">
       {data.map((row) => (
         <Link
           href={row.collection_url + row.category_url}

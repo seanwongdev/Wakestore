@@ -12,6 +12,7 @@ export interface ProductAdmin {
   product_category_id: number;
   url: string;
   is_deleted: boolean;
+  image_url: string[];
 }
 
 export default function ManageItems({
@@ -30,7 +31,7 @@ export default function ManageItems({
 export const getStaticProps = (async () => {
   const client = await pool.connect();
   const { rows } = await client.query("SELECT * FROM product_items");
-
+  client.release();
   return {
     props: {
       products: rows.map((item) => ({

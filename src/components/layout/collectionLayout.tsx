@@ -22,7 +22,7 @@ const CollectionLayout: React.FC<LayoutProps> = ({ children }) => {
     fetchHeaderData();
   }, []);
   return (
-    <div className="md:grid md:grid-cols-[auto,1fr] gap-5 h-screen">
+    <div className="md:grid md:grid-cols-[2fr,9fr] gap-5 h-screen w-[90vw] mx-auto">
       <div>
         <SideNavbar data={data} />
       </div>

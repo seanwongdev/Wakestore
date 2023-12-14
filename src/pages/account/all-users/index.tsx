@@ -15,6 +15,7 @@ export const getServerSideProps = (async (context) => {
   const { rows } = await client.query(
     "SELECT * FROM users WHERE role = 'user'"
   );
+  client.release();
   return {
     props: {
       users: rows.map((row) => ({

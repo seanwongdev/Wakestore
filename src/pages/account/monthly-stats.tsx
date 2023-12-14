@@ -9,6 +9,7 @@ export default function MonthlyStats() {
 export const getServerSideProps = (async (context) => {
   const client = await pool.connect();
   const { rows } = await client.query("SELECT * FROM orders");
+  client.release();
   return {
     props: {
       orders: [...rows],

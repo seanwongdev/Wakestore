@@ -22,7 +22,7 @@ export default async function handler(
     const { product } = req.body;
     const client = await pool.connect();
     const result = await client.query(
-      "INSERT INTO product_items(name, description, quantity, price, product_category_id, url, created_on, modified_at)  VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+      "INSERT INTO product_items(name, description, quantity, price, product_category_id, url, created_on, modified_at, image_url)  VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)",
       [
         product.name,
         product.description,
@@ -32,6 +32,7 @@ export default async function handler(
         product.url,
         createdOn,
         modifiedAt,
+        product.image_url,
       ]
     );
 

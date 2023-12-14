@@ -3,14 +3,19 @@ import pool from "@/database/db";
 import type { GetStaticProps, GetStaticPaths } from "next";
 import { Product } from "../products/[products]";
 import Link from "next/link";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 export default function Index({ products }: { products: Product[] }) {
   return (
-    <div>
+    <div className="grid grid-cols-3 gap-y-6 ">
       {products.map((item) => (
-        <Link key={item.id} href={`/products${item.url}`}>
-          {item.name}
-        </Link>
+        <div key={item.id} className="flex flex-col justify-center">
+          <Link href={`/products${item.url}`}>image</Link>
+          <Link href={`/products${item.url}`}>{item.name}</Link>
+          <span className="font-semibold">
+            {formatCurrency(Number(item.price))}
+          </span>
+        </div>
       ))}
     </div>
   );

@@ -11,6 +11,7 @@ export interface Product {
   description: string;
   quantity: number;
   price: number;
+  image_url: string[];
 }
 
 export default function Product(props: Product) {
