@@ -3,6 +3,7 @@ import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
 import { uploadCloudinary } from "@/lib/utils/upload";
 import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 
 interface Category {
@@ -18,7 +19,7 @@ export default function NewItem({ category }: { category: Category[] }) {
   const [categoryId, setCategoryId] = useState("");
   const [url, setUrl] = useState("");
   const [images, setImages] = useState([]);
-  const [links, setLinks] = useState([]);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ export default function NewItem({ category }: { category: Category[] }) {
         method: "POST",
         body: JSON.stringify({ product }),
       });
-      const data = await res.json();
+      router.push("/account/manage-items");
     } catch (err) {
       console.log(err);
     }

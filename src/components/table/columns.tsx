@@ -4,6 +4,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import EditCell from "./EditCell";
+import EditImage from "./EditImage";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -41,6 +42,11 @@ export const columns: ColumnDef<ProductAdmin>[] = [
         </Button>
       );
     },
+  },
+  {
+    accessorKey: "image_url",
+    header: "Image",
+    cell: EditImage,
   },
   {
     accessorKey: "name",

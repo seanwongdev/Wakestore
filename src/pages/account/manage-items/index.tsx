@@ -41,6 +41,7 @@ export const getStaticProps = (async () => {
         quantity: item.quantity,
         product_category_id: item.product_category_id,
         url: item.url,
+        image_url: item.image_url,
         is_deleted: item.is_deleted,
       })),
     },
