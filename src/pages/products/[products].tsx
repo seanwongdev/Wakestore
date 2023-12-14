@@ -3,6 +3,7 @@ import type { GetStaticProps, GetStaticPaths } from "next";
 import pool from "@/database/db";
 import Button from "@/components/Button";
 import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 
 export interface Product {
   id: number;
@@ -16,11 +17,11 @@ export interface Product {
 
 export default function Product(props: Product) {
   const { increaseCartQuantity } = useCart();
-  const { id, name, description, quantity, price } = props;
+  const { id, name, description, quantity, price, image_url } = props;
 
   return (
     <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
-      <div></div>
+      <Image width="600" height="400" alt="product" src={image_url[0]}></Image>
       <div className="flex flex-col gap-5">
         <div>{name}</div>
         <div>{description}</div>
@@ -43,7 +44,7 @@ export const getStaticProps = (async (context) => {
 
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT id, name, description, quantity, price FROM product_items WHERE url = $1 AND is_deleted = false",
+    "SELECT id, name, description, quantity, price, image_url FROM product_items WHERE url = $1 AND is_deleted = false",
     [products]
   );
   client.release();
