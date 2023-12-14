@@ -13,7 +13,7 @@ const ShoppingCart = () => {
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProductData = async () => {
-      const res = await fetch("/api/products");
+      const res = await fetch("/api/admin/products");
       const { products } = await res.json();
 
       setData(products);

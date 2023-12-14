@@ -25,19 +25,19 @@ import React, { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  products: TData[];
+  data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function UserTable<TData, TValue>({
   columns,
-  products,
+  data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = useState(products);
+
   const table = useReactTable({
     data,
     columns,
@@ -53,19 +53,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-    meta: {
-      updateData: (rowIndex, columnId, value) =>
-        setData((prev) =>
-          prev.map((row, index) =>
-            index === rowIndex
-              ? {
-                  ...prev[rowIndex],
-                  [columnId]: value,
-                }
-              : row
-          )
-        ),
-    },
   });
 
   const handleDeleteRows = async () => {
@@ -73,11 +60,11 @@ export function DataTable<TData, TValue>({
       .getSelectedRowModel()
       .rows.map((item) => item.original.id);
 
-    const res = await fetch("/api/admin/products/delete", {
+    const res = await fetch("/api/admin/users/delete", {
       headers: {
         "Content-Type": "application/json",
       },
-      method: "PATCH",
+      method: "DELETE",
       body: JSON.stringify(idsToDelete),
     });
   };
@@ -87,16 +74,18 @@ export function DataTable<TData, TValue>({
       <div className="flex justify-between items-center">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter products..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            placeholder="Filter users..."
+            value={
+              (table.getColumn("username")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("username")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
         </div>
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
-          <Button onClick={handleDeleteRows}>Soft Delete</Button>
+          <Button onClick={handleDeleteRows}>Delete</Button>
         )}
       </div>
       <div className="rounded-md border">

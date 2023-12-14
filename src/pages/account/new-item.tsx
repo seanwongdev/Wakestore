@@ -27,7 +27,7 @@ export default function NewItem({ category }: { category: Category[] }) {
       product_category_id: Number(categoryId),
       url,
     };
-    const res = await fetch("/api/products", {
+    const res = await fetch("/api/admin/products", {
       headers: {
         "Content-Type": "application/json",
       },
