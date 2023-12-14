@@ -1,6 +1,6 @@
 import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
-import { GetStaticPaths, GetStaticProps } from "next";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
 interface Product {

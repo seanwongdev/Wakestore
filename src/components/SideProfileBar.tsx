@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 
 const SideProfileNavBar: React.FC = () => {
   const { data: session, status } = useSession();
-  console.log(session);
+
   return (
     <div className="flex flex-col space-y-4 font-semibold">
       {session?.user?.role === "admin" && (

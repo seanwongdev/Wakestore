@@ -35,7 +35,6 @@ export default function NewItem({ category }: { category: Category[] }) {
       body: JSON.stringify({ product }),
     });
     const data = await res.json();
-    console.log(data);
   };
   return (
     <div>

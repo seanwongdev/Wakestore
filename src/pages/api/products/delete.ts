@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "PATCH") {
     const idArray = req.body;
-    console.log(idArray);
+
     const client = await pool.connect();
     await client.query(
       "UPDATE product_items SET is_deleted = true WHERE id = ANY($1)",
