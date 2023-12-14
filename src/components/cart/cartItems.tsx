@@ -6,6 +6,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons/faCaretUp";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+import Image from "next/image";
 
 interface CartItemsProps {
   id: number;
@@ -35,7 +36,16 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
 
   return (
     <div className="flex gap-4 justify-evenly py-6 border-b">
-      <div>image</div>
+      {item?.image_url ? (
+        <Image
+          height="30"
+          width="80"
+          alt="product"
+          src={item.image_url[0]}
+        ></Image>
+      ) : (
+        <span>image</span>
+      )}
       <div className="flex flex-col gap-2 flex-grow ">
         <span>{item?.name}</span>
         <span className="font-bold">
