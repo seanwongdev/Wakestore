@@ -9,7 +9,7 @@ import { Product } from "@/pages/products/[products]";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 const ShoppingCart = () => {
-  const { isOpen, toggleCart, cartItems } = useCart();
+  const { isOpen, toggleCart, cartItems, handleOverlayClick } = useCart();
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProductData = async () => {
@@ -34,6 +34,7 @@ const ShoppingCart = () => {
         className={`fixed inset-0 bg-black bg-opacity-30 flex justify-end z-50 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
+        onClick={handleOverlayClick}
       >
         <FontAwesomeIcon
           className={`text-3xl absolute text-white top-[20px] right-[520px] z-10 ${

@@ -23,8 +23,8 @@ const Category = ({ products }: { products: Product[] }) => {
             <Link href={`/products${product.url}`}>
               {product.image_url?.length > 0 ? (
                 <Image
-                  width="200"
-                  height="200"
+                  width={350}
+                  height={200}
                   alt="product"
                   src={product.image_url[0]}
                 ></Image>

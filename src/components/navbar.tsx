@@ -4,6 +4,8 @@ import Button from "./Button";
 import { signOut, useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
+
 import { useCart } from "@/context/CartContext";
 import NavbarHover from "./NavbarHover";
 
@@ -16,9 +18,10 @@ interface Collection {
 export interface NavbarProps {
   onSignup: () => void;
   onSignin: () => void;
+  onSearch: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
+const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
   const [header, setHeader] = useState("");
   const { toggleCart, cartItems } = useCart();
   const [data, setData] = useState<Collection[]>([]);
@@ -50,9 +53,16 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin }) => {
     fetchHeaderData();
   }, []);
   return (
-    <div className="flex justify-between w-full px-20 py-12 bg-gray-800 text-white">
+    <div className="flex justify-between w-full px-20 py-12 bg-gray-800 text-white items-center">
       <span>Logo</span>
       <div className="flex justify-evenly items-center gap-14 relative">
+        <div>
+          <FontAwesomeIcon
+            className="text-white"
+            icon={faMagnifyingGlass}
+            onClick={onSearch}
+          />
+        </div>
         {data.map((row) => (
           <Link
             href={row.collection_url}

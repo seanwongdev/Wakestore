@@ -17,7 +17,7 @@ export interface CartContext {
   removeFromCart: (id: number) => void;
   changeCartQuantity: (id: number, value: string) => void;
   toggleCart: () => void;
-
+  handleOverlayClick: () => void;
   cartItems: CartItem[];
   isOpen: boolean;
 }
@@ -105,6 +105,10 @@ export const CartProvider = ({ children }: LayoutProps) => {
     setCartToState();
   };
 
+  const handleOverlayClick = (e: MouseEvent) => {
+    if (e.target === e.currentTarget) setIsOpen(false);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -116,6 +120,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
         removeFromCart,
         isOpen,
         changeCartQuantity,
+        handleOverlayClick,
       }}
     >
       <ShoppingCart />
