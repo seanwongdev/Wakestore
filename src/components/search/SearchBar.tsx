@@ -6,19 +6,14 @@ import Image from "next/image";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 interface SearchBarProps {
-  isOpen: boolean;
-  setShowSearchBar: (isOpen: boolean) => void;
+  onOverlayClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ isOpen, setShowSearchBar }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onOverlayClick }) => {
   const [keyword, setKeyword] = useState("");
 
   const [data, setData] = useState<ProductAdmin[]>([]);
-  const handleOverlayClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) {
-      setShowSearchBar(false);
-    }
-  };
+
   useEffect(() => {
     const fetchSearchQuery = async () => {
       if (keyword === "") return;
@@ -38,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isOpen, setShowSearchBar }) => {
     <>
       <div
         className="fixed inset-0 bg-black bg-opacity-30 flex items-top z-50"
-        onClick={handleOverlayClick}
+        onClick={onOverlayClick}
       >
         {" "}
       </div>
@@ -50,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isOpen, setShowSearchBar }) => {
             onChange={(value) => setKeyword(value)}
           />
         </div>
-        <div className="bg-white  w-full  min-h-[60px]  max-h-[550px] overflow-y-auto ">
+        <div className="bg-white  w-full  min-h-[60px]  max-h-[550px] overflow-y-auto pt-4">
           {data.length > 0 ? (
             <div className=" w-2/3 mx-auto grid grid-cols-4 gap-y-8">
               {data.map((item) => (

@@ -8,9 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 interface SignupProps {
   onSignup: () => void;
   onSwap: () => void;
+  onOverlaySignup: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const SignUp: React.FC<SignupProps> = ({ onSignup, onSwap }) => {
+const SignUp: React.FC<SignupProps> = ({
+  onSignup,
+  onSwap,
+  onOverlaySignup,
+}) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,7 +47,10 @@ const SignUp: React.FC<SignupProps> = ({ onSignup, onSwap }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 transition-opacity opacity-100 ">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 transition-opacity opacity-100 "
+      onClick={onOverlaySignup}
+    >
       <div className="bg-white inset-1 p-8 rounded shadow-lg">
         <div className="flex justify-end">
           <FontAwesomeIcon icon={faXmark} onClick={onSignup} />

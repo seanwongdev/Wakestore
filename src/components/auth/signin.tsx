@@ -8,9 +8,10 @@ import "react-toastify/dist/ReactToastify.css";
 interface Signin {
   onSignin: () => void;
   onSwap: () => void;
+  onOverlaySignin: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
+const Signin: React.FC<Signin> = ({ onSignin, onSwap, onOverlaySignin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (e: FormEvent) => {
@@ -29,7 +30,10 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap }) => {
     toast.error(data?.error);
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 transition-opacity opacity-100 ">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 transition-opacity opacity-100"
+      onClick={onOverlaySignin}
+    >
       <div className="bg-white inset-1 p-8 rounded shadow-lg">
         <span className="flex justify-end">
           <FontAwesomeIcon icon={faXmark} onClick={onSignin} />
