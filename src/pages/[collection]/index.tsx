@@ -7,7 +7,6 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 import Image from "next/image";
 
 export default function Index({ products }: { products: Product[] }) {
-  console.log(products);
   return (
     <div className="grid grid-cols-3 gap-y-6 ">
       {products.map((item) => (

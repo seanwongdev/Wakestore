@@ -4,7 +4,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SignUp from "../auth/Signup";
 import Signin from "../auth/Signin";
-import SearchBar from "../SearchBar";
+import SearchBar from "../search/SearchBar";
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showSignup, setShowSignup] = useState(false);
@@ -32,6 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setShowSignin((state) => !state);
     document.body.classList.toggle("overflow-hidden", !showSignin);
   };
+
   return (
     <div>
       {showSignup && (
@@ -40,7 +41,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {showSignin && (
         <Signin onSignin={handleSignin} onSwap={handleSwapToSignup} />
       )}
-      {!showSearchBar && <SearchBar isOpen={showSearchBar} />}
+      {showSearchBar && (
+        <SearchBar isOpen={showSearchBar} setShowSearchBar={setShowSearchBar} />
+      )}
       <Navbar
         onSearch={handleClickSearch}
         onSignup={handleSignup}

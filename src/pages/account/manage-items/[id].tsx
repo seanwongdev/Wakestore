@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
 export default function ProductImage({ product }: { product: ProductAdmin }) {
-  console.log(product);
   const [images, setImages] = useState([]);
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {

@@ -6,7 +6,6 @@ import { UserTable } from "@/components/table/userTable";
 import { columns as userColumn } from "@/components/table/userColumns";
 
 export default function AllUsers({ users }: { users: User[] }) {
-  console.log(users);
   return <UserTable users={users} columns={userColumn} />;
 }
 

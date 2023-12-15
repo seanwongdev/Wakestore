@@ -86,7 +86,7 @@ export const getStaticProps = (async (context) => {
     "SELECT * from users WHERE role = 'user' AND  id = $1",
     [id]
   );
-  console.log(rows);
+
   client.release();
   return {
     props: {
