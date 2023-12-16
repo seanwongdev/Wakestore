@@ -56,13 +56,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
     <div className="flex justify-between w-full px-20 py-12 bg-gray-800 text-white items-center">
       <span>Logo</span>
       <div className="flex justify-evenly items-center gap-14 relative">
-        <div>
-          <FontAwesomeIcon
-            className="text-white"
-            icon={faMagnifyingGlass}
-            onClick={onSearch}
-          />
-        </div>
         {data.map((row) => (
           <Link
             href={row.collection_url}
@@ -84,6 +77,13 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
       </div>
 
       <div className="flex items-center space-x-10 relative">
+        <div>
+          <FontAwesomeIcon
+            className="text-white hover:cursor-pointer"
+            icon={faMagnifyingGlass}
+            onClick={onSearch}
+          />
+        </div>
         {status === "authenticated" ? (
           <>
             <Link href="/account" className="font-semibold">

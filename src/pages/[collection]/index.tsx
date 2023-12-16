@@ -5,31 +5,93 @@ import { Product } from "../products/[products]";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { Button } from "@/components/ui/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 
 export default function Index({ products }: { products: Product[] }) {
+  const router = useRouter();
+
+  const { page } = router.query;
+
+  const resultsPerPage = 5;
+
+  let pageNum = Number(page) || 1;
+  const maxPage = products.length / resultsPerPage;
+  let pageArray = [];
+  for (let i = 1; i < maxPage + 1; i++) {
+    pageArray.push(i);
+  }
+
+  const entries = products.slice(
+    (pageNum - 1) * resultsPerPage,
+    pageNum * resultsPerPage
+  );
+
+  const handlePrev = () => {
+    if (pageNum > 1) {
+      pageNum--;
+      router.push(`/riding-essentials?page=${pageNum}`);
+    }
+  };
+
+  const handleNext = () => {
+    if (pageNum < maxPage) {
+      pageNum++;
+      router.push(`/riding-essentials?page=${pageNum}`);
+    }
+  };
+
+  const handleClick = (value: number) => {
+    pageNum = value;
+    router.push(`/riding-essentials?page=${pageNum}`);
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-y-6 ">
-      {products.map((item) => (
-        <div key={item.id} className="flex flex-col justify-center">
-          <Link href={`/products${item.url}`}>
-            {item.image_url?.length > 0 ? (
-              <Image
-                width={350}
-                height={200}
-                alt="product"
-                src={item.image_url[0]}
-              ></Image>
-            ) : (
-              <span>Image coming</span>
-            )}
-          </Link>
-          <Link href={`/products${item.url}`}>{item.name}</Link>
-          <span className="font-semibold">
-            {formatCurrency(Number(item.price))}
-          </span>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-3 gap-y-6 py-4 ">
+        {entries.map((item) => (
+          <div key={item.id} className="flex flex-col justify-center">
+            <Link href={`/products${item.url}`}>
+              {item.image_url?.length > 0 ? (
+                <Image
+                  width={350}
+                  height={200}
+                  alt="product"
+                  src={item.image_url[0]}
+                ></Image>
+              ) : (
+                <span>Image coming</span>
+              )}
+            </Link>
+            <Link href={`/products${item.url}`}>{item.name}</Link>
+            <span className="font-semibold">
+              {formatCurrency(Number(item.price))}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-end items-center space-x-4">
+        <Button onClick={handlePrev} disabled={pageNum === 1}>
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </Button>
+        {pageArray.map((page) => (
+          <Button
+            className={page === pageNum ? "bg-gray-400" : ""}
+            key={page}
+            onClick={() => handleClick(page)}
+          >
+            {page}
+          </Button>
+        ))}
+
+        <Button onClick={handleNext} disabled={pageNum === maxPage}>
+          <FontAwesomeIcon icon={faChevronRight} />
+        </Button>
+      </div>
+    </>
   );
 }
 

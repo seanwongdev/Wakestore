@@ -45,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onOverlayClick }) => {
             onChange={(value) => setKeyword(value)}
           />
         </div>
-        <div className="bg-white  w-full  min-h-[60px]  max-h-[550px] overflow-y-auto pt-4">
+        <div className="bg-white  w-full  min-h-[60px]  max-h-[550px] overflow-y-auto py-6">
           {data.length > 0 ? (
             <div className=" w-2/3 mx-auto grid grid-cols-4 gap-y-8">
               {data.map((item) => (
