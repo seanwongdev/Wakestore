@@ -1,9 +1,14 @@
 import CollectionLayout from "@/components/layout/CollectionLayout";
+import { Button } from "@/components/ui/button";
 import pool from "@/database/db";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Product {
   name: string;
@@ -15,31 +20,96 @@ interface Product {
 }
 
 const Category = ({ products }: { products: Product[] }) => {
+  const router = useRouter();
+
+  const { page, collection, category } = router.query;
+
+  const resultsPerPage = 5;
+
+  let pageNum = Number(page) || 1;
+  const maxPage = Math.ceil(products.length / resultsPerPage);
+  let pageArray = [];
+  for (let i = 1; i < maxPage + 1; i++) {
+    pageArray.push(i);
+  }
+
+  const entries = products.slice(
+    (pageNum - 1) * resultsPerPage,
+    pageNum * resultsPerPage
+  );
+
+  const handlePrev = () => {
+    if (pageNum > 1) {
+      pageNum--;
+      router.push(`/${collection}/${category}?page=${pageNum}`);
+    }
+  };
+
+  const handleNext = () => {
+    if (pageNum < maxPage) {
+      pageNum++;
+      router.push(`/${collection}/${category}?page=${pageNum}`);
+    }
+  };
+
+  const handleClick = (value: number) => {
+    pageNum = value;
+    router.push(`/${collection}/${category}?page=${pageNum}`);
+  };
+
   return (
-    <div className="grid grid-cols-3">
-      {products.map((product) => {
-        return (
-          <div key={product.url} className="py-4 flex flex-col justify-center ">
-            <Link href={`/products${product.url}`}>
-              {product.image_url?.length > 0 ? (
-                <Image
-                  width={350}
-                  height={200}
-                  alt="product"
-                  src={product.image_url[0]}
-                ></Image>
-              ) : (
-                <span>Image coming</span>
-              )}
-            </Link>
-            <Link href={`/products${product.url}`}>{product.name}</Link>
-            <span className="font-semibold">
-              {formatCurrency(Number(product.price))}
-            </span>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className="grid grid-cols-3">
+        {products.map((product) => {
+          return (
+            <div
+              key={product.url}
+              className="py-4 flex flex-col justify-center "
+            >
+              <Link href={`/products${product.url}`}>
+                {product.image_url?.length > 0 ? (
+                  <Image
+                    width={350}
+                    height={200}
+                    alt="product"
+                    src={product.image_url[0]}
+                  ></Image>
+                ) : (
+                  <span>Image coming</span>
+                )}
+              </Link>
+              <Link href={`/products${product.url}`}>{product.name}</Link>
+              <span className="font-semibold">
+                {formatCurrency(Number(product.price))}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex justify-end items-center space-x-4">
+        {pageNum !== 1 && (
+          <Button onClick={handlePrev}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </Button>
+        )}
+        {pageArray.map((page) => (
+          <Button
+            className={page === pageNum ? "bg-gray-400" : ""}
+            disabled={page === pageNum}
+            key={page}
+            onClick={() => handleClick(page)}
+          >
+            {page}
+          </Button>
+        ))}
+
+        {pageNum !== maxPage && (
+          <Button onClick={handleNext}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </Button>
+        )}
+      </div>
+    </>
   );
 };
 

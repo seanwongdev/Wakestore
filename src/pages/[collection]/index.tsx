@@ -14,12 +14,12 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight
 export default function Index({ products }: { products: Product[] }) {
   const router = useRouter();
 
-  const { page } = router.query;
+  const { page, collection } = router.query;
 
   const resultsPerPage = 5;
 
   let pageNum = Number(page) || 1;
-  const maxPage = products.length / resultsPerPage;
+  const maxPage = Math.ceil(products.length / resultsPerPage);
   let pageArray = [];
   for (let i = 1; i < maxPage + 1; i++) {
     pageArray.push(i);
@@ -33,20 +33,20 @@ export default function Index({ products }: { products: Product[] }) {
   const handlePrev = () => {
     if (pageNum > 1) {
       pageNum--;
-      router.push(`/riding-essentials?page=${pageNum}`);
+      router.push(`/${collection}?page=${pageNum}`);
     }
   };
 
   const handleNext = () => {
     if (pageNum < maxPage) {
       pageNum++;
-      router.push(`/riding-essentials?page=${pageNum}`);
+      router.push(`/${collection}?page=${pageNum}`);
     }
   };
 
   const handleClick = (value: number) => {
     pageNum = value;
-    router.push(`/riding-essentials?page=${pageNum}`);
+    router.push(`/${collection}?page=${pageNum}`);
   };
 
   return (
@@ -74,12 +74,15 @@ export default function Index({ products }: { products: Product[] }) {
         ))}
       </div>
       <div className="flex justify-end items-center space-x-4">
-        <Button onClick={handlePrev} disabled={pageNum === 1}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </Button>
+        {pageNum !== 1 && (
+          <Button onClick={handlePrev}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </Button>
+        )}
         {pageArray.map((page) => (
           <Button
             className={page === pageNum ? "bg-gray-400" : ""}
+            disabled={page === pageNum}
             key={page}
             onClick={() => handleClick(page)}
           >
@@ -87,9 +90,11 @@ export default function Index({ products }: { products: Product[] }) {
           </Button>
         ))}
 
-        <Button onClick={handleNext} disabled={pageNum === maxPage}>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </Button>
+        {pageNum !== maxPage && (
+          <Button onClick={handleNext}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </Button>
+        )}
       </div>
     </>
   );
