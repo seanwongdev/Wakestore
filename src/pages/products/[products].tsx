@@ -21,7 +21,14 @@ export default function Product(props: Product) {
 
   return (
     <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
-      <Image width="600" height="400" alt="product" src={image_url[0]}></Image>
+      {image_url && (
+        <Image
+          width="600"
+          height="400"
+          alt="product"
+          src={image_url[0]}
+        ></Image>
+      )}
       <div className="flex flex-col gap-5">
         <div>{name}</div>
         <div>{description}</div>

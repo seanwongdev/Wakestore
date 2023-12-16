@@ -22,9 +22,9 @@ interface Product {
 const Category = ({ products }: { products: Product[] }) => {
   const router = useRouter();
 
-  const { page, collection, category } = router.query;
+  const { page, collection, category, per_page } = router.query;
 
-  const resultsPerPage = 5;
+  let resultsPerPage = Number(per_page) || 9;
 
   let pageNum = Number(page) || 1;
   const maxPage = Math.ceil(products.length / resultsPerPage);
@@ -41,24 +41,51 @@ const Category = ({ products }: { products: Product[] }) => {
   const handlePrev = () => {
     if (pageNum > 1) {
       pageNum--;
-      router.push(`/${collection}/${category}?page=${pageNum}`);
+      router.push(
+        `/${collection}/${category}?page=${pageNum}&per_page=${resultsPerPage}`
+      );
     }
   };
 
   const handleNext = () => {
     if (pageNum < maxPage) {
       pageNum++;
-      router.push(`/${collection}/${category}?page=${pageNum}`);
+      router.push(
+        `/${collection}/${category}?page=${pageNum}&per_page=${resultsPerPage}`
+      );
     }
   };
 
   const handleClick = (value: number) => {
     pageNum = value;
-    router.push(`/${collection}/${category}?page=${pageNum}`);
+    router.push(
+      `/${collection}/${category}?page=${pageNum}&per_page=${resultsPerPage}`
+    );
+  };
+
+  const handleSelectResults = (value: number) => {
+    resultsPerPage = value;
+    router.push(
+      `/${collection}/${category}?page=${pageNum}&per_page=${resultsPerPage}`
+    );
   };
 
   return (
-    <>
+    <div className="mt-4">
+      <div className="flex justify-end items-center gap-2">
+        <span className="font-bold">Show</span>
+        <select
+          name="resultsPerPage"
+          id="resultsPerPage"
+          className="border rounded-sm border-gray-300 p-2 focus:outline-blue-500 "
+          onClick={(e) => handleSelectResults(e.target.value)}
+        >
+          <option value="9">9 products per page</option>
+          <option value="18">18 products per page</option>
+          <option value="36">36 products per page</option>
+          <option value="72">72 products per page</option>
+        </select>
+      </div>
       <div className="grid grid-cols-3">
         {products.map((product) => {
           return (
@@ -109,7 +136,7 @@ const Category = ({ products }: { products: Product[] }) => {
           </Button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
