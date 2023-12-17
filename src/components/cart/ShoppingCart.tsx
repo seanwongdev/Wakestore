@@ -21,7 +21,7 @@ const ShoppingCart = () => {
     fetchProductData();
   }, []);
 
-  const totalCost = cartItems.reduce(
+  const totalCost = cartItems?.reduce(
     (acc, cur) =>
       acc +
       cur.quantity * (data.find((item) => item.id === cur.id)?.price || 0),

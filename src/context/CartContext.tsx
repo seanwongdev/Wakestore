@@ -49,12 +49,12 @@ export const CartProvider = ({ children }: LayoutProps) => {
   };
 
   const getItemQuantity = (id: number) => {
-    return cartItems.find((item) => item.id === id)?.quantity || 0;
+    return cartItems?.find((item) => item.id === id)?.quantity || 0;
   };
 
   const increaseCartQuantity = (id: number) => {
-    if (!cartItems.find((item) => item.id === id)) {
-      const newCartItems = [...cartItems, { id, quantity: 1 }];
+    if (!cartItems?.find((item) => item.id === id)) {
+      const newCartItems = cartItems?.length > 0 ?  [...cartItems,  {id, quantity: 1 }] : [{id, quantity: 1}];
       localStorage.setItem("cart", JSON.stringify({ cart: newCartItems }));
       setCartToState();
     } else {
