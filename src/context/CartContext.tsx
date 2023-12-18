@@ -16,6 +16,7 @@ import {
   removeCartItem,
   updateCartItem,
 } from "@/lib/utils/cart";
+import { useSession } from "next-auth/react";
 
 export interface CartContext {
   getItemQuantity: (id: number) => number;
@@ -24,7 +25,7 @@ export interface CartContext {
   removeFromCart: (id: number) => void;
   changeCartQuantity: (id: number, value: string) => void;
   toggleCart: () => void;
-  handleOverlayClick: () => void;
+  handleOverlayClick: (e: MouseEvent) => void;
   cartItems: CartItem[];
   isOpen: boolean;
 }
@@ -40,6 +41,7 @@ interface CartItem {
 const CartContext = createContext({} as CartContext);
 
 export const CartProvider = ({ children }: LayoutProps) => {
+  const { data: session, status } = useSession();
   const setCartToState = async () => {
     const cartItems = (await getCart()) ?? [];
 
@@ -51,10 +53,10 @@ export const CartProvider = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     setCartToState();
-  }, []);
+  }, [status]);
   const [isOpen, setIsOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  console.log(cartItems);
+
   const toggleCart = () => {
     setIsOpen((state) => !state);
     document.body.classList.toggle("overflow-hidden", !isOpen);

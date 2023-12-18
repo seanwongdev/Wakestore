@@ -24,17 +24,17 @@ export default function App({
   const NestedLayout = Component.PageLayout || EmptyLayout;
   return (
     <>
-      <GlobalProvider>
-        <ChakraProvider>
-          <SessionProvider session={session}>
+      <ChakraProvider>
+        <SessionProvider session={session}>
+          <GlobalProvider>
             <Layout>
               <NestedLayout>
                 <Component {...pageProps} />
               </NestedLayout>
             </Layout>
-          </SessionProvider>
-        </ChakraProvider>
-      </GlobalProvider>
+          </GlobalProvider>
+        </SessionProvider>
+      </ChakraProvider>
     </>
   );
 }

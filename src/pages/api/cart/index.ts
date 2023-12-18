@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { user_id } = req.body;
+    const user_id = req.body;
 
     const createdOn = new Date().toLocaleDateString("en-CA");
     const modifiedAt = createdOn;
@@ -19,5 +19,17 @@ export default async function handler(
     client.release();
 
     res.status(200).json({ cart: rows[0] });
+  }
+  if (req.method === "PATCH") {
+    const id = req.body;
+
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT user_id, carts.cart_id, cartitems_id, product_item_id, quantity_ordered FROM carts JOIN cart_items ON carts.cart_id = cart_items.cart_id JOIN product_items ON cart_items.product_item_id = product_items.id WHERE carts.user_id = $1  ORDER BY cartitems_id ASC",
+      [id]
+    );
+    client.release();
+
+    res.status(200).json(rows);
   }
 }
