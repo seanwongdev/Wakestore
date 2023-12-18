@@ -24,7 +24,8 @@ const ShoppingCart = () => {
   const totalCost = cartItems?.reduce(
     (acc, cur) =>
       acc +
-      cur.quantity * (data.find((item) => item.id === cur.id)?.price || 0),
+      cur.quantity_ordered *
+        (data.find((item) => item.id === cur.product_item_id)?.price || 0),
     0
   );
 
@@ -60,9 +61,9 @@ const ShoppingCart = () => {
               <div className="  ">
                 {cartItems.map((item) => (
                   <CartItems
-                    key={item.id}
-                    id={item.id}
-                    quantity={item.quantity}
+                    key={item.product_item_id}
+                    id={item.product_item_id}
+                    quantity={item.quantity_ordered}
                   />
                 ))}
               </div>

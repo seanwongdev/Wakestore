@@ -6,16 +6,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
+  if (req.method === "PATCH") {
     const { id } = req.query;
+    const modifiedAt = new Date().toLocaleDateString("en-CA");
+    const { quantityOrdered } = req.body;
+
     const client = await pool.connect();
     const { rows } = await client.query(
-      "SELECT user_id, carts.cart_id, cartitems_id, product_item_id, quantity_ordered FROM carts JOIN cart_items ON carts.cart_id = cart_items.cart_id JOIN product_items ON cart_items.product_item_id = product_items.id WHERE carts.cart_id = $1",
-      [id]
+      "UPDATE cart_items SET quantity_ordered = $1, modified_at= $2 WHERE cartitems_id = $3 RETURNING cartitems_id, quantity_ordered",
+      [quantityOrdered, modifiedAt, id]
     );
 
     client.release();
 
-    res.status(200).json(rows);
+    res.status(200).json({ cartitem: rows[0] });
   }
 }

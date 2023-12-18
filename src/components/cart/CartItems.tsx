@@ -1,6 +1,6 @@
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
-import { Product } from "@/pages/[collection]";
+import { Product } from "@/pages/products/[products]";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons/faCaretUp";
@@ -18,7 +18,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
   const {
     removeFromCart,
     increaseCartQuantity,
-    decreaseCartQuantity,
+
     changeCartQuantity,
   } = useCart();
   useEffect(() => {
@@ -51,26 +51,17 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
         <span className="font-bold">
           {quantity > 1 ? `${quantity} x` : ""} ${item?.price}
         </span>
-        <span className="font-semibold relative">
-          Quantity: <button></button>
-          <FontAwesomeIcon
-            className="absolute top-[10px] left-[130px]"
-            icon={faCaretUp}
-            onClick={() => increaseCartQuantity(id)}
-          />
-          <FontAwesomeIcon
-            className="absolute top-[20px] left-[130px]"
-            icon={faCaretDown}
-            onClick={() => decreaseCartQuantity(id)}
-          />
+        <div className="font-semibold relative">
+          Quantity:{" "}
           <input
+            type="number"
             className="py-2.5 border rounded-md w-1/4 px-3.5 "
             value={quantity}
             onChange={(e) => {
               changeCartQuantity(id, e.target.value);
             }}
           />
-        </span>
+        </div>
       </div>
 
       <div className="flex items-center">
