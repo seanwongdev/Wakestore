@@ -13,6 +13,7 @@ import {
   createCart,
   createCartItem,
   getCart,
+  removeCartItem,
   updateCartItem,
 } from "@/lib/utils/cart";
 
@@ -108,7 +109,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
     if (!isNaN(newQuantity) && newQuantity > 0) {
       const cartItemId = cartItems.find((item) => item.product_item_id === id)
         ?.cartitems_id!;
-      await updateCartItem(id, cartItemId, newQuantity);
+      await updateCartItem(cartItemId, newQuantity);
       await setCartToState();
     }
   };
@@ -123,7 +124,10 @@ export const CartProvider = ({ children }: LayoutProps) => {
   //     setCartToState();
   //   }
   // };
-  const removeFromCart = (id: number) => {
+  const removeFromCart = async (id: number) => {
+    const cartItemId = cartItems.find((item) => item.product_item_id === id)
+      ?.cartitems_id!;
+    await removeCartItem(cartItemId);
     setCartToState();
   };
 

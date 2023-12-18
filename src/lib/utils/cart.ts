@@ -47,3 +47,14 @@ export const updateCartItem = async (
   const { cartitem } = await res.json();
   return cartitem;
 };
+
+export const removeCartItem = async (cartItemId: number) => {
+  const res = await fetch(`/api/cartitems/${cartItemId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+  });
+  const { cartitem } = await res.json();
+  return cartitem;
+};

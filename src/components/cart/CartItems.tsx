@@ -14,10 +14,17 @@ interface CartItemsProps {
 }
 
 const CartItems = ({ id, quantity }: CartItemsProps) => {
+  const quantityOptions: JSX.Element[] = [];
+  for (let i = 1; i < 100; i++) {
+    quantityOptions.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
   const [data, setData] = useState<Product[]>([]);
   const {
     removeFromCart,
-    increaseCartQuantity,
 
     changeCartQuantity,
   } = useCart();
@@ -53,14 +60,13 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
         </span>
         <div className="font-semibold relative">
           Quantity:{" "}
-          <input
-            type="number"
+          <select
             className="py-2.5 border rounded-md w-1/4 px-3.5 "
             value={quantity}
-            onChange={(e) => {
-              changeCartQuantity(id, e.target.value);
-            }}
-          />
+            onChange={(e) => changeCartQuantity(id, e.target.value)}
+          >
+            {quantityOptions.map((row) => row)}
+          </select>
         </div>
       </div>
 

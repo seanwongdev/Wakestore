@@ -13,8 +13,21 @@ export default async function handler(
 
     const client = await pool.connect();
     const { rows } = await client.query(
-      "UPDATE cart_items SET quantity_ordered = $1, modified_at= $2 WHERE cartitems_id = $3 RETURNING cartitems_id, quantity_ordered",
+      "UPDATE cart_items SET quantity_ordered = $1, modified_at= $2 WHERE cartitems_id = $3 RETURNING cartitems_id, quantity_ordered ",
       [quantityOrdered, modifiedAt, id]
+    );
+
+    client.release();
+
+    res.status(200).json({ cartitem: rows[0] });
+  }
+  if (req.method === "DELETE") {
+    const { id } = req.query;
+
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "DELETE FROM cart_items WHERE cartitems_id = $1",
+      [id]
     );
 
     client.release();
