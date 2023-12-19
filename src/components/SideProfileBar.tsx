@@ -7,14 +7,14 @@ import { faChartSimple } from "@fortawesome/free-solid-svg-icons/faChartSimple";
 import { faAddressBook } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 import { faUser } from "@fortawesome/free-regular-svg-icons/faUser";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons/faPenToSquare";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons/faCreditCard";
 import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
 
 const SideProfileNavBar: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className="flex flex-col space-y-4 font-semibold">
+    <div className="flex flex-col space-y-6 font-semibold">
       {session?.user?.role === "admin" && (
         <>
           <Link href="/account/new-item" className="space-x-4">
@@ -34,13 +34,13 @@ const SideProfileNavBar: React.FC = () => {
       )}
 
       <Link href="/account/" className="space-x-4">
-        <FontAwesomeIcon icon={faUser} /> <span>Main Account</span>
+        <FontAwesomeIcon icon={faUser} /> <span>Personal Information</span>
       </Link>
       <Link href="/account/view-orders" className="space-x-4">
         <FontAwesomeIcon icon={faCartShopping} /> <span>View Orders</span>
       </Link>
       <Link href="/account/update-profile" className="space-x-4">
-        <FontAwesomeIcon icon={faPenToSquare} /> <span>Manage Profile</span>
+        <FontAwesomeIcon icon={faCreditCard} /> <span>My Purchases</span>
       </Link>
       <Link href="/account/update-password" className="space-x-4">
         <FontAwesomeIcon icon={faKey} />

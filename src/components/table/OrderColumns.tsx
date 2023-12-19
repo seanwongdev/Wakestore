@@ -77,6 +77,21 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
+  {
+    accessorKey: "total",
+    cell: (info) => <span>{`$${info.getValue()}`}</span>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Order Value
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
 
   {
     accessorKey: "payment",

@@ -1,7 +1,7 @@
 import ProfileLayout from "@/components/layout/ProfileLayout";
 
-export default function UpdateProfile() {
+export default function MyPurchases() {
   return <div>Update Profile here</div>;
 }
 
-UpdateProfile.PageLayout = ProfileLayout;
+MyPurchases.PageLayout = ProfileLayout;
