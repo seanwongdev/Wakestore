@@ -41,18 +41,16 @@ export default async function handler(
   const addressStr = addressComponents.filter((obj) => obj !== null).join(", ");
   const phoneStr = session?.customer_details?.phone || "";
   const orderId = session?.metadata?.orderId;
-
+  const modifiedAt = new Date().toLocaleDateString("en-CA");
   if (event.type === "checkout.session.completed") {
-    console.log(addressStr, phoneStr, orderId);
-
     const client = await pool.connect();
     await client.query(
-      "UPDATE orders SET payment=true, address=$1, phone=$2 WHERE id = $3 ",
-      [addressStr, phoneStr, orderId]
+      "UPDATE orders SET payment=true, address=$1, phone=$2, modified_at=$3 WHERE id = $4 ",
+      [addressStr, phoneStr, modifiedAt, orderId]
     );
 
     client.release();
   }
 
-  res.status(200).json({ message: "updated successfully" });
+  res.status(200).json(null);
 }
