@@ -89,3 +89,5 @@ export const removeCartItem = async (cartItemId: number) => {
   const { cartitem } = await res.json();
   return cartitem;
 };
+
+export const mergeAnonymousCartIntoUserCart = async (userId: number) => {};

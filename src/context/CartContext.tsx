@@ -30,12 +30,14 @@ export interface CartContext {
   isOpen: boolean;
 }
 
-interface CartItem {
+export interface CartItem {
   user_id?: number;
   cart_id: number;
   cartitems_id: number;
   product_item_id: number;
+  name: string;
   quantity_ordered: number;
+  price: string;
 }
 
 const CartContext = createContext({} as CartContext);

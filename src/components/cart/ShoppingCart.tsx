@@ -10,6 +10,7 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 const ShoppingCart = () => {
   const { isOpen, toggleCart, cartItems, handleOverlayClick } = useCart();
+
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProductData = async () => {
@@ -28,6 +29,22 @@ const ShoppingCart = () => {
         (data.find((item) => item.id === cur.product_item_id)?.price || 0),
     0
   );
+
+  const checkout = async () => {
+    const res = await fetch("/api/checkout_sessions", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+
+      body: JSON.stringify({ cartItems }),
+    });
+    const { url } = await res.json();
+    if (url) {
+      window.location.href = url;
+    }
+    return;
+  };
 
   return (
     <div>
@@ -76,7 +93,7 @@ const ShoppingCart = () => {
                   <span className="font-bold">Grand Total: </span>
                   <span className="font-bold">{formatCurrency(totalCost)}</span>
                 </div>
-                <Button type="primary" onClick={() => {}}>
+                <Button type="primary" onClick={checkout}>
                   CHECKOUT
                 </Button>
               </div>
