@@ -2,7 +2,7 @@ import { MouseEvent, ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "checkout";
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -10,6 +10,7 @@ const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
   const styles = {
     primary: "font-semibold",
     secondary: "font-semibold",
+    checkout: "font-semibold bg-blue-500 text-white p-2.5 rounded-md mt-4",
   };
 
   return (

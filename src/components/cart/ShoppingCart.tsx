@@ -93,7 +93,7 @@ const ShoppingCart = () => {
                   <span className="font-bold">Grand Total: </span>
                   <span className="font-bold">{formatCurrency(totalCost)}</span>
                 </div>
-                <Button type="primary" onClick={checkout}>
+                <Button type="checkout" onClick={checkout}>
                   CHECKOUT
                 </Button>
               </div>
