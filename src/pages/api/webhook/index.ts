@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { buffer } from "micro";
 import Stripe from "stripe";
 import pool from "@/database/db";
@@ -41,13 +42,26 @@ export default async function handler(
   const addressStr = addressComponents.filter((obj) => obj !== null).join(", ");
   const phoneStr = session?.customer_details?.phone || "";
   const orderId = session?.metadata?.orderId;
+  const userId = session?.metadata?.userId;
   const modifiedAt = new Date().toLocaleDateString("en-CA");
   if (event.type === "checkout.session.completed") {
     const client = await pool.connect();
     await client.query(
-      "UPDATE orders SET payment=true, address=$1, phone=$2, modified_at=$3 WHERE id = $4 ",
+      "UPDATE orders SET payment=true, address=$1, phone=$2, order_modified_at=$3 WHERE id = $4 ",
       [addressStr, phoneStr, modifiedAt, orderId]
     );
+    console.log(userId);
+    if (userId) {
+      const { rows } = await client.query(
+        "SELECT cart_id FROM carts WHERE user_id = $1",
+        [userId]
+      );
+      const { cart_id } = rows[0];
+      await client.query("DELETE FROM cart_items WHERE cart_id = $1 ", [
+        cart_id,
+      ]);
+      await client.query("DELETE FROM carts WHERE cart_id = $1 ", [cart_id]);
+    }
 
     client.release();
   }

@@ -105,6 +105,7 @@ export default async function handler(
         cancel_url: `${req.headers.origin}/checkout/rejected`,
         metadata: {
           orderId: order.id,
+          userId: userId,
         },
       });
       res.status(200).json({ url: session.url });
