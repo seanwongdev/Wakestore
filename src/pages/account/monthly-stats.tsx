@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons/faDollarSign";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons/faCreditCard";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons/faThumbsUp";
-
 import {
   Card,
   CardContent,
@@ -16,12 +15,13 @@ import {
   columns as OrderColumns,
   Order,
 } from "@/components/table/OrderColumns";
-
-import ProfileLayout from "@/components/layout/ProfileLayout";
-import pool from "@/database/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+
+import ProfileLayout from "@/components/layout/ProfileLayout";
+import pool from "@/database/db";
+import DashboardChart from "@/components/table/DashboardChart";
 
 interface OrderItems {
   order_id: number;
@@ -33,14 +33,22 @@ interface OrderItems {
   date: string;
 }
 
+interface salesByCollectionByMonth {
+  name: string;
+  collection_name: string;
+  total_sales: string;
+}
+
 export default function MonthlyStats({
   orders,
   orderItems,
+  salesByCollectionByMonth,
 }: {
   orders: Order[];
   orderItems: OrderItems[];
+  salesByCollectionByMonth: salesByCollectionByMonth[];
 }) {
-  // const [showCharts, setShowCharts] = useState(false);
+  const [showCharts, setShowCharts] = useState(false);
   const revenue = orders
     .filter((items) => items.payment === true)
     .reduce((acc: any, cur: any) => {
@@ -73,15 +81,49 @@ export default function MonthlyStats({
     (item) => item.product_item_id === correspondingId
   )?.product_name;
 
+  // manipulating to get desired format for reChart
+  const getMonthName = (monthNumber) => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return months[monthNumber - 1];
+  };
+
+  const resultObject = {};
+
+  salesByCollectionByMonth.forEach((item) => {
+    const monthName = getMonthName(parseInt(item.name, 10));
+    const collectionName = item.collection_name;
+    const key = monthName;
+    if (!resultObject[key]) {
+      resultObject[key] = { name: key };
+    }
+
+    resultObject[key][collectionName] = parseFloat(item.total_sales);
+  });
+
+  const finalOutput = Object.values(resultObject);
+
   return (
     <div>
       <Card>
         <CardHeader>
           <div className="flex flex-row items-center justify-between">
             <CardTitle>Dashboard</CardTitle>
-            {/* <Button onClick={() => setShowCharts((state) => !state)}>
+            <Button onClick={() => setShowCharts((state) => !state)}>
               {showCharts ? "View Orders" : "View Charts"}
-            </Button> */}
+            </Button>
           </div>
           <CardDescription>Overview of your store</CardDescription>
         </CardHeader>
@@ -119,7 +161,11 @@ export default function MonthlyStats({
       </div>
 
       <div className="mt-6">
-        <OrderTable data={orders} columns={OrderColumns} />
+        {showCharts ? (
+          <DashboardChart data={finalOutput} />
+        ) : (
+          <OrderTable data={orders} columns={OrderColumns} />
+        )}
       </div>
     </div>
   );
@@ -132,8 +178,12 @@ export const getServerSideProps = (async (context) => {
     "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id"
   );
 
-  const orderItems = results.rows;
+  const output = await client.query(
+    "SELECT EXTRACT(MONTH FROM oi.created_on) AS month, ps.collection_name, SUM(oi.quantity_ordered * pi.price) AS total_sales FROM order_items oi JOIN product_items pi ON oi.product_item_id = pi.id JOIN product_category pc ON pi.product_category_id = pc.category_id JOIN product_collections ps ON ps.collection_id = pc.product_collection_id JOIN orders o ON oi.order_id = o.id WHERE o.payment=true GROUP BY month, ps.collection_name"
+  );
 
+  const orderItems = results.rows;
+  const salesByCollectionByMonth = output.rows;
   client.release();
   return {
     props: {
@@ -153,6 +203,11 @@ export const getServerSideProps = (async (context) => {
         quantity_ordered: item.quantity_ordered,
         price: item.price,
         date: new Date(item.order_modified_at).toISOString(),
+      })),
+      salesByCollectionByMonth: salesByCollectionByMonth.map((item) => ({
+        name: item.month,
+        collection_name: item.collection_name,
+        total_sales: item.total_sales,
       })),
     },
   };
