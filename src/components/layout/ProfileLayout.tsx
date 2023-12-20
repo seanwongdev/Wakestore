@@ -9,7 +9,7 @@ const ProfileLayout: React.FC<LayoutProps> = ({ children }) => {
       <div className="w-[280px]">
         <SideProfileNavBar />
       </div>
-      <div className="flex-grow">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   );
 };

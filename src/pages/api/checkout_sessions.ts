@@ -13,6 +13,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { cartItems } = req.body;
     const data: CartItem[] = cartItems;
+
     try {
       const getActive = await stripe.products.list({
         active: true,
@@ -36,19 +37,49 @@ export default async function handler(
         }
       }
 
+      // creating order
       const createdOn = new Date().toLocaleDateString("en-CA");
       const userId = data[0].user_id;
-
       const total = data
         .reduce((acc, cur) => acc + +cur.price * cur.quantity_ordered, 0)
         .toFixed(2);
-
       const client = await pool.connect();
       const { rows } = await client.query(
-        "INSERT INTO orders(user_id, total, created_on,modified_at) VALUES($1, $2, $3, $4) RETURNING id",
+        "INSERT INTO orders(user_id, total, order_created_on,order_modified_at) VALUES($1, $2, $3, $4) RETURNING id",
         [userId, total, createdOn, createdOn]
       );
       const order = rows[0];
+
+      // creating order items
+      const orderItems = data.map((row) => ({
+        orderId: order.id,
+        productItemId: row.product_item_id,
+        quantity: row.quantity_ordered,
+        createdOn: createdOn,
+        modifiedAt: createdOn,
+      }));
+
+      const values = orderItems.map((row) => [
+        row.orderId,
+        row.productItemId,
+        row.quantity,
+        row.createdOn,
+        row.modifiedAt,
+      ]);
+
+      const query = `
+        INSERT INTO order_items(order_id, product_item_id, quantity_ordered, created_on, modified_at)
+        SELECT * FROM UNNEST($1::int[], $2::int[], $3::int[], $4::timestamp[], $5::timestamp[]);
+        `;
+      await client.query(query, [
+        values.map((v) => v[0]), // order_id
+        values.map((v) => v[1]), // product_item_id
+        values.map((v) => v[2]), // quantity
+        values.map((v) => v[3]), // created_on
+        values.map((v) => v[4]), // modified_at
+      ]);
+
+      client.release();
 
       let stripeItems: any = [];
       for (const product of data) {
@@ -72,7 +103,9 @@ export default async function handler(
         },
         success_url: `${req.headers.origin}/checkout/success`,
         cancel_url: `${req.headers.origin}/checkout/rejected`,
-        metadata: { orderId: order.id },
+        metadata: {
+          orderId: order.id,
+        },
       });
       res.status(200).json({ url: session.url });
     } catch (err: any) {

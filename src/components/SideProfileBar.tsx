@@ -25,7 +25,7 @@ const SideProfileNavBar: React.FC = () => {
             <span>Manage Products</span>
           </Link>
           <Link href="/account/monthly-stats" className="space-x-4">
-            <FontAwesomeIcon icon={faChartSimple} /> <span>Monthly Stats</span>
+            <FontAwesomeIcon icon={faChartSimple} /> <span>Dashboard</span>
           </Link>
           <Link href="/account/all-users" className="space-x-4">
             <FontAwesomeIcon icon={faAddressBook} /> <span>All Users</span>

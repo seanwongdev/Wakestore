@@ -60,10 +60,11 @@ export function OrderTable<TData, TValue>({
   return (
     <div>
       <div className="flex justify-between items-center"></div>
-      <span className="font-semibold">
+      <header className="font-bold text-xl">Orders Log</header>
+      <span className="text-gray-600 text-sm">
         {table.getFilteredRowModel().rows.length} Orders
       </span>
-      <div className="rounded-md border mt-4">
+      <div className="rounded-md border mt-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

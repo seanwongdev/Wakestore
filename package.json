@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "stripe": "stripe login && stripe listen --forward-to localhost:3000/api/webhook"
   },
   "dependencies": {
     "@auth/pg-adapter": "^0.2.7",

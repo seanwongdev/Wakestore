@@ -22,7 +22,6 @@ export default function ManageItems({
 }) {
   return (
     <div>
-      In this dashboard you can manage your items
       <DataTable products={products} columns={columns} />
     </div>
   );
