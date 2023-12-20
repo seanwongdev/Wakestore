@@ -21,6 +21,7 @@ import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 interface OrderItems {
   order_id: number;
@@ -92,7 +93,7 @@ export default function MonthlyStats({
             <FontAwesomeIcon className="text-gray-400" icon={faDollarSign} />
           </CardHeader>
           <CardContent className="text-2xl font-bold">
-            <p>{`$${revenue}`}</p>
+            <p>{formatCurrency(parseFloat(revenue))}</p>
           </CardContent>
         </Card>
         <Card>
@@ -130,12 +131,9 @@ export const getServerSideProps = (async (context) => {
   const results = await client.query(
     "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id"
   );
-  const output = await client.query(
-    "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id JOIN product_category ON product_category.category_id = product_items.product_category_id JOIN product_collections ON product_collections.collection_id = product_category.product_collection_id"
-  );
 
   const orderItems = results.rows;
-  const collectionSales = output.rows;
+
   client.release();
   return {
     props: {

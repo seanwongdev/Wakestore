@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "../ui/button";
 import React from "react";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -79,7 +80,7 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "total",
-    cell: (info) => <span>{`$${info.getValue()}`}</span>,
+    cell: (info) => <span>{formatCurrency(parseFloat(info.getValue()))}</span>,
     header: ({ column }) => {
       return (
         <Button
