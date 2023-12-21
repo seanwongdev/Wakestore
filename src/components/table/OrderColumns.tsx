@@ -19,7 +19,7 @@ export interface Order {
 
 export const columns: ColumnDef<Order>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "guid",
     header: ({ column }) => {
       return (
         <Button
@@ -88,22 +88,6 @@ export const columns: ColumnDef<Order>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Order Value
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-
-  {
-    accessorKey: "payment",
-
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Paid?
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

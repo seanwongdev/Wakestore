@@ -173,7 +173,9 @@ export default function MonthlyStats({
 
 export const getServerSideProps = (async (context) => {
   const client = await pool.connect();
-  const { rows } = await client.query("SELECT * FROM orders ");
+  const { rows } = await client.query(
+    "SELECT * FROM orders WHERE payment = true "
+  );
   const results = await client.query(
     "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id"
   );
@@ -189,6 +191,7 @@ export const getServerSideProps = (async (context) => {
     props: {
       orders: rows.map((item) => ({
         id: item.id,
+        guid: item.guid,
         user_id: item.user_id,
         total: item.total,
         payment: item.payment,
