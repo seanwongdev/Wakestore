@@ -12,7 +12,14 @@ function EditImage({ getValue, row }) {
   return (
     <Link href={`/account/manage-items/${row.original.id}`}>
       {initValue ? (
-        <Image width="60" height="60" alt="product" src={initValue[0]}></Image>
+        <Image
+          width="60"
+          height="60"
+          alt="product"
+          loading="lazy"
+          quality={60}
+          src={initValue[0]}
+        ></Image>
       ) : (
         <Button>Add Image</Button>
       )}

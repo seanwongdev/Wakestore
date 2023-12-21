@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   const client = await pool.connect();
   const result = await client.query(
-    "SELECT * FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id"
+    "SELECT * FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id ORDER BY position_id ASC"
   );
   const category = result.rows;
   client.release();

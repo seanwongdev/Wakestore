@@ -99,6 +99,8 @@ const Category = ({ products }: { products: Product[] }) => {
                     width={350}
                     height={200}
                     alt="product"
+                    loading="lazy"
+                    quality={60}
                     src={product.image_url[0]}
                   ></Image>
                 ) : (

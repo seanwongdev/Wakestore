@@ -45,6 +45,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
     <div className="flex gap-4 justify-evenly py-6 border-b">
       {item?.image_url ? (
         <Image
+          loading="lazy"
           height="30"
           width="80"
           alt="product"

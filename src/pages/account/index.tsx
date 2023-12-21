@@ -14,6 +14,8 @@ export default function Account() {
             alt="avatar"
             width={200}
             height={200}
+            loading="lazy"
+            quality={60}
             src="https://res.cloudinary.com/dleikmnsf/image/upload/v1702456346/Blank-Avatar-Man-in-Suit_vzwexp.jpg"
           />
         </>

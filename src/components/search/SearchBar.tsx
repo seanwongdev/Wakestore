@@ -53,9 +53,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onOverlayClick }) => {
                   <Link href={`/products${item.url}`}>
                     {item.image_url?.length > 0 ? (
                       <Image
+                        loading="lazy"
                         width={250}
                         height={200}
                         alt="product"
+                        quality={60}
                         src={item.image_url[0]}
                       ></Image>
                     ) : (

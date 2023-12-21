@@ -27,6 +27,8 @@ export default function Product(props: Product) {
           height="400"
           alt="product"
           src={image_url[0]}
+          loading="lazy"
+          quality={60}
         ></Image>
       )}
       <div className="flex flex-col gap-5">

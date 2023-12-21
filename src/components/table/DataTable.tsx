@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +38,9 @@ export function DataTable<TData, TValue>({
   );
   const [rowSelection, setRowSelection] = React.useState({});
   const [data, setData] = useState(products);
+  useEffect(() => {
+    setData(products);
+  }, [products]);
   const table = useReactTable({
     data,
     columns,
