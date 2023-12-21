@@ -8,7 +8,7 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSadCry } from "@fortawesome/free-regular-svg-icons/faFaceSadCry";
 import OrderItem from "@/components/OrderItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface Orders {
   user_id: number;
   guid: string;
@@ -26,9 +26,18 @@ interface OrderProps {
 }
 
 export default function ViewOrders({ orders }: OrderProps) {
-  console.log(orders);
   const dateOptions = { day: "numeric", month: "short", year: "numeric" };
   const [order, setOrder] = useState("");
+  const [data, setData] = useState([]);
+  console.log(data);
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      const res = await fetch(`/api/order/${order}`);
+      const orderItems = await res.json();
+      setData(orderItems);
+    };
+    fetchOrderData();
+  }, [order]);
 
   return (
     <>
@@ -47,7 +56,8 @@ export default function ViewOrders({ orders }: OrderProps) {
                 {new Intl.DateTimeFormat("en-GB", dateOptions).format(
                   new Date(order.date)
                 )}{" "}
-                : {order.guid} - {formatCurrency(parseFloat(order.total))}
+                : {order.guid.toUpperCase()} -{" "}
+                {formatCurrency(parseFloat(order.total))}
               </option>
             ))}
           </select>
@@ -58,7 +68,7 @@ export default function ViewOrders({ orders }: OrderProps) {
           <FontAwesomeIcon className="text-2xl" icon={faFaceSadCry} />
         </div>
       )}
-      <OrderItem />
+      <OrderItem data={data} />
     </>
   );
 }
@@ -71,10 +81,7 @@ export const getServerSideProps = (async (context) => {
     "SELECT user_id, guid, total, order_modified_at FROM orders o WHERE o.user_id = $1 AND payment=true",
     [session?.user.id]
   );
-  // const { rows } = await client.query(
-  //   "SELECT user_id, guid,address, phone,total, order_modified_at, pi.name, quantity_ordered, price FROM orders o JOIN order_items oi ON oi.order_id = o.id JOIN product_items pi ON pi.id = oi.product_item_id WHERE o.user_id = $1 AND payment=true",
-  //   [session?.user.id]
-  // );
+
   client.release();
   return {
     props: {
