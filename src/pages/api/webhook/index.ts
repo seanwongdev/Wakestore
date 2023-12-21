@@ -50,7 +50,7 @@ export default async function handler(
       "UPDATE orders SET payment=true, address=$1, phone=$2, order_modified_at=$3 WHERE id = $4 ",
       [addressStr, phoneStr, modifiedAt, orderId]
     );
-    console.log(userId);
+
     if (userId) {
       const { rows } = await client.query(
         "SELECT cart_id FROM carts WHERE user_id = $1",

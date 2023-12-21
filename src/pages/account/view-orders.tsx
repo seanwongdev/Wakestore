@@ -29,7 +29,7 @@ export default function ViewOrders({ orders }: OrderProps) {
   const dateOptions = { day: "numeric", month: "short", year: "numeric" };
   const [order, setOrder] = useState("");
   const [data, setData] = useState([]);
-  console.log(data);
+
   useEffect(() => {
     const fetchOrderData = async () => {
       const res = await fetch(`/api/order/${order}`);
