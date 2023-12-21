@@ -39,7 +39,7 @@ const SideProfileNavBar: React.FC = () => {
       <Link href="/account/view-orders" className="space-x-4">
         <FontAwesomeIcon icon={faCartShopping} /> <span>View Orders</span>
       </Link>
-      <Link href="/account/update-profile" className="space-x-4">
+      <Link href="/account/my-purchases" className="space-x-4">
         <FontAwesomeIcon icon={faCreditCard} /> <span>My Purchases</span>
       </Link>
       <Link href="/account/update-password" className="space-x-4">

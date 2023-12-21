@@ -186,7 +186,9 @@ export default function NewItem({ category }: { category: Category[] }) {
 
 export const getStaticProps = (async () => {
   const client = await pool.connect();
-  const { rows } = await client.query("SELECT * FROM product_category");
+  const { rows } = await client.query(
+    "SELECT * FROM product_category ORDER BY position_id ASC"
+  );
   client.release();
   return {
     props: {

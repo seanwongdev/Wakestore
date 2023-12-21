@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
+import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
 
 import { useCart } from "@/context/CartContext";
 import NavbarHover from "./NavbarHover";
@@ -54,7 +55,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
   }, []);
   return (
     <div className="flex justify-between w-full px-20 py-12 bg-gray-800 text-white items-center">
-      <span>Logo</span>
+      <div className="space-x-2">
+        <FontAwesomeIcon className="text-3xl" icon={faWaveSquare} />{" "}
+        <span className="font-bold text-2xl">ShredShop </span>
+      </div>
       <div className="flex justify-evenly items-center gap-14 relative">
         {data.map((row) => (
           <Link

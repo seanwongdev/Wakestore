@@ -92,13 +92,13 @@ const Category = ({ products }: { products: Product[] }) => {
         </select>
       </div>
       <div className="grid grid-cols-3 gap-10 mt-4">
-        {products.map((product) => {
+        {entries.map((product) => {
           return (
             <div
               key={product.url}
               className="py-4 flex flex-col justify-center gap-2"
             >
-              <Link href={`/products${product.url}`}>
+              <Link className="h-full" href={`/products${product.url}`}>
                 {product.image_url?.length > 0 ? (
                   <Image
                     width={400}
