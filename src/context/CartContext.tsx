@@ -89,6 +89,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
       await createCartItem(productId, cart.cart_id);
       setCartToState();
     }
+    toggleCart();
   };
   // const increaseCartQuantity = (id: number) => {
   //   if (!cartItems?.find((item) => item.id === id)) {

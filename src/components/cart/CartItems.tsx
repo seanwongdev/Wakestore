@@ -47,7 +47,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
         <Image
           loading="lazy"
           height="30"
-          width="80"
+          width="100"
           alt="product"
           src={item.image_url[0]}
         ></Image>

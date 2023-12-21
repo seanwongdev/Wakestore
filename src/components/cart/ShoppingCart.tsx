@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/context/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
+import { faCreditCard } from "@fortawesome/free-regular-svg-icons/faCreditCard";
+
 import CartItems from "./CartItems";
 import Button from "../Button";
 import { Product } from "@/pages/products/[products]";
@@ -94,7 +96,8 @@ const ShoppingCart = () => {
                   <span className="font-bold">{formatCurrency(totalCost)}</span>
                 </div>
                 <Button type="checkout" onClick={checkout}>
-                  CHECKOUT
+                  <FontAwesomeIcon icon={faCreditCard} />
+                  <span>CHECKOUT</span>
                 </Button>
               </div>
             </>

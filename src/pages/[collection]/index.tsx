@@ -10,9 +10,12 @@ import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
+import { useCart } from "@/context/CartContext";
 
 export default function Index({ products }: { products: Product[] }) {
   const router = useRouter();
+  const { increaseCartQuantity } = useCart();
 
   const { page, collection, per_page } = router.query;
 
@@ -61,7 +64,7 @@ export default function Index({ products }: { products: Product[] }) {
         <select
           name="resultsPerPage"
           id="resultsPerPage"
-          className="border rounded-sm border-gray-300 p-2 focus:outline-blue-500 "
+          className="border rounded border-gray-300 p-2 focus:outline-blue-500 "
           onClick={(e) => handleSelectResults(e.target.value)}
         >
           <option value="9">9 products per page</option>
@@ -70,13 +73,13 @@ export default function Index({ products }: { products: Product[] }) {
           <option value="72">72 products per page</option>
         </select>
       </div>
-      <div className="grid grid-cols-3 gap-y-6 py-4 ">
+      <div className="grid grid-cols-3 gap-10 mt-4">
         {entries.map((item) => (
-          <div key={item.id} className="flex flex-col justify-center">
+          <div key={item.id} className="flex flex-col justify-center gap-2">
             <Link href={`/products${item.url}`}>
               {item.image_url?.length > 0 ? (
                 <Image
-                  width={350}
+                  width={400}
                   height={200}
                   alt="product"
                   loading="lazy"
@@ -87,14 +90,23 @@ export default function Index({ products }: { products: Product[] }) {
                 <span>Image coming</span>
               )}
             </Link>
-            <Link href={`/products${item.url}`}>{item.name}</Link>
-            <span className="font-semibold">
+            <Link className="text-sm" href={`/products${item.url}`}>
+              {item.name}
+            </Link>
+            <span className="font-bold text-l ">
               {formatCurrency(Number(item.price))}
             </span>
+            <Button
+              className="space-x-4"
+              onClick={() => increaseCartQuantity(item.id)}
+            >
+              <FontAwesomeIcon icon={faCartShopping} />
+              <span>ADD TO CART</span>
+            </Button>
           </div>
         ))}
       </div>
-      <div className="flex justify-end items-center space-x-4">
+      <div className="flex justify-end items-center space-x-2 mt-6">
         {pageNum !== 1 && (
           <Button onClick={handlePrev}>
             <FontAwesomeIcon icon={faChevronLeft} />

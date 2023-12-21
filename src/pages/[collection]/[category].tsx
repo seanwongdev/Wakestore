@@ -4,13 +4,17 @@ import pool from "@/database/db";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import type { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCart } from "@/context/CartContext";
 
 interface Product {
+  id: number;
   name: string;
   url: string;
   description: string;
@@ -20,6 +24,7 @@ interface Product {
 }
 
 const Category = ({ products }: { products: Product[] }) => {
+  const { increaseCartQuantity } = useCart();
   const router = useRouter();
 
   const { page, collection, category, per_page } = router.query;
@@ -77,7 +82,7 @@ const Category = ({ products }: { products: Product[] }) => {
         <select
           name="resultsPerPage"
           id="resultsPerPage"
-          className="border rounded-sm border-gray-300 p-2 focus:outline-blue-500 "
+          className="border rounded border-gray-300 p-2 focus:outline-blue-500 "
           onClick={(e) => handleSelectResults(e.target.value)}
         >
           <option value="9">9 products per page</option>
@@ -86,17 +91,17 @@ const Category = ({ products }: { products: Product[] }) => {
           <option value="72">72 products per page</option>
         </select>
       </div>
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 gap-10 mt-4">
         {products.map((product) => {
           return (
             <div
               key={product.url}
-              className="py-4 flex flex-col justify-center "
+              className="py-4 flex flex-col justify-center gap-2"
             >
               <Link href={`/products${product.url}`}>
                 {product.image_url?.length > 0 ? (
                   <Image
-                    width={350}
+                    width={400}
                     height={200}
                     alt="product"
                     loading="lazy"
@@ -107,15 +112,24 @@ const Category = ({ products }: { products: Product[] }) => {
                   <span>Image coming</span>
                 )}
               </Link>
-              <Link href={`/products${product.url}`}>{product.name}</Link>
-              <span className="font-semibold">
+              <Link className="text-sm" href={`/products${product.url}`}>
+                {product.name}
+              </Link>
+              <span className="font-bold text-l ">
                 {formatCurrency(Number(product.price))}
               </span>
+              <Button
+                className="space-x-4"
+                onClick={() => increaseCartQuantity(product.id)}
+              >
+                <FontAwesomeIcon icon={faCartShopping} />
+                <span>ADD TO CART</span>
+              </Button>
             </div>
           );
         })}
       </div>
-      <div className="flex justify-end items-center space-x-4">
+      <div className="flex justify-end items-center space-x-2 mt-6">
         {pageNum !== 1 && (
           <Button onClick={handlePrev}>
             <FontAwesomeIcon icon={faChevronLeft} />
@@ -154,6 +168,7 @@ export const getStaticProps = (async (context) => {
   return {
     props: {
       products: result.rows.map((product) => ({
+        id: product.id,
         name: product.name,
         description: product.description,
         url: product.url,
