@@ -30,7 +30,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
   } = useCart();
   useEffect(() => {
     const fetchProductData = async () => {
-      const res = await fetch("/api/admin/products");
+      const res = await fetch("/api/products");
       const { products } = await res.json();
 
       setData(products);
@@ -38,7 +38,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
     fetchProductData();
   }, []);
 
-  const item = data.find((item) => item.id === id);
+  const item = data?.find((item) => item.id === id);
   if (item === null) return null;
 
   return (

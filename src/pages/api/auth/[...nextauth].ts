@@ -1,8 +1,9 @@
-import NextAuth, { Session, User } from "next-auth";
+import NextAuth, { Session, User, getServerSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import pool from "../../../database/db";
 import bcrypt from "bcryptjs";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export const authOptions = {
   callbacks: {
@@ -53,3 +54,16 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 export default NextAuth(authOptions);
+
+export async function isAdminRequest(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const session = await getServerSession(req, res, authOptions);
+  if (session?.user?.role !== "admin") {
+    res
+      .status(403)
+      .json({ error: "You need to be an Admin to access this page" });
+    throw Error("You need to be an Admin to access this page");
+  }
+}

@@ -16,7 +16,7 @@ const ShoppingCart = () => {
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProductData = async () => {
-      const res = await fetch("/api/admin/products");
+      const res = await fetch("/api/products");
       const { products } = await res.json();
 
       setData(products);
@@ -28,7 +28,7 @@ const ShoppingCart = () => {
     (acc, cur) =>
       acc +
       cur.quantity_ordered *
-        (data.find((item) => item.id === cur.product_item_id)?.price || 0),
+        (data?.find((item) => item.id === cur.product_item_id)?.price || 0),
     0
   );
 

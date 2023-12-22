@@ -45,12 +45,12 @@ const CartContext = createContext({} as CartContext);
 export const CartProvider = ({ children }: LayoutProps) => {
   const { data: session, status } = useSession();
   const setCartToState = async () => {
-    const cartItems = (await getCart()) ?? [];
+    const cartProds = (await getCart()) ?? [];
 
     // const { cart } = localStorage.getItem("cart")
     //   ? JSON.parse(localStorage.getItem("cart")!)
     //   : [];
-    setCartItems(cartItems);
+    setCartItems(cartProds);
   };
 
   useEffect(() => {
