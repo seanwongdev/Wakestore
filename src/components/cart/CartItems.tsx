@@ -7,6 +7,7 @@ import { faCaretUp } from "@fortawesome/free-solid-svg-icons/faCaretUp";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 interface CartItemsProps {
   id: number;
@@ -30,10 +31,16 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
   } = useCart();
   useEffect(() => {
     const fetchProductData = async () => {
-      const res = await fetch("/api/products");
-      const { products } = await res.json();
+      try {
+        const res = await fetch("/api/products");
+        if (!res.ok) throw new Error("Failed to fetch product data");
+        const { products } = await res.json();
 
-      setData(products);
+        setData(products);
+      } catch (err: any) {
+        console.error("Error in fetching product data:", err);
+        toast.error(err.message);
+      }
     };
     fetchProductData();
   }, []);

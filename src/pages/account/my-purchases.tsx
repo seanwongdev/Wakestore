@@ -1,10 +1,11 @@
-import ProfileLayout from "@/components/layout/ProfileLayout";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
+
 import pool from "@/database/db";
 import Image from "next/image";
-import { formatCurrency } from "@/lib/utils/formatCurrency";
+import ProfileLayout from "@/components/layout/ProfileLayout";
 
 interface ItemProps {
   name: string;
@@ -53,25 +54,36 @@ export default function MyPurchases({ items }: { items: ItemProps[] }) {
 }
 
 export const getServerSideProps = (async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  try {
+    const session = await getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT name, price, order_modified_at, image_url FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN product_items pi ON pi.id = oi.product_item_id WHERE o.user_id = $1 AND payment=true ORDER BY order_modified_at DESC",
-    [session?.user.id]
-  );
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT name, price, order_modified_at, image_url FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN product_items pi ON pi.id = oi.product_item_id WHERE o.user_id = $1 AND payment=true ORDER BY order_modified_at DESC",
+      [session?.user.id]
+    );
 
-  client.release();
-  return {
-    props: {
-      items: rows.map((row) => ({
-        name: row.name,
-        price: row.price,
-        date: new Date(row.order_modified_at).toISOString(),
-        image: row.image_url,
-      })),
-    },
-  };
+    client.release();
+    return {
+      props: {
+        items: rows.map((row) => ({
+          name: row.name,
+          price: row.price,
+          date: new Date(row.order_modified_at).toISOString(),
+          image: row.image_url,
+        })),
+      },
+    };
+  } catch (err) {
+    console.error("Error in getServerSideProps:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetServerSideProps;
 
 MyPurchases.PageLayout = ProfileLayout;

@@ -1,10 +1,12 @@
-import Button from "@/components/Button";
-import ProfileLayout from "@/components/layout/ProfileLayout";
-import pool from "@/database/db";
 import { uploadCloudinary } from "@/lib/utils/upload";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
+import { toast } from "react-toastify";
+
+import Button from "@/components/Button";
+import ProfileLayout from "@/components/layout/ProfileLayout";
+import pool from "@/database/db";
 
 interface Category {
   id: number;
@@ -48,9 +50,11 @@ export default function NewItem({ category }: { category: Category[] }) {
         method: "POST",
         body: JSON.stringify({ product }),
       });
+      if (!res.ok) throw new Error("Failed to create new item");
       router.push("/account/manage-items");
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.error("Error in form submission:", err);
+      toast.error(err.message);
     }
   };
   return (
@@ -185,19 +189,26 @@ export default function NewItem({ category }: { category: Category[] }) {
 }
 
 export const getStaticProps = (async () => {
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT * FROM product_category ORDER BY position_id ASC"
-  );
-  client.release();
-  return {
-    props: {
-      category: rows.map((item) => ({
-        id: item.category_id,
-        name: item.category_name,
-      })),
-    },
-  };
+  try {
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT * FROM product_category ORDER BY position_id ASC"
+    );
+    client.release();
+    return {
+      props: {
+        category: rows.map((item) => ({
+          id: item.category_id,
+          name: item.category_name,
+        })),
+      },
+    };
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetStaticProps;
 
 NewItem.PageLayout = ProfileLayout;

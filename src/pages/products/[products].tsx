@@ -49,30 +49,50 @@ export default function Product(props: Product) {
 }
 
 export const getStaticProps = (async (context) => {
-  const products = "/" + context.params?.products;
+  try {
+    const products = "/" + context.params?.products;
 
-  const client = await pool.connect();
-  const result = await client.query(
-    "SELECT id, name, description, quantity, price, image_url FROM product_items WHERE url = $1 AND is_deleted = false",
-    [products]
-  );
-  client.release();
-  return {
-    props: result.rows[0],
-    revalidate: 3600,
-  };
+    const client = await pool.connect();
+    const result = await client.query(
+      "SELECT id, name, description, quantity, price, image_url FROM product_items WHERE url = $1 AND is_deleted = false",
+      [products]
+    );
+    client.release();
+    if (result.rows.length === 0) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: result.rows[0],
+      revalidate: 3600,
+    };
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetStaticProps;
 
 export const getStaticPaths = (async () => {
-  const client = await pool.connect();
-  const result = await client.query("SELECT url FROM product_items");
-  client.release();
-  return {
-    paths: result.rows.map((product) => ({
-      params: {
-        products: product.url.slice(1),
-      },
-    })),
-    fallback: false,
-  };
+  try {
+    const client = await pool.connect();
+    const result = await client.query("SELECT url FROM product_items");
+    client.release();
+    return {
+      paths: result.rows.map((product) => ({
+        params: {
+          products: product.url.slice(1),
+        },
+      })),
+      fallback: false,
+    };
+  } catch (err) {
+    console.error("Error in getStaticPaths:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetStaticPaths;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Category } from "./layout/CollectionLayout";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 interface NavbarHoverProps {
   collection: string;
@@ -16,9 +17,15 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
   const [data, setData] = useState<Category[]>([]);
   useEffect(() => {
     const fetchCategoryData = async () => {
-      const res = await fetch("/api/category");
-      const { category } = await res.json();
-      setData(category);
+      try {
+        const res = await fetch("/api/category");
+        if (!res.ok) throw new Error("Failed to fetch category data");
+        const { category } = await res.json();
+        setData(category);
+      } catch (err: any) {
+        console.error("Error fetching category data:", err);
+        toast.error(err.message);
+      }
     };
     fetchCategoryData();
   }, []);

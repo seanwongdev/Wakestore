@@ -9,6 +9,7 @@ import CartItems from "./CartItems";
 import Button from "../Button";
 import { Product } from "@/pages/products/[products]";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
+import { toast } from "react-toastify";
 
 const ShoppingCart = () => {
   const { isOpen, toggleCart, cartItems, handleOverlayClick } = useCart();
@@ -16,10 +17,16 @@ const ShoppingCart = () => {
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProductData = async () => {
-      const res = await fetch("/api/products");
-      const { products } = await res.json();
+      try {
+        const res = await fetch("/api/products");
+        if (!res.ok) throw new Error("Failed to fetch product data");
+        const { products } = await res.json();
 
-      setData(products);
+        setData(products);
+      } catch (err: any) {
+        console.error("Error in fetching product data:", err);
+        toast.error(err.message);
+      }
     };
     fetchProductData();
   }, []);
@@ -33,19 +40,25 @@ const ShoppingCart = () => {
   );
 
   const checkout = async () => {
-    const res = await fetch("/api/checkout_sessions", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
+    try {
+      const res = await fetch("/api/checkout_sessions", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
 
-      body: JSON.stringify({ cartItems }),
-    });
-    const { url } = await res.json();
-    if (url) {
-      window.location.href = url;
+        body: JSON.stringify({ cartItems }),
+      });
+      if (!res.ok) throw new Error("Failed to checkout");
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      }
+      return;
+    } catch (err: any) {
+      console.error("Error in checkout:", err);
+      toast.error(err.message);
     }
-    return;
   };
 
   return (

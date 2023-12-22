@@ -1,17 +1,17 @@
-import CollectionLayout from "@/components/layout/CollectionLayout";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import { Button } from "@/components/ui/button";
-import pool from "@/database/db";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import type { GetStaticPaths, GetStaticProps } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCart } from "@/context/CartContext";
+
+import CollectionLayout from "@/components/layout/CollectionLayout";
+import pool from "@/database/db";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Product {
   id: number;
@@ -157,46 +157,60 @@ const Category = ({ products }: { products: Product[] }) => {
 };
 
 export const getStaticProps = (async (context) => {
-  const category = "/" + context.params?.category;
-  const client = await pool.connect();
-  const result = await client.query<Product>(
-    "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1 AND is_deleted = false",
-    [category]
-  );
-  client.release();
+  try {
+    const category = "/" + context.params?.category;
+    const client = await pool.connect();
+    const result = await client.query<Product>(
+      "SELECT * FROM product_items JOIN product_category ON product_items.product_category_id = product_category.category_id WHERE category_url = $1 AND is_deleted = false",
+      [category]
+    );
+    client.release();
 
-  return {
-    props: {
-      products: result.rows.map((product) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        url: product.url,
-        quantity: product.quantity,
-        price: product.price,
-        image_url: product.image_url,
-      })),
-    },
-    revalidate: 3600,
-  };
+    return {
+      props: {
+        products: result.rows.map((product) => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          url: product.url,
+          quantity: product.quantity,
+          price: product.price,
+          image_url: product.image_url,
+        })),
+      },
+      revalidate: 3600,
+    };
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetStaticProps;
 
 export const getStaticPaths = (async () => {
-  const client = await pool.connect();
-  const result = await client.query(
-    "SELECT category_url, collection_url FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id"
-  );
-  client.release();
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      "SELECT category_url, collection_url FROM product_category JOIN product_collections ON product_category.product_collection_id = product_collections.collection_id"
+    );
+    client.release();
 
-  return {
-    paths: result.rows.map((category) => ({
-      params: {
-        category: category.category_url.slice(1),
-        collection: category.collection_url.slice(1),
-      },
-    })),
-    fallback: false,
-  };
+    return {
+      paths: result.rows.map((category) => ({
+        params: {
+          category: category.category_url.slice(1),
+          collection: category.collection_url.slice(1),
+        },
+      })),
+      fallback: false,
+    };
+  } catch (err) {
+    console.error("Error in getStaticPaths:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetStaticPaths;
 
 Category.PageLayout = CollectionLayout;

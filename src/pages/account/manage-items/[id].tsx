@@ -27,6 +27,7 @@ export default function ProductImage({ product }: { product: ProductAdmin }) {
         },
         body: JSON.stringify(payload),
       });
+      if (!res.ok) throw new Error("Error uploading product images");
       router.push("/account/manage-items");
     } catch (err) {
       console.log(err);
@@ -59,41 +60,51 @@ export default function ProductImage({ product }: { product: ProductAdmin }) {
 }
 
 export const getStaticProps = (async (context) => {
-  const { id } = context.params;
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT * FROM product_items WHERE id = $1",
-    [id]
-  );
-  client.release();
-  return {
-    props: {
-      product: {
-        id: rows[0].id,
-        name: rows[0].name,
-        price: rows[0].price,
-        quantity: rows[0].quantity,
-        product_category_id: rows[0].product_category_id,
-        url: rows[0].url,
-        image_url: rows[0].image_url,
-        is_deleted: rows[0].is_deleted,
+  try {
+    const { id } = context.params;
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT * FROM product_items WHERE id = $1",
+      [id]
+    );
+    client.release();
+    return {
+      props: {
+        product: {
+          id: rows[0].id,
+          name: rows[0].name,
+          price: rows[0].price,
+          quantity: rows[0].quantity,
+          product_category_id: rows[0].product_category_id,
+          url: rows[0].url,
+          image_url: rows[0].image_url,
+          is_deleted: rows[0].is_deleted,
+        },
       },
-    },
-  };
+    };
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return { notFound: true };
+  }
 }) satisfies GetStaticProps;
 
 export const getStaticPaths = (async () => {
-  const client = await pool.connect();
-  const { rows } = await client.query("SELECT id FROM product_items");
-  client.release();
-  return {
-    paths: rows.map((item) => ({
-      params: {
-        id: item.id.toString(),
-      },
-    })),
-    fallback: false,
-  };
+  try {
+    const client = await pool.connect();
+    const { rows } = await client.query("SELECT id FROM product_items");
+    client.release();
+    return {
+      paths: rows.map((item) => ({
+        params: {
+          id: item.id.toString(),
+        },
+      })),
+      fallback: false,
+    };
+  } catch (err) {
+    console.error("Error in getStaticPaths:", err);
+    return { notFound: true };
+  }
 }) satisfies GetStaticPaths;
 
 ProductImage.PageLayout = ProfileLayout;

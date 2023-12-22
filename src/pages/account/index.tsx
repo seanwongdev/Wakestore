@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
+
 import ProfileLayout from "@/components/layout/ProfileLayout";
-import { Cloudinary } from "@cloudinary/url-gen";
 import Image from "next/image";
 
 export default function Account() {

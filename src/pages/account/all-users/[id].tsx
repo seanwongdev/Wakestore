@@ -1,8 +1,10 @@
 import type { GetStaticPaths, GetStaticProps } from "next";
-import pool from "@/database/db";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { User } from "next-auth";
+import { toast } from "react-toastify";
+
+import pool from "@/database/db";
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import Button from "@/components/Button";
 
@@ -20,15 +22,21 @@ export default function EditPage({ user }: { user: User }) {
       email,
       role,
     };
-    const res = await fetch(`/api/admin/users/${userId}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-      body: JSON.stringify({ newUser }),
-    });
-    const data = await res.json();
-    router.push("/account/all-users");
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({ newUser }),
+      });
+      if (!res.ok) throw new Error("Failed to update user data");
+
+      router.push("/account/all-users");
+    } catch (err: any) {
+      console.error("Error updating user info:", err);
+      toast.error(err.message);
+    }
   };
 
   return (
@@ -80,40 +88,50 @@ export default function EditPage({ user }: { user: User }) {
 }
 
 export const getStaticProps = (async (context) => {
-  const { id } = context.params;
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT * from users WHERE role = 'user' AND  id = $1",
-    [id]
-  );
+  try {
+    const { id } = context.params;
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT * from users WHERE role = 'user' AND  id = $1",
+      [id]
+    );
 
-  client.release();
-  return {
-    props: {
-      user: {
-        id: rows[0].id,
-        username: rows[0].username,
-        email: rows[0].email,
-        role: rows[0].role,
+    client.release();
+    return {
+      props: {
+        user: {
+          id: rows[0].id,
+          username: rows[0].username,
+          email: rows[0].email,
+          role: rows[0].role,
+        },
       },
-    },
-  };
+    };
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return { notFound: true };
+  }
 }) satisfies GetStaticProps;
 
 export const getStaticPaths = (async () => {
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT id from users WHERE role = 'user'"
-  );
-  client.release();
-  return {
-    paths: rows.map((user) => ({
-      params: {
-        id: user.id.toString(),
-      },
-    })),
-    fallback: false,
-  };
+  try {
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT id from users WHERE role = 'user'"
+    );
+    client.release();
+    return {
+      paths: rows.map((user) => ({
+        params: {
+          id: user.id.toString(),
+        },
+      })),
+      fallback: false,
+    };
+  } catch (err) {
+    console.error("Error in getStaticPaths:", err);
+    return { notFound: true };
+  }
 }) satisfies GetStaticPaths;
 
 EditPage.PageLayout = ProfileLayout;

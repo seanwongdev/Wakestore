@@ -1,9 +1,6 @@
-import { Input } from "@chakra-ui/react";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+
 import { Button } from "../ui/button";
 
 function EditImage({ getValue, row }) {

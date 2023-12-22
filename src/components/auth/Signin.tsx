@@ -16,18 +16,23 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap, onOverlaySignin }) => {
   const [password, setPassword] = useState("");
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const data = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const data = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
-    if (data?.ok) {
-      toast.success("Successfully logged in");
-      onSignin();
+      if (data?.ok) {
+        toast.success("Successfully logged in");
+        onSignin();
+      } else {
+        toast.error(data?.error || "Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error("An unexpected error occurred during login");
     }
-
-    toast.error(data?.error);
   };
   return (
     <div

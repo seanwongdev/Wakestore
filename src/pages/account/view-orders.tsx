@@ -1,14 +1,16 @@
-import ProfileLayout from "@/components/layout/ProfileLayout";
-import pool from "@/database/db";
 import type { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
-import { Order } from "@/components/table/OrderColumns";
 import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSadCry } from "@fortawesome/free-regular-svg-icons/faFaceSadCry";
-import OrderItem from "@/components/OrderItem";
 import { useEffect, useState } from "react";
+
+import ProfileLayout from "@/components/layout/ProfileLayout";
+import pool from "@/database/db";
+import OrderItem from "@/components/OrderItem";
+import { toast } from "react-toastify";
+
 interface Orders {
   user_id: number;
   guid: string;
@@ -32,9 +34,20 @@ export default function ViewOrders({ orders }: OrderProps) {
 
   useEffect(() => {
     const fetchOrderData = async () => {
-      const res = await fetch(`/api/order/${order}`);
-      const orderItems = await res.json();
-      setData(orderItems);
+      try {
+        if (!order) {
+          setData([]);
+          return;
+        }
+        const res = await fetch(`/api/order/${order}`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch order details for ${order} `);
+        }
+        const orderItems = await res.json();
+        setData(orderItems);
+      } catch (err: any) {
+        toast.error(err.message);
+      }
     };
     fetchOrderData();
   }, [order]);
@@ -74,25 +87,36 @@ export default function ViewOrders({ orders }: OrderProps) {
 }
 
 export const getServerSideProps = (async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  try {
+    const session = await getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT user_id, guid, total, order_modified_at FROM orders o WHERE o.user_id = $1 AND payment=true",
-    [session?.user.id]
-  );
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT user_id, guid, total, order_modified_at FROM orders o WHERE o.user_id = $1 AND payment=true",
+      [session?.user.id]
+    );
 
-  client.release();
-  return {
-    props: {
-      orders: rows.map((row) => ({
-        user_id: row.user_id,
-        guid: row.guid,
-        total: row.total,
-        date: new Date(row.order_modified_at).toISOString(),
-      })),
-    },
-  };
+    client.release();
+    return {
+      props: {
+        orders: rows.map((row) => ({
+          user_id: row.user_id,
+          guid: row.guid,
+          total: row.total,
+          date: new Date(row.order_modified_at).toISOString(),
+        })),
+      },
+    };
+  } catch (err) {
+    console.error("Error in getServerSideProps:", err);
+    return {
+      notFound: true,
+    };
+  }
 }) satisfies GetServerSideProps;
 
 ViewOrders.PageLayout = ProfileLayout;

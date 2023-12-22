@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -76,13 +77,20 @@ export function DataTable<TData, TValue>({
       .getSelectedRowModel()
       .rows.map((item) => item.original.id);
 
-    const res = await fetch("/api/admin/products/delete", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-      body: JSON.stringify(idsToDelete),
-    });
+    try {
+      const res = await fetch("/api/admin/products/delete", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify(idsToDelete),
+      });
+      if (!res.ok)
+        throw new Error("Failed to update deleted status of products");
+    } catch (err: any) {
+      console.error("Error in soft deleting products:", err);
+      toast.error(err.message);
+    }
   };
 
   return (

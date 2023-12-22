@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons/faDollarSign";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons/faCreditCard";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons/faThumbsUp";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 import {
   Card,
   CardContent,
@@ -15,9 +18,6 @@ import {
   columns as OrderColumns,
   Order,
 } from "@/components/table/OrderColumns";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
@@ -37,6 +37,13 @@ interface salesByCollectionByMonth {
   name: string;
   collection_name: string;
   total_sales: string;
+}
+
+interface ResultObject {
+  [key: string]: {
+    name: string;
+    [collectionName: string]: number;
+  };
 }
 
 export default function MonthlyStats({
@@ -69,11 +76,12 @@ export default function MonthlyStats({
       return acc;
     }, {});
 
-  let maxQuantity = 0;
-  let correspondingId;
+  let maxQuantity: number = 0;
+  let correspondingId: number;
   Object.entries(totalSalesPerProduct).map((row) => {
-    if (row[1] > maxQuantity) {
-      maxQuantity = row[1];
+    const currentQuantity = parseInt(row[1], 10);
+    if (currentQuantity > maxQuantity) {
+      maxQuantity = currentQuantity;
       correspondingId = parseInt(row[0], 10);
     }
   });
@@ -82,7 +90,7 @@ export default function MonthlyStats({
   )?.product_name;
 
   // manipulating to get desired format for reChart
-  const getMonthName = (monthNumber) => {
+  const getMonthName = (monthNumber: number) => {
     const months = [
       "Jan",
       "Feb",
@@ -100,7 +108,7 @@ export default function MonthlyStats({
     return months[monthNumber - 1];
   };
 
-  const resultObject = {};
+  const resultObject: ResultObject = {};
 
   salesByCollectionByMonth.forEach((item) => {
     const monthName = getMonthName(parseInt(item.name, 10));
@@ -172,48 +180,53 @@ export default function MonthlyStats({
 }
 
 export const getServerSideProps = (async (context) => {
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT * FROM orders WHERE payment = true "
-  );
-  const results = await client.query(
-    "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id"
-  );
+  try {
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT * FROM orders WHERE payment = true "
+    );
+    const results = await client.query(
+      "SELECT * FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN product_items ON product_items.id = order_items.product_item_id"
+    );
 
-  const output = await client.query(
-    "SELECT EXTRACT(MONTH FROM oi.created_on) AS month, ps.collection_name, SUM(oi.quantity_ordered * pi.price) AS total_sales FROM order_items oi JOIN product_items pi ON oi.product_item_id = pi.id JOIN product_category pc ON pi.product_category_id = pc.category_id JOIN product_collections ps ON ps.collection_id = pc.product_collection_id JOIN orders o ON oi.order_id = o.id WHERE o.payment=true GROUP BY month, ps.collection_name"
-  );
+    const output = await client.query(
+      "SELECT EXTRACT(MONTH FROM oi.created_on) AS month, ps.collection_name, SUM(oi.quantity_ordered * pi.price) AS total_sales FROM order_items oi JOIN product_items pi ON oi.product_item_id = pi.id JOIN product_category pc ON pi.product_category_id = pc.category_id JOIN product_collections ps ON ps.collection_id = pc.product_collection_id JOIN orders o ON oi.order_id = o.id WHERE o.payment=true GROUP BY month, ps.collection_name"
+    );
 
-  const orderItems = results.rows;
-  const salesByCollectionByMonth = output.rows;
-  client.release();
-  return {
-    props: {
-      orders: rows.map((item) => ({
-        id: item.id,
-        guid: item.guid,
-        user_id: item.user_id,
-        total: item.total,
-        payment: item.payment,
-        address: item.address,
-        phone: item.phone,
-      })),
-      orderItems: orderItems.map((item) => ({
-        order_id: item.order_id,
-        payment: item.payment,
-        product_item_id: item.product_item_id,
-        product_name: item.name,
-        quantity_ordered: item.quantity_ordered,
-        price: item.price,
-        date: new Date(item.order_modified_at).toISOString(),
-      })),
-      salesByCollectionByMonth: salesByCollectionByMonth.map((item) => ({
-        name: item.month,
-        collection_name: item.collection_name,
-        total_sales: item.total_sales,
-      })),
-    },
-  };
+    const orderItems = results.rows;
+    const salesByCollectionByMonth = output.rows;
+    client.release();
+    return {
+      props: {
+        orders: rows.map((item) => ({
+          id: item.id,
+          guid: item.guid,
+          user_id: item.user_id,
+          total: item.total,
+          payment: item.payment,
+          address: item.address,
+          phone: item.phone,
+        })),
+        orderItems: orderItems.map((item) => ({
+          order_id: item.order_id,
+          payment: item.payment,
+          product_item_id: item.product_item_id,
+          product_name: item.name,
+          quantity_ordered: item.quantity_ordered,
+          price: item.price,
+          date: new Date(item.order_modified_at).toISOString(),
+        })),
+        salesByCollectionByMonth: salesByCollectionByMonth.map((item) => ({
+          name: item.month,
+          collection_name: item.collection_name,
+          total_sales: item.total_sales,
+        })),
+      },
+    };
+  } catch (err) {
+    console.error("Error in getServerSideProps:", err);
+    return { notFound: true };
+  }
 }) satisfies GetServerSideProps;
 
 MonthlyStats.PageLayout = ProfileLayout;

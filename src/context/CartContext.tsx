@@ -7,8 +7,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { LayoutProps } from "next-auth";
-import ShoppingCart from "@/components/cart/ShoppingCart";
 import {
   createCart,
   createCartItem,
@@ -16,7 +14,12 @@ import {
   removeCartItem,
   updateCartItem,
 } from "@/lib/utils/cart";
+import { LayoutProps } from "next-auth";
 import { useSession } from "next-auth/react";
+
+import ShoppingCart from "@/components/cart/ShoppingCart";
+import { toast } from "react-toastify";
+import { ToastProvider } from "@chakra-ui/react";
 
 export interface CartContext {
   getItemQuantity: (id: number) => number;
@@ -44,13 +47,19 @@ const CartContext = createContext({} as CartContext);
 
 export const CartProvider = ({ children }: LayoutProps) => {
   const { data: session, status } = useSession();
-  const setCartToState = async () => {
-    const cartProds = (await getCart()) ?? [];
 
-    // const { cart } = localStorage.getItem("cart")
-    //   ? JSON.parse(localStorage.getItem("cart")!)
-    //   : [];
-    setCartItems(cartProds);
+  const setCartToState = async () => {
+    try {
+      const cartProds = (await getCart()) ?? [];
+
+      // const { cart } = localStorage.getItem("cart")
+      //   ? JSON.parse(localStorage.getItem("cart")!)
+      //   : [];
+      setCartItems(cartProds);
+    } catch (err: any) {
+      console.error("Error setting cart to state:", err);
+      toast.error(err.message);
+    }
   };
 
   useEffect(() => {
@@ -65,31 +74,38 @@ export const CartProvider = ({ children }: LayoutProps) => {
   };
 
   const getItemQuantity = (id: number) => {
-    return cartItems?.find((item) => item.cartitems_id === id)?.quantity || 0;
+    return (
+      cartItems?.find((item) => item.cartitems_id === id)?.quantity_ordered || 0
+    );
   };
 
   const increaseCartQuantity = async (productId: number) => {
-    if (cartItems.length > 0) {
-      const articleInCart = cartItems.find(
-        (item) => item.product_item_id === productId
-      );
-
-      if (articleInCart) {
-        await updateCartItem(
-          articleInCart.cartitems_id,
-          articleInCart.quantity_ordered + 1
+    try {
+      if (cartItems.length > 0) {
+        const articleInCart = cartItems.find(
+          (item) => item.product_item_id === productId
         );
-        setCartToState();
+
+        if (articleInCart) {
+          await updateCartItem(
+            articleInCart.cartitems_id,
+            articleInCart.quantity_ordered + 1
+          );
+          await setCartToState();
+        } else {
+          await createCartItem(productId, cartItems[0].cart_id);
+          await setCartToState();
+        }
       } else {
-        await createCartItem(productId, cartItems[0].cart_id);
-        setCartToState();
+        const cart = await createCart();
+        await createCartItem(productId, cart.cart_id);
+        await setCartToState();
       }
-    } else {
-      const cart = await createCart();
-      await createCartItem(productId, cart.cart_id);
-      setCartToState();
+      toggleCart();
+    } catch (err: any) {
+      console.error("Error adding to cart:", err);
+      toast.error(err.message);
     }
-    toggleCart();
   };
   // const increaseCartQuantity = (id: number) => {
   //   if (!cartItems?.find((item) => item.id === id)) {
@@ -111,11 +127,16 @@ export const CartProvider = ({ children }: LayoutProps) => {
 
   const changeCartQuantity = async (id: number, value: string) => {
     const newQuantity = parseInt(value, 10);
-    if (!isNaN(newQuantity) && newQuantity > 0) {
-      const cartItemId = cartItems.find((item) => item.product_item_id === id)
-        ?.cartitems_id!;
-      await updateCartItem(cartItemId, newQuantity);
-      await setCartToState();
+    try {
+      if (!isNaN(newQuantity) && newQuantity > 0) {
+        const cartItemId = cartItems.find((item) => item.product_item_id === id)
+          ?.cartitems_id!;
+        await updateCartItem(cartItemId, newQuantity);
+        await setCartToState();
+      }
+    } catch (err: any) {
+      console.error("Error changing cart quantity:", err);
+      toast.error(err.message);
     }
   };
 
@@ -130,10 +151,15 @@ export const CartProvider = ({ children }: LayoutProps) => {
   //   }
   // };
   const removeFromCart = async (id: number) => {
-    const cartItemId = cartItems.find((item) => item.product_item_id === id)
-      ?.cartitems_id!;
-    await removeCartItem(cartItemId);
-    setCartToState();
+    try {
+      const cartItemId = cartItems.find((item) => item.product_item_id === id)
+        ?.cartitems_id!;
+      await removeCartItem(cartItemId);
+      await setCartToState();
+    } catch (err: any) {
+      console.error("Error removing from cart:", err);
+      toast.error(err.message);
+    }
   };
 
   // const removeFromCart = (id: number) => {

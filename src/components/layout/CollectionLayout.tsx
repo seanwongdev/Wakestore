@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import SideNavbar from "../SideNavbar";
 import { LayoutProps } from "next-auth";
+import { toast } from "react-toastify";
 
 export interface Category {
   category_id: number;
@@ -15,9 +16,14 @@ const CollectionLayout: React.FC<LayoutProps> = ({ children }) => {
   const [data, setData] = useState<Category[]>([]);
   useEffect(() => {
     const fetchHeaderData = async () => {
-      const res = await fetch("/api/category");
-      const { category } = await res.json();
-      setData(category);
+      try {
+        const res = await fetch("/api/category");
+        const { category } = await res.json();
+        setData(category);
+      } catch (err: any) {
+        console.error("Error in fetching data:", err);
+        toast.error(err.message);
+      }
     };
     fetchHeaderData();
   }, []);

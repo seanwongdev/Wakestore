@@ -10,22 +10,27 @@ export default function AllUsers({ users }: { users: User[] }) {
 }
 
 export const getServerSideProps = (async (context) => {
-  const client = await pool.connect();
-  const { rows } = await client.query(
-    "SELECT * FROM users WHERE role = 'user'"
-  );
-  client.release();
-  return {
-    props: {
-      users: rows.map((row) => ({
-        id: row.id,
-        username: row.username,
-        email: row.email,
-        role: row.role,
-        img_url: row.img_url,
-      })),
-    },
-  };
+  try {
+    const client = await pool.connect();
+    const { rows } = await client.query(
+      "SELECT * FROM users WHERE role = 'user'"
+    );
+    client.release();
+    return {
+      props: {
+        users: rows.map((row) => ({
+          id: row.id,
+          username: row.username,
+          email: row.email,
+          role: row.role,
+          img_url: row.img_url,
+        })),
+      },
+    };
+  } catch (err) {
+    console.error("Error in getServerSideProps:", err);
+    return { notFound: true };
+  }
 }) satisfies GetServerSideProps;
 
 AllUsers.PageLayout = ProfileLayout;

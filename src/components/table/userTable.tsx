@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -59,14 +60,19 @@ export function UserTable<TData, TValue>({
     const idsToDelete = table
       .getSelectedRowModel()
       .rows.map((item) => item.original.id);
-
-    const res = await fetch("/api/admin/users/delete", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-      body: JSON.stringify(idsToDelete),
-    });
+    try {
+      const res = await fetch("/api/admin/users/delete", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify(idsToDelete),
+      });
+      if (!res.ok) throw new Error("Failed to delete data");
+    } catch (err: any) {
+      console.error("Error in deleting rows:", err);
+      toast.error(err.message);
+    }
 
     //error handling: if successful
     const newUser = data.filter((user) => !idsToDelete.includes(user.id));

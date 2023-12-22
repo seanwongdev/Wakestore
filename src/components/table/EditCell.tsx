@@ -31,7 +31,8 @@ function EditCell({ getValue, row, column, table }) {
       const { data } = await res.json();
 
       updateData(row.index, column.id, value);
-    } catch (err) {
+    } catch (err: any) {
+      console.error("Error in editing cell:", err);
       toast.error(err.message);
     }
   };

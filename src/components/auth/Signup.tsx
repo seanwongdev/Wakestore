@@ -41,8 +41,9 @@ const SignUp: React.FC<SignupProps> = ({
         onSignup();
         toast.success("User successfully created ");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.log("Error during signup:", err);
+      toast.error(err.message);
     }
   };
 

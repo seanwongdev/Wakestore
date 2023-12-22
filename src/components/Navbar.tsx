@@ -9,6 +9,7 @@ import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
 
 import { useCart } from "@/context/CartContext";
 import NavbarHover from "./NavbarHover";
+import { toast } from "react-toastify";
 
 interface Collection {
   collection_id: number;
@@ -46,10 +47,16 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
 
   useEffect(() => {
     const fetchHeaderData = async () => {
-      const res = await fetch("/api/collection");
-      const { collection } = await res.json();
+      try {
+        const res = await fetch("/api/collection");
+        if (!res.ok) throw new Error("Failed to fetch header data");
+        const { collection } = await res.json();
 
-      setData(collection);
+        setData(collection);
+      } catch (err: any) {
+        console.error("Error in fetching header data:", err);
+        toast.error(err.message);
+      }
     };
     fetchHeaderData();
   }, []);
