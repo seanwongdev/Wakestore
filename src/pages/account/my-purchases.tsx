@@ -6,12 +6,14 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 import pool from "@/database/db";
 import Image from "next/image";
 import ProfileLayout from "@/components/layout/ProfileLayout";
+import Link from "next/link";
 
 interface ItemProps {
   name: string;
   price: string;
   date: string;
   image: string;
+  url: string;
 }
 
 export default function MyPurchases({ items }: { items: ItemProps[] }) {
@@ -22,12 +24,17 @@ export default function MyPurchases({ items }: { items: ItemProps[] }) {
     price: items.find((item) => item.name === product)?.price,
     date: items.find((item) => item.name === product)?.date,
     image: items.find((item) => item.name === product)?.image,
+    link: items.find((item) => item.name === product)?.url,
   }));
   console.log(uniqueArray);
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-2 gap-6">
       {uniqueArray.map((item) => (
-        <div key={item.name} className="flex gap-10 border rounded">
+        <Link
+          href={`/products/${item.link}`}
+          key={item.name}
+          className="flex gap-10  rounded hover:shadow hover:bg-gray-300"
+        >
           <Image
             alt="product"
             height={100}
@@ -47,7 +54,7 @@ export default function MyPurchases({ items }: { items: ItemProps[] }) {
               {formatCurrency(parseFloat(item.price))}
             </span>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
@@ -63,7 +70,7 @@ export const getServerSideProps = (async (context) => {
 
     const client = await pool.connect();
     const { rows } = await client.query(
-      "SELECT name, price, order_modified_at, image_url FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN product_items pi ON pi.id = oi.product_item_id WHERE o.user_id = $1 AND payment=true ORDER BY order_modified_at DESC",
+      "SELECT name, price, order_modified_at, image_url, url FROM order_items oi JOIN orders o ON o.id = oi.order_id JOIN product_items pi ON pi.id = oi.product_item_id WHERE o.user_id = $1 AND payment=true ORDER BY order_modified_at DESC",
       [session?.user.id]
     );
 
@@ -75,6 +82,7 @@ export const getServerSideProps = (async (context) => {
           price: row.price,
           date: new Date(row.order_modified_at).toISOString(),
           image: row.image_url,
+          url: row.url,
         })),
       },
     };
