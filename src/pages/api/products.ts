@@ -1,4 +1,5 @@
 import pool from "@/database/db";
+import errorHandler from "@/middleware/error-handler";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -27,8 +28,7 @@ export default async function handler(
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }
-  } catch (err) {
-    console.error("Error in API handler:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+  } catch (err: any) {
+    errorHandler(err, req, res);
   }
 }

@@ -2,6 +2,7 @@
 import pool from "@/database/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isAdminRequest } from "../../auth/[...nextauth]";
+import errorHandler from "@/middleware/error-handler";
 
 export default async function handler(
   req: NextApiRequest,
@@ -46,8 +47,7 @@ export default async function handler(
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }
-  } catch (error) {
-    console.error("Error in API handler:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+  } catch (err: any) {
+    errorHandler(err, req, res);
   }
 }
