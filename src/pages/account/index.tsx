@@ -20,9 +20,17 @@ export default function Account() {
           />
         </>
       )}
-      <div className="flex flex-col space-y-3">
-        <span>Username: {session?.user.username} </span>
-        <span>Email: {session?.user.email} </span>
+      <div className="flex flex-col space-y-3 justify-center">
+        <div className="flex flex-col">
+          <span className="text-sm underline">Username</span>{" "}
+          <span className="font-semibold text-xl">
+            {session?.user.username}
+          </span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm underline">Email</span>{" "}
+          <span className="font-semibold text-xl">{session?.user.email}</span>
+        </div>
       </div>
     </div>
   );
