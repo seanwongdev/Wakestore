@@ -1,15 +1,23 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { LayoutProps } from "next-auth";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SignUp from "../auth/Signup";
 import Signin from "../auth/Signin";
 import SearchBar from "../search/SearchBar";
+import { toast } from "react-toastify";
+
+export interface Collection {
+  collection_id: number;
+  collection_name: string;
+  collection_url: string;
+}
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showSignup, setShowSignup] = useState(false);
   const [showSignin, setShowSignin] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [data, setData] = useState<Collection[]>([]);
   const handleClickSearch = () => {
     setShowSearchBar((state) => !state);
     document.body.classList.toggle("overflow-hidden", !showSearchBar);
@@ -50,6 +58,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchHeaderData = async () => {
+      try {
+        const res = await fetch("/api/collection");
+        if (!res.ok) throw new Error("Failed to fetch header data");
+        const { collection } = await res.json();
+
+        setData(collection);
+      } catch (err: any) {
+        console.error("Error in fetching header data:", err);
+        toast.error(err.message);
+      }
+    };
+    fetchHeaderData();
+  }, []);
+
   return (
     <div>
       {showSignup && (
@@ -71,9 +95,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         onSearch={handleClickSearch}
         onSignup={handleSignup}
         onSignin={handleSignin}
+        data={data}
       />
       {children}
-      <Footer />
+      <Footer data={data} />
     </div>
   );
 };

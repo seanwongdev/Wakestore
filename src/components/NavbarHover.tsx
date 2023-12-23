@@ -36,7 +36,7 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
 
   return (
     <div
-      className="absolute z-20 top-10  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
+      className="absolute z-100 top-10  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
       style={collectionId ? { left: `${(collectionId - 1) * 30}%` } : {}}
     >
       {data.map((row) =>
