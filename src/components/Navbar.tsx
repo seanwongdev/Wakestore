@@ -46,11 +46,11 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <div className="flex  w-full  py-12 bg-navbar bg-navbar::before  text-white items-center">
+    <div className="flex  w-full  py-11 bg-navbar bg-navbar::before  text-white items-center">
       <div className="flex w-[90vw] mx-auto justify-between">
-        <div className="space-x-2">
-          <FontAwesomeIcon className="text-3xl" icon={faWaveSquare} />{" "}
-          <span className="font-bold text-2xl">ShredShop </span>
+        <div className="">
+          <FontAwesomeIcon className="text-4xl" icon={faWaveSquare} />{" "}
+          <span className="font-bold text-xl">ShredShop </span>
         </div>
         <div className="flex justify-evenly items-center gap-14 relative">
           {data.map((row) => (

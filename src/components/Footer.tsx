@@ -1,5 +1,12 @@
-import Link from "next/link";
 import { Collection } from "./layout/Layout";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons/faFacebook";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
+import { faYoutube } from "@fortawesome/free-brands-svg-icons/faYoutube";
+
+import Link from "next/link";
 
 interface FooterProps {
   data: Collection[];
@@ -9,10 +16,22 @@ const Footer = ({ data }: { data: FooterProps }) => {
   return (
     <div className="bg-footer bg-footer::before mt-4 h-auto">
       <div className="flex flex-col w-[90vw] mx-auto ">
-        <div className="grid lg:grid-cols-[4fr,3fr,3fr,4fr] md:grid-cols-3 gap-6 text-white pt-14">
+        <div className="grid lg:grid-cols-[3fr,3fr,3fr,4fr] md:grid-cols-3 gap-6 text-white pt-14">
           <div className="flex flex-col gap-1">
-            <span className="font-bold text-xl">logo and address</span>
-            <span>logo and address</span>
+            <span className="font-bold text-xl">
+              <FontAwesomeIcon className="text-5xl" icon={faWaveSquare} />
+              ShredShop
+            </span>
+            <span>31 Wake Park Ave</span>
+            <span>103563 CA</span>
+            <span className="mt-2">Call us: 015-232-2039</span>
+            <span>Email: sales@shredshop.com</span>
+            <div className="flex items-center justify-start gap-4 mt-2 text-xl">
+              <FontAwesomeIcon icon={faInstagram} />
+              <FontAwesomeIcon icon={faFacebook} />
+              <FontAwesomeIcon icon={faTwitter} />
+              <FontAwesomeIcon icon={faYoutube} />
+            </div>
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold text-xl">Shop by</span>
@@ -36,7 +55,11 @@ const Footer = ({ data }: { data: FooterProps }) => {
             <span>
               Receive our latest updates about our products and promotions
             </span>
-            <input placeholder="Enter your email address" type="text"></input>
+            <input
+              placeholder="Enter your email address"
+              type="text"
+              className="mt-2 rounded py-1.5 placeholder:text-gray-500 placeholder:px-4"
+            ></input>
           </div>
         </div>
 
