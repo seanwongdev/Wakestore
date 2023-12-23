@@ -1,14 +1,85 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { User } from "next-auth";
+import { Button } from "@/components/ui/button";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { uploadCloudinary } from "@/lib/utils/upload";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
-import { Button } from "@/components/ui/button";
+import bcrypt from "bcryptjs";
+
+interface UserForm {
+  username: string | undefined;
+  email: string | undefined | null;
+  files: FileList | null;
+  password: string;
+}
 
 export default function EditUser({ user }: { user: User }) {
-  const handleSubmit = () => {};
+  const [error, setError] = useState("");
+  const { data: session, status } = useSession();
+  console.log(session);
+  const [formData, setFormData] = useState<UserForm>({
+    username: session?.user?.username,
+    email: session?.user?.email,
+    files: null,
+    password: "",
+  });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    setFormData((prev) => ({ ...prev, [target.id]: target.value }));
+  };
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    setFormData((prev) => ({ ...prev, [target.id]: target.files }));
+  };
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      if (!formData.password) {
+        throw new Error("Please input password to confirm changes");
+      }
+
+      const response = await fetch(`/api/account/${session?.user?.id}`);
+      if (!response.ok) throw new Error("Failed to fetch user data");
+      const { password } = await response.json();
+      console.log(password);
+
+      const isPasswordMatched = await bcrypt.compare(
+        formData.password,
+        password.password
+      );
+
+      if (!isPasswordMatched) throw new Error("Invalid Email or Password");
+
+      const data = await uploadCloudinary(formData.files[0]);
+
+      const updatedUser = {
+        username: formData.username,
+        email: formData.email,
+        image_url: data,
+      };
+
+      const res = await fetch(`/api/account/${session?.user?.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (!res.ok) throw new Error("Failed to update user data");
+
+      toast.success("Successfully updated personal info");
+    } catch (err: any) {
+      console.error("Error in updating user data:", err);
+      setError(err.message);
+    }
+  };
   return (
-    <form className="flex flex-col space-y-4" onSubmit={() => {}}>
+    <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
       <div className="flex justify-between w-[450px] items-center">
         <label htmlFor="username" className="font-semibold">
           Username
@@ -17,6 +88,8 @@ export default function EditUser({ user }: { user: User }) {
           type="text"
           id="username"
           className="border rounded border-gray-500 p-1.5 w-[350px]"
+          value={formData.username}
+          onChange={handleChange}
         />
       </div>
       <div className="flex justify-between w-[450px] items-center">
@@ -27,30 +100,38 @@ export default function EditUser({ user }: { user: User }) {
           type="text"
           id="email"
           className="border rounded border-gray-500 p-1.5 w-[350px] "
+          value={formData.email}
+          onChange={handleChange}
         />
       </div>
       <div className="flex justify-between w-[450px] items-center">
-        <label className="font-semibold" htmlFor="file_input">
+        <label className="font-semibold" htmlFor="files">
           Upload file
         </label>
         <input
           className="block w-[78%] text-sm  text-gray-900 border border-gray-600 rounded file:bg-gray-600 file:rounded file:py-2 file:text-white"
-          id="file_input"
+          id="files"
           type="file"
-          multiple={true}
-          onChange={(e) => setImages(e.target.files)}
+          multiple={false}
+          onChange={handleFileChange}
         />
       </div>
-      <div className="flex justify-between w-[450px] items-center">
-        <label htmlFor="password" className="font-semibold">
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          className="border rounded border-gray-500 p-1.5 w-[350px] "
-        />
+      <div className="flex flex-col">
+        <div className="flex justify-between w-[450px] items-center">
+          <label htmlFor="password" className="font-semibold">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            className="border rounded border-gray-500 p-1.5 w-[350px] "
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
+        <span className="px-24 text-red-500 font-semibold">{error}</span>
       </div>
+
       <div className="flex justify-end w-[450px] items-center">
         <Button className="w-[100px]">Update</Button>
       </div>

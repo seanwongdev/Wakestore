@@ -10,6 +10,7 @@ import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
 import { useCart } from "@/context/CartContext";
 import NavbarHover from "./NavbarHover";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 interface Collection {
   collection_id: number;
@@ -97,11 +98,23 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
         </div>
         {status === "authenticated" ? (
           <>
-            <Link href="/account" className="font-semibold">
-              {session.user.username &&
-                session.user.username[0].toUpperCase() +
-                  session.user.username?.slice(1)}
-            </Link>
+            {session.user.image ? (
+              <Link href="/account" className="font-semibold">
+                <Image
+                  height={40}
+                  width={40}
+                  alt="avatar"
+                  className="rounded-full"
+                  src={session.user.image}
+                ></Image>
+              </Link>
+            ) : (
+              <Link href="/account" className="font-semibold">
+                {session.user.username &&
+                  session.user.username[0].toUpperCase() +
+                    session.user.username?.slice(1)}
+              </Link>
+            )}
             <Button type="primary" onClick={() => signOut()}>
               Log out
             </Button>

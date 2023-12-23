@@ -14,7 +14,17 @@ export default function Account() {
   return (
     <div className="flex flex-col gap-14 ">
       <div className="flex gap-10">
-        {session?.user.image ? null : (
+        {session?.user.image ? (
+          <Image
+            className="rounded-full"
+            alt="avatar"
+            width={200}
+            height={200}
+            loading="lazy"
+            quality={60}
+            src={session?.user.image}
+          />
+        ) : (
           <>
             <Image
               className="rounded-full"
