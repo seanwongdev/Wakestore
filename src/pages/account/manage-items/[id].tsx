@@ -30,7 +30,7 @@ export default function ProductImage({ product }: { product: ProductAdmin }) {
       if (!res.ok) throw new Error("Error uploading product images");
       router.push("/account/manage-items");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
   return (

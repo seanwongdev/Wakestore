@@ -101,11 +101,13 @@ const Category = ({ products }: { products: Product[] }) => {
               <Link className="h-full" href={`/products${product.url}`}>
                 {product.image_url?.length > 0 ? (
                   <Image
-                    width={400}
-                    height={200}
+                    width={0}
+                    height={0}
                     alt="product"
                     loading="lazy"
                     quality={60}
+                    className="w-full h-auto"
+                    sizes="100vw"
                     src={product.image_url[0]}
                   ></Image>
                 ) : (

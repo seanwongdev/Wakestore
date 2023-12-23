@@ -25,10 +25,11 @@ export interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
+  const { data: session, status } = useSession();
+
   const [header, setHeader] = useState("");
   const { toggleCart, cartItems } = useCart();
   const [data, setData] = useState<Collection[]>([]);
-  const { data: session, status } = useSession();
 
   const handleMouseEnter = (name: string) => {
     setHeader(name);
@@ -98,23 +99,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSignup, onSignin, onSearch }) => {
         </div>
         {status === "authenticated" ? (
           <>
-            {session.user.image ? (
-              <Link href="/account" className="font-semibold">
-                <Image
-                  height={40}
-                  width={40}
-                  alt="avatar"
-                  className="rounded-full"
-                  src={session.user.image}
-                ></Image>
-              </Link>
-            ) : (
-              <Link href="/account" className="font-semibold">
-                {session.user.username &&
-                  session.user.username[0].toUpperCase() +
-                    session.user.username?.slice(1)}
-              </Link>
-            )}
+            <Link href="/account" className="font-semibold">
+              {session.user.username &&
+                session.user.username[0].toUpperCase() +
+                  session.user.username?.slice(1)}
+            </Link>
+
             <Button type="primary" onClick={() => signOut()}>
               Log out
             </Button>

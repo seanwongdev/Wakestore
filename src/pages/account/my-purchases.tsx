@@ -26,14 +26,14 @@ export default function MyPurchases({ items }: { items: ItemProps[] }) {
     image: items.find((item) => item.name === product)?.image,
     link: items.find((item) => item.name === product)?.url,
   }));
-  console.log(uniqueArray);
+
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6  ">
       {uniqueArray.map((item) => (
         <Link
-          href={`/products/${item.link}`}
+          href={`/products${item.link}`}
           key={item.name}
-          className="flex gap-10  rounded hover:shadow hover:bg-gray-300"
+          className="flex gap-10 rounded hover:shadow hover:bg-gray-300"
         >
           <Image
             alt="product"

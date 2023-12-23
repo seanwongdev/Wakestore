@@ -80,11 +80,13 @@ export default function Index({ products }: { products: Product[] }) {
             <Link href={`/products${item.url}`}>
               {item.image_url?.length > 0 ? (
                 <Image
-                  width={400}
-                  height={200}
+                  width={0}
+                  height={0}
                   alt="product"
                   loading="lazy"
                   quality={60}
+                  className="w-full h-auto"
+                  sizes="100vw"
                   src={item.image_url[0]}
                 ></Image>
               ) : (

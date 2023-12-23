@@ -27,13 +27,13 @@ export default async function handler(
 
       const client = await pool.connect();
       const result = await client.query(
-        "SELECT password FROM users WHERE id=$1 ",
+        "SELECT id, email, img_url FROM users WHERE id=$1 ",
         [id]
       );
-      const password = result.rows[0];
+      const userData = result.rows[0];
       client.release();
 
-      res.status(200).json({ password });
+      res.status(200).json({ userData });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }

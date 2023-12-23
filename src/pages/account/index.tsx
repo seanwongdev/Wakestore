@@ -4,9 +4,32 @@ import ProfileLayout from "@/components/layout/ProfileLayout";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Account() {
+  const [image, setImage] = useState("");
+  console.log(image);
   const { data: session, status } = useSession();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (status !== "authenticated") {
+          // If session or user ID is missing, handle accordingly
+          throw new Error("User ID not available");
+        }
+        const res = await fetch(`/api/account/${session.user.id}`);
+        if (!res.ok) throw new Error("Failed to fetch user data");
+        const { userData } = await res.json();
+
+        setImage(userData.img_url);
+      } catch (err: any) {
+        console.error("Error in fetching user data:", err);
+      }
+    };
+    fetchUserData();
+  }, [session?.user?.id, status]);
+
   const router = useRouter();
   const handleUpdate = () => {
     router.push(`/account/${session?.user.id}`);
@@ -22,7 +45,7 @@ export default function Account() {
             height={200}
             loading="lazy"
             quality={60}
-            src={session?.user.image}
+            src={image}
           />
         ) : (
           <>

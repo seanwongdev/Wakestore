@@ -42,14 +42,13 @@ export default function EditUser({ user }: { user: User }) {
         throw new Error("Please input password to confirm changes");
       }
 
-      const response = await fetch(`/api/account/${session?.user?.id}`);
+      const response = await fetch(`/api/account/pw/${session?.user?.id}`);
       if (!response.ok) throw new Error("Failed to fetch user data");
-      const { password } = await response.json();
-      console.log(password);
+      const { userData } = await response.json();
 
       const isPasswordMatched = await bcrypt.compare(
         formData.password,
-        password.password
+        userData.password
       );
 
       if (!isPasswordMatched) throw new Error("Invalid Email or Password");
