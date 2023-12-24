@@ -1,0 +1,5 @@
+.accordionContent {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease-in-out; /* Adjust the duration and easing as needed */
+}
