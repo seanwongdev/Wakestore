@@ -41,7 +41,10 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
       <div>
         {collectionNames.map((row) => (
           <>
-            <div className="flex justify-between items-center py-3 border-t">
+            <div
+              onClick={() => toggleAccordion(row)}
+              className="flex justify-between items-center py-3 border-t hover:cursor-pointer"
+            >
               <Link
                 href={
                   data.find((item) => item.collection_name === row)
@@ -52,10 +55,7 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
               >
                 {row}
               </Link>
-              <FontAwesomeIcon
-                onClick={() => toggleAccordion(row)}
-                icon={faChevronDown}
-              />
+              <FontAwesomeIcon icon={faChevronDown} />
             </div>
             {isCollectionOpen[row] && (
               <Accordion data={data} collection={row} />
