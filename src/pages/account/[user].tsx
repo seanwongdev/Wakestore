@@ -20,7 +20,7 @@ interface UserForm {
 export default function EditUser({ user }: { user: User }) {
   const [error, setError] = useState("");
   const { data: session, status } = useSession();
-  console.log(session);
+
   const [formData, setFormData] = useState<UserForm>({
     username: session?.user?.username,
     email: session?.user?.email,

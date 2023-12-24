@@ -3,7 +3,8 @@ import { Category } from "./layout/CollectionLayout";
 import Accordion from "./Accordion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface SideNavbarProps {
   data: Category[];
@@ -14,15 +15,32 @@ interface AccordionProps {
   Apparel: boolean;
   Accessories: boolean;
   Kids: boolean;
+  [key: string]: boolean;
 }
 
+const initialAccordion = {
+  "Riding Essentials": false,
+  Apparel: false,
+  Accessories: false,
+  Kids: false,
+};
+
 const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
-  const [isCollectionOpen, setIsCollectionOpen] = useState<AccordionProps>({
-    "Riding Essentials": false,
-    Apparel: false,
-    Accessories: false,
-    Kids: false,
-  });
+  const router = useRouter();
+  const { collection } = router.query;
+  console.log(collection);
+  const [isCollectionOpen, setIsCollectionOpen] =
+    useState<AccordionProps>(initialAccordion);
+
+  useEffect(() => {
+    if (!collection || !data) return;
+    const collectionSetup: string | undefined = data.find(
+      (item) => item.collection_url.slice(1) === collection
+    )?.collection_name;
+    setIsCollectionOpen(initialAccordion);
+    if (collectionSetup)
+      setIsCollectionOpen((state) => ({ ...state, [collectionSetup]: true }));
+  }, [collection, data]);
   const toggleAccordion = (collection: string) => {
     setIsCollectionOpen((state) => ({
       ...state,
@@ -32,7 +50,7 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
   const collectionNames = [
     ...new Set(data.map((item) => item.collection_name)),
   ];
-  console.log(collectionNames);
+
   return (
     <div className="flex flex-col font-semibold mt-8">
       <span className="font-bold text-xl italic border-b border-b-black py-2">

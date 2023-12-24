@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 export default function Account() {
   const [image, setImage] = useState("");
-  console.log(image);
+
   const { data: session, status } = useSession();
   useEffect(() => {
     const fetchUserData = async () => {
