@@ -100,7 +100,7 @@ export default function Index({ products }: { products: Product[] }) {
               {formatCurrency(Number(item.price))}
             </span>
             <Button
-              className="space-x-4"
+              className="space-x-4 bg-gray-800"
               onClick={() => increaseCartQuantity(item.id)}
             >
               <FontAwesomeIcon icon={faCartShopping} />
@@ -111,13 +111,20 @@ export default function Index({ products }: { products: Product[] }) {
       </div>
       <div className="flex justify-end items-center space-x-2 mt-6">
         {pageNum !== 1 && (
-          <Button onClick={handlePrev}>
+          <Button
+            className="bg-white text-black hover:bg-gray-200"
+            onClick={handlePrev}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
           </Button>
         )}
         {pageArray.map((page) => (
           <Button
-            className={page === pageNum ? "bg-gray-400" : ""}
+            className={
+              page === pageNum
+                ? "bg-gray-400"
+                : "bg-white text-black border hover:bg-gray-200"
+            }
             disabled={page === pageNum}
             key={page}
             onClick={() => handleClick(page)}
@@ -127,7 +134,10 @@ export default function Index({ products }: { products: Product[] }) {
         ))}
 
         {pageNum !== maxPage && (
-          <Button onClick={handleNext}>
+          <Button
+            className="bg-white text-black hover:bg-gray-200"
+            onClick={handleNext}
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         )}

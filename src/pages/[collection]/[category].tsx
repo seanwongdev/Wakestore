@@ -121,7 +121,7 @@ const Category = ({ products }: { products: Product[] }) => {
                 {formatCurrency(Number(product.price))}
               </span>
               <Button
-                className="space-x-4"
+                className="space-x-4 bg-gray-800"
                 onClick={() => increaseCartQuantity(product.id)}
               >
                 <FontAwesomeIcon icon={faCartShopping} />
@@ -133,23 +133,34 @@ const Category = ({ products }: { products: Product[] }) => {
       </div>
       <div className="flex justify-end items-center space-x-2 mt-6">
         {pageNum !== 1 && (
-          <Button onClick={handlePrev}>
+          <Button
+            className="bg-white text-black hover:bg-gray-200"
+            onClick={handlePrev}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
           </Button>
         )}
-        {pageArray.map((page) => (
-          <Button
-            className={page === pageNum ? "bg-gray-400" : ""}
-            disabled={page === pageNum}
-            key={page}
-            onClick={() => handleClick(page)}
-          >
-            {page}
-          </Button>
-        ))}
+        {maxPage > 1 &&
+          pageArray.map((page) => (
+            <Button
+              className={
+                page === pageNum
+                  ? "bg-gray-400"
+                  : "bg-white text-black border hover:bg-gray-200"
+              }
+              disabled={page === pageNum}
+              key={page}
+              onClick={() => handleClick(page)}
+            >
+              {page}
+            </Button>
+          ))}
 
         {pageNum !== maxPage && (
-          <Button onClick={handleNext}>
+          <Button
+            className="bg-white text-black hover:bg-gray-200"
+            onClick={handleNext}
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         )}
