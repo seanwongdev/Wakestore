@@ -61,3 +61,28 @@
   filter: brightness(25%); /* Adjust the brightness value as needed */
   z-index: -1;
 }
+
+.hoverside-underline-animation {
+  display: inline-block;
+  position: relative;
+  color: black;
+}
+
+.hoverside-underline-animation:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 2px;
+  left: 0;
+  background-color: black;
+  transform-origin: bottom left;
+  transition: transform 0.3s ease-out;
+}
+
+.hoverside-underline-animation:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+  background-color: rgb(96 165 250);
+}

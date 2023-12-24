@@ -27,8 +27,8 @@ const initialAccordion = {
 
 const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
   const router = useRouter();
-  const { collection } = router.query;
-  console.log(collection);
+  const { collection, category } = router.query;
+
   const [isCollectionOpen, setIsCollectionOpen] =
     useState<AccordionProps>(initialAccordion);
 
@@ -69,14 +69,24 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
                     ?.collection_url
                 }
                 key={row}
-                className=""
+                className={` hover:text-blue-400 hoverside-underline-animation:hover:after hoverside-underline-animation:after hoverside-underline-animation
+                ${
+                  !category &&
+                  row ===
+                    data.find(
+                      (item) => item.collection_url.slice(1) === collection
+                    )?.collection_name
+                    ? "underline underline-offset-2"
+                    : ""
+                }
+              `}
               >
                 {row}
               </Link>
               <FontAwesomeIcon icon={faChevronDown} />
             </div>
             {isCollectionOpen[row] && (
-              <Accordion data={data} collection={row} />
+              <Accordion data={data} collection={row} category={category} />
             )}
           </>
         ))}

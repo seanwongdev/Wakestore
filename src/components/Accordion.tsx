@@ -6,9 +6,14 @@ import { Category } from "./layout/CollectionLayout";
 interface AccordionProps {
   data: Category[];
   collection: string;
+  category: string;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ data, collection }) => {
+const Accordion: React.FC<AccordionProps> = ({
+  data,
+  collection,
+  category,
+}) => {
   const [contentHeight, setContentHeight] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +37,17 @@ const Accordion: React.FC<AccordionProps> = ({ data, collection }) => {
             key={item.category_id}
             href={item.collection_url + item.category_url}
           >
-            {item.category_name}
+            <span
+              className={` 
+              ${
+                item.category_url.slice(1) === category
+                  ? "underline underline-offset-2  hover:text-blue-400 "
+                  : "hoverside-underline-animation:hover:after hoverside-underline-animation:after hoverside-underline-animation  hover:text-blue-400 "
+              }
+            `}
+            >
+              {item.category_name}
+            </span>
           </Link>
         ))}
       </div>

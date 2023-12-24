@@ -45,7 +45,7 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseExit}
             key={row.category_name}
-            className="flex flex-col p-1.5 hover:underline hover:text-blue-600  "
+            className="flex flex-col p-1.5 hover:underline  hover:text-blue-400 "
           >
             <Link href={`${row.collection_url}${row.category_url}`}>
               {row.category_name}

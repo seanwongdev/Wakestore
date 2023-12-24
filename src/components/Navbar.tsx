@@ -57,11 +57,12 @@ const Navbar: React.FC<NavbarProps> = ({
             <Link
               href={row.collection_url}
               key={row.collection_id}
-              className="font-semibold p-2 hover-underline-animation hover-underline-animation::after hover-underline-animation:hover::after"
               onMouseEnter={() => handleMouseEnter(row.collection_name)}
               onMouseLeave={handleMouseExit}
             >
-              {row.collection_name}
+              <span className="font-semibold py-2 hover-underline-animation hover-underline-animation::after hover-underline-animation:hover::after">
+                {row.collection_name}
+              </span>
             </Link>
           ))}
           {header && (
