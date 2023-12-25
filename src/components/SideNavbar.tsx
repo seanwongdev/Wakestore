@@ -69,15 +69,15 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
                     ?.collection_url
                 }
                 key={row}
-                className={` hover:text-blue-400 hoverside-underline-animation:hover:after hoverside-underline-animation:after hoverside-underline-animation
+                className={` 
                 ${
                   !category &&
                   row ===
                     data.find(
                       (item) => item.collection_url.slice(1) === collection
                     )?.collection_name
-                    ? "underline underline-offset-2"
-                    : ""
+                    ? "underline underline-offset-2  hover:text-blue-400"
+                    : " hover:text-blue-400 hoverside-underline-animation:hover:after hoverside-underline-animation:after hoverside-underline-animation"
                 }
               `}
               >
