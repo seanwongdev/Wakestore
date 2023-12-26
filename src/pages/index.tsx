@@ -28,10 +28,10 @@ export default function Home() {
         <span className="font-bold">
           SHRED YOUR SORROWS AWAY WITH US - COME REDISCOVER YOURSELF!
         </span>
-        <div className=" w-[90vw] mx-auto grid grid-cols-4 gap-6 mt-6 h-auto">
+        <div className=" w-[90vw] mx-auto grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6 mt-6 h-auto">
           <Link
             href="/riding-essentials"
-            className="hover:shadow-md flex flex-col justify-between h-4/5 pb-2"
+            className="flex flex-col justify-between h-4/5 pb-2"
           >
             <Image
               width="0"
@@ -52,7 +52,7 @@ export default function Home() {
           </Link>
           <Link
             href="/apparel"
-            className="hover:shadow-md flex flex-col justify-between h-4/5 pb-2"
+            className=" flex flex-col justify-between h-4/5 pb-2"
           >
             <Image
               width="0"
@@ -71,7 +71,7 @@ export default function Home() {
           </Link>
           <Link
             href="/accessories"
-            className="hover:shadow-md flex flex-col justify-between  h-4/5 pb-2"
+            className=" flex flex-col justify-between  h-4/5 pb-2"
           >
             <Image
               width="0"
@@ -92,7 +92,7 @@ export default function Home() {
           </Link>
           <Link
             href="/kids"
-            className="hover:shadow-md flex flex-col justify-between  h-4/5 pb-2"
+            className=" flex flex-col justify-between  h-4/5 pb-2"
           >
             <Image
               width="0"
