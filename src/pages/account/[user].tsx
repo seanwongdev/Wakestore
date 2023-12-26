@@ -51,7 +51,7 @@ export default function EditUser({ user }: { user: User }) {
         userData.password
       );
 
-      if (!isPasswordMatched) throw new Error("Invalid Email or Password");
+      if (!isPasswordMatched) throw new Error("Invalid Password");
 
       const data = await uploadCloudinary(formData.files[0]);
 
@@ -154,6 +154,7 @@ export const getStaticProps = (async (context) => {
           img_url: rows[0].img_url,
         },
       },
+      revalidate: 60,
     };
   } catch (err) {
     console.error("Error in getStaticProps:", err);

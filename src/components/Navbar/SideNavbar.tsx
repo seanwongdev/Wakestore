@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Category } from "./layout/CollectionLayout";
+import { Category } from "../layout/CollectionLayout";
 import Accordion from "./Accordion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";

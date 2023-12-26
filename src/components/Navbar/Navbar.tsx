@@ -6,9 +6,9 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
 import { useCart } from "@/context/CartContext";
-import { Collection } from "./layout/Layout";
+import { Collection } from "../layout/Layout";
 
-import Button from "./Button";
+import Button from "../Button";
 import NavbarHover from "./NavbarHover";
 
 export interface NavbarProps {

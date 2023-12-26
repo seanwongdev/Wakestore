@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { LayoutProps } from "next-auth";
-import Navbar from "../Navbar";
+import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer";
 import SignUp from "../auth/Signup";
 import Signin from "../auth/Signin";

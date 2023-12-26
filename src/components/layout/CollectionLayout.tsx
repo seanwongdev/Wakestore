@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import SideNavbar from "../SideNavbar";
+import SideNavbar from "../Navbar/SideNavbar";
 import { LayoutProps } from "next-auth";
 import { toast } from "react-toastify";
 

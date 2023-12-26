@@ -19,6 +19,19 @@ export default async function handler(
       client.release();
 
       res.status(200).json({ userData });
+    } else if (req.method === "PATCH") {
+      const { id } = req.query;
+      const { updatedPassword } = req.body;
+      const modifiedAt = new Date().toLocaleDateString("en-CA");
+      const client = await pool.connect();
+      const result = await client.query(
+        "UPDATE users SET password=$1, modified_at=$2 WHERE id=$3 ",
+        [updatedPassword, modifiedAt, id]
+      );
+      const user = result.rows[0];
+      client.release();
+
+      res.status(200).json({ user });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }
