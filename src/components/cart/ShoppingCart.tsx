@@ -70,14 +70,14 @@ const ShoppingCart = () => {
         onClick={handleOverlayClick}
       >
         <FontAwesomeIcon
-          className={`text-3xl absolute text-white top-[20px] right-[520px] z-10 ${
+          className={`text-3xl absolute text-white top-[20px] right-[340px] md:right-[520px] z-10 ${
             isOpen ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-400`}
           icon={faXmark}
           onClick={toggleCart}
         />
         <div
-          className={`bg-white p-8 w-[500px] h-full overflow-y-auto transform ${
+          className={`bg-white p-8 w-[330px] md:w-[500px] h-full overflow-y-auto transform ${
             isOpen ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-400`}
         >

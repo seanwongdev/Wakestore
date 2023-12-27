@@ -49,7 +49,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
   if (item === null) return null;
 
   return (
-    <div className="flex gap-4 justify-evenly py-6 border-b">
+    <div className="flex md:gap-4 md:justify-evenly py-6 border-b">
       {item?.image_url ? (
         <Image
           loading="lazy"
@@ -70,7 +70,7 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
         <div className="font-semibold relative">
           Quantity:{" "}
           <select
-            className="py-2.5 border rounded-md w-1/4 px-3.5 "
+            className="py-2 border rounded-md md:w-1/4 px-1 md:px-3.5 "
             value={quantity}
             onChange={(e) => changeCartQuantity(id, e.target.value)}
           >

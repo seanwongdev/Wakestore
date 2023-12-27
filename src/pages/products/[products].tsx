@@ -4,6 +4,7 @@ import pool from "@/database/db";
 import Button from "@/components/Button";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
+import { formatCurrency } from "@/lib/utils/formatCurrency";
 
 export interface Product {
   id: number;
@@ -20,7 +21,7 @@ export default function Product(props: Product) {
   const { id, name, description, quantity, price, image_url } = props;
 
   return (
-    <div className="h-screen w-3/4 mx-auto grid grid-cols-2 gap-5 mt-16">
+    <div className="h-auto w-3/4 mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 mt-16">
       {image_url && (
         <Image
           width="600"
@@ -32,12 +33,12 @@ export default function Product(props: Product) {
         ></Image>
       )}
       <div className="flex flex-col gap-5">
-        <div>{name}</div>
+        <div className="font-bold">{name}</div>
         <div>{description}</div>
-        <div>{price}</div>
-        <div>
-          <Button type="primary">BUY NOW</Button>
+        <div className="text-gray-700 font-semibold">
+          {formatCurrency(parseFloat(price))}
         </div>
+
         <div>
           <Button onClick={() => increaseCartQuantity(id)} type="secondary">
             ADD TO CART
