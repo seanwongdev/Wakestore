@@ -100,7 +100,10 @@ const Navbar: React.FC<NavbarProps> = ({
           </div>
           {status === "authenticated" ? (
             <div className="relative">
-              <button className="font-bold" onClick={handleAccount}>
+              <button
+                className="font-bold hover:text-blue-300"
+                onClick={handleAccount}
+              >
                 {session.user.username &&
                   session.user.username[0].toUpperCase() +
                     session.user.username?.slice(1)}

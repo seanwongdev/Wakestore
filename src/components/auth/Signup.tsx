@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Button from "../Button";
 
 interface SignupProps {
   onSignup: () => void;
@@ -57,7 +58,7 @@ const SignUp: React.FC<SignupProps> = ({
           <FontAwesomeIcon icon={faXmark} onClick={onSignup} />
         </div>
         <div className="flex flex-col gap-4">
-          <form onSubmit={handleSubmit}>
+          <form className="p-2" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <label htmlFor="username">Username</label>
@@ -98,11 +99,20 @@ const SignUp: React.FC<SignupProps> = ({
                   className="w-full rounded-md  bg-gray-200 px-4 py-3 text-sm transition-all duration-300"
                 ></input>
               </div>
-              <button type="submit"> Sign up</button>
+              <div className="flex justify-center">
+                <Button type="submit"> Sign up</Button>
+              </div>
             </div>
           </form>
+        </div>
+        <div className="mt-4 space-x-4">
           <span>Already a member?</span>
-          <span onClick={onSwap}>Sign in</span>
+          <span
+            className="hover:cursor-pointer underline text-blue-400"
+            onClick={onSwap}
+          >
+            Sign in
+          </span>
         </div>
       </div>
     </div>

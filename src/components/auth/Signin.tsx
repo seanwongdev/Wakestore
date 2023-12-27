@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Button from "../Button";
 
 interface Signin {
   onSignin: () => void;
@@ -43,7 +44,7 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap, onOverlaySignin }) => {
         <span className="flex justify-end">
           <FontAwesomeIcon icon={faXmark} onClick={onSignin} />
         </span>
-        <form onSubmit={handleSubmit}>
+        <form className="p-2 mb-2" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
               <label htmlFor="email">Email</label>
@@ -65,11 +66,19 @@ const Signin: React.FC<Signin> = ({ onSignin, onSwap, onOverlaySignin }) => {
                 className="w-full rounded-md  bg-gray-200 px-4 py-3 text-sm transition-all duration-300"
               ></input>
 
-              <button type="submit"> Sign in</button>
+              <div className="flex justify-center">
+                <Button type="submit"> Sign in</Button>
+              </div>
             </div>
           </div>
         </form>
-        <span>Not a member yet?</span> <span onClick={onSwap}>Sign up</span>
+        <span>Not a member yet?</span>{" "}
+        <span
+          className="underline text-blue-400 hover:cursor-pointer"
+          onClick={onSwap}
+        >
+          Sign up
+        </span>
       </div>
     </div>
   );
