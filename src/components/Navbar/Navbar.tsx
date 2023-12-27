@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons/faCartShopping";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { faWaveSquare } from "@fortawesome/free-solid-svg-icons/faWaveSquare";
+import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
+
 import { useCart } from "@/context/CartContext";
 import { Collection } from "../layout/Layout";
 
@@ -67,12 +69,15 @@ const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <div className="flex  w-full py-11 bg-[#302c2c] md:bg-transparent bg-navbar bg-navbar::before  text-white items-center">
-      <div className="flex w-[90vw] mx-auto justify-between">
+      <div className="flex w-[90vw] mx-auto items-center justify-between">
+        <div className="md:hidden text-xl">
+          <FontAwesomeIcon icon={faBars} />
+        </div>
         <Link href="/">
           <FontAwesomeIcon className="text-4xl" icon={faWaveSquare} />{" "}
           <span className="font-bold text-xl">ShredShop </span>
         </Link>
-        <div className="hidden lg:flex justify-evenly items-center gap-14 relative">
+        <div className="hidden md:flex justify-evenly items-center md:gap-5 lg:gap-14 relative">
           {data.map((row) => (
             <Link
               href={row.collection_url}
@@ -94,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({
           )}{" "}
         </div>
 
-        <div className="flex items-center space-x-5 md:space-x-10 relative">
+        <div className="flex items-center gap-5 lg:gap-10 relative">
           <div>
             <FontAwesomeIcon
               className="text-white hover:cursor-pointer"

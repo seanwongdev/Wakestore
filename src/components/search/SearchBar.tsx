@@ -54,7 +54,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onOverlayClick }) => {
         </div>
         <div className="bg-white  w-full  min-h-[60px]  max-h-[550px] overflow-y-auto py-6">
           {data.length > 0 ? (
-            <div className=" w-2/3 mx-auto grid grid-cols-4 gap-y-8">
+            <div className=" lg:w-2/3 w-5/6 mx-auto grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-y-8">
               {data.map((item) => (
                 <div className="flex flex-col" key={item.id}>
                   <Link href={`/products${item.url}`}>
