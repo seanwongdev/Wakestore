@@ -91,7 +91,7 @@ const Category = ({ products }: { products: Product[] }) => {
           <option value="72">72 products per page</option>
         </select>
       </div>
-      <div className="grid grid-cols-3 gap-10 mt-4">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 mt-4">
         {entries.map((product) => {
           return (
             <div

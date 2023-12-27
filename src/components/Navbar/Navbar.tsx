@@ -13,6 +13,7 @@ import { Collection } from "../layout/Layout";
 import Button from "../Button";
 import NavbarHover from "./NavbarHover";
 import { useRouter } from "next/router";
+import SideBarDropdown from "./SideBarDropdown";
 
 export interface NavbarProps {
   onSignup: () => void;
@@ -29,6 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const { data: session, status } = useSession();
   const [showAccount, setShowAccount] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [header, setHeader] = useState("");
   const { toggleCart, cartItems } = useCart();
   const router = useRouter();
@@ -70,10 +72,15 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div className="flex  w-full py-11 bg-[#302c2c] md:bg-transparent bg-navbar bg-navbar::before  text-white items-center">
       <div className="flex w-[90vw] mx-auto items-center justify-between">
-        <div className="md:hidden text-xl">
-          <FontAwesomeIcon icon={faBars} />
+        <div className="md:hidden text-xl relative">
+          <FontAwesomeIcon
+            icon={faBars}
+            onMouseEnter={() => setShowSidebar(true)}
+            onMouseLeave={() => setShowSidebar(false)}
+          />
+          {showSidebar && <SideBarDropdown data={data} />}
         </div>
-        <Link href="/">
+        <Link className="" href="/">
           <FontAwesomeIcon className="text-4xl" icon={faWaveSquare} />{" "}
           <span className="font-bold text-xl">ShredShop </span>
         </Link>
