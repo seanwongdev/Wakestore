@@ -54,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
   const handleSignout = () => {
     setShowAccount(false);
-    signOut();
+    signOut({ callbackUrl: "/" });
   };
 
   const handleMouseExit = () => {

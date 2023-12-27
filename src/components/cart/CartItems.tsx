@@ -53,9 +53,11 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
       {item?.image_url ? (
         <Image
           loading="lazy"
-          height="30"
-          width="100"
+          height="0"
+          width="0"
           alt="product"
+          sizes="90vw"
+          className="w-[80px] object-contain md:w-[100px] h-auto"
           src={item.image_url[0]}
         ></Image>
       ) : (
