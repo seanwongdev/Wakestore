@@ -93,13 +93,13 @@ export default function NewItem({ category }: { category: Category[] }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-3 gap-20">
+          <div className="grid grid-cols-3 md:gap-11 lg:gap-20 gap-6">
             <div className="flex flex-col space-y-2">
               <label
                 htmlFor="quantity"
                 className="block  text-sm font-medium text-gray-900 dark:text-white"
               >
-                Inventory Quantity
+                Inventory
               </label>
               <input
                 className="rounded-md py-2 border border-gray-600 bg-white px-6"
@@ -131,7 +131,7 @@ export default function NewItem({ category }: { category: Category[] }) {
                 htmlFor="category"
                 className="block  text-sm font-medium text-gray-900 dark:text-white"
               >
-                Product Category
+                Category
               </label>
               <select
                 className="rounded-md py-2 border border-gray-600 bg-white px-6"

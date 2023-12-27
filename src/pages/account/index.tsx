@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 export default function Account() {
   const [image, setImage] = useState("");
@@ -36,7 +35,7 @@ export default function Account() {
   };
   return (
     <div className="flex flex-col gap-14 ">
-      <div className="flex gap-10">
+      <div className="flex gap-10 flex-wrap">
         {session?.user.image ? (
           <Image
             className="rounded-full"

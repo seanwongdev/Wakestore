@@ -18,7 +18,7 @@ const SideProfileNavBar: React.FC = () => {
 
   return (
     <>
-      <div className="hidden md:flex flex-col space-y-6 font-semibold">
+      <div className="hidden lg:flex flex-col space-y-6 font-semibold">
         {session?.user?.role === "admin" && (
           <>
             <Link href="/account/new-item" className="space-x-4">
@@ -52,7 +52,7 @@ const SideProfileNavBar: React.FC = () => {
           <span>Update Password</span>
         </Link>
       </div>
-      <div className="md:hidden text-start mb-4">
+      <div className="lg:hidden text-start mb-4">
         <select
           className="bg-gray-800 w-full text-white p-2 focus:outline-none"
           onChange={(e) => router.push(e.target.value)}
