@@ -42,13 +42,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const handleOverlaySignin: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) setShowSignin(false);
-    document.body.classList.toggle("overflow-hidden", !showSignin);
+    if (e.target === e.currentTarget) {
+      setShowSignin(false);
+      document.body.classList.toggle("overflow-hidden", !showSignin);
+    }
   };
 
   const handleOverlaySignup: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    if (e.target === e.currentTarget) setShowSignup(false);
-    document.body.classList.toggle("overflow-hidden", !showSignup);
+    if (e.target === e.currentTarget) {
+      setShowSignup(false);
+      document.body.classList.toggle("overflow-hidden", !showSignup);
+    }
   };
 
   const handleOverlayClick: React.MouseEventHandler<HTMLDivElement> = (e) => {

@@ -169,8 +169,10 @@ export const CartProvider = ({ children }: LayoutProps) => {
   // };
 
   const handleOverlayClick = (e: MouseEvent) => {
-    if (e.target === e.currentTarget) setIsOpen(false);
-    document.body.classList.toggle("overflow-hidden", !isOpen);
+    if (e.target === e.currentTarget) {
+      setIsOpen(false);
+      document.body.classList.toggle("overflow-hidden", !isOpen);
+    }
   };
 
   return (
