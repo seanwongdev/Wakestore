@@ -36,8 +36,12 @@ const Navbar: React.FC<NavbarProps> = ({
     setShowAccount(false);
   };
 
-  const handleAccount = () => {
-    setShowAccount((prev) => !prev);
+  const handleHoverAccount = () => {
+    setShowAccount(true);
+  };
+
+  const handleLeaveAccount = () => {
+    setShowAccount(false);
   };
 
   const handleMouseEnter = (name: string) => {
@@ -102,14 +106,19 @@ const Navbar: React.FC<NavbarProps> = ({
             <div className="relative">
               <button
                 className="font-bold hover:text-blue-300"
-                onClick={handleAccount}
+                onMouseEnter={handleHoverAccount}
+                onMouseLeave={handleLeaveAccount}
               >
                 {session.user.username &&
                   session.user.username[0].toUpperCase() +
                     session.user.username?.slice(1)}
               </button>
               {showAccount && (
-                <div className="absolute bottom-[-66px] left-[-8px] space-y-1 bg-[#302c2c] pb-2 px-2 rounded">
+                <div
+                  className="absolute bottom-[-66px] left-[-8px] space-y-1 bg-[#302c2c] pb-2 px-2 rounded pt-2"
+                  onMouseEnter={handleHoverAccount}
+                  onMouseLeave={handleLeaveAccount}
+                >
                   <Button type="primary" onClick={handleProfileRouting}>
                     Account
                   </Button>
