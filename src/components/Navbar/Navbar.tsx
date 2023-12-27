@@ -10,6 +10,7 @@ import { Collection } from "../layout/Layout";
 
 import Button from "../Button";
 import NavbarHover from "./NavbarHover";
+import { useRouter } from "next/router";
 
 export interface NavbarProps {
   onSignup: () => void;
@@ -25,12 +26,27 @@ const Navbar: React.FC<NavbarProps> = ({
   data,
 }) => {
   const { data: session, status } = useSession();
-
+  const [showAccount, setShowAccount] = useState(false);
   const [header, setHeader] = useState("");
   const { toggleCart, cartItems } = useCart();
+  const router = useRouter();
+
+  const handleProfileRouting = () => {
+    router.push("/account");
+    setShowAccount(false);
+  };
+
+  const handleAccount = () => {
+    setShowAccount((prev) => !prev);
+  };
 
   const handleMouseEnter = (name: string) => {
     setHeader(name);
+  };
+
+  const handleSignout = () => {
+    setShowAccount(false);
+    signOut();
   };
 
   const handleMouseExit = () => {
@@ -74,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({
           )}{" "}
         </div>
 
-        <div className="flex items-center space-x-10 relative">
+        <div className="flex items-center space-x-5 md:space-x-10 relative">
           <div>
             <FontAwesomeIcon
               className="text-white hover:cursor-pointer"
@@ -83,25 +99,32 @@ const Navbar: React.FC<NavbarProps> = ({
             />
           </div>
           {status === "authenticated" ? (
-            <>
-              <Link href="/account" className="font-semibold">
+            <div className="relative">
+              <button className="font-bold" onClick={handleAccount}>
                 {session.user.username &&
                   session.user.username[0].toUpperCase() +
                     session.user.username?.slice(1)}
-              </Link>
+              </button>
+              {showAccount && (
+                <div className="absolute bottom-[-66px] left-[-8px] space-y-1 bg-[#302c2c] pb-2 px-2 rounded">
+                  <Button type="primary" onClick={handleProfileRouting}>
+                    Account
+                  </Button>
 
-              <Button type="primary" onClick={() => signOut()}>
-                Log out
-              </Button>
-            </>
+                  <Button type="primary" onClick={handleSignout}>
+                    Log out
+                  </Button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <Button type="primary" onClick={onSignin}>
-                Sign in
+                Log in
               </Button>
-              <Button type="secondary" onClick={onSignup}>
+              {/* <Button type="secondary" onClick={onSignup}>
                 Sign up
-              </Button>
+              </Button> */}
             </>
           )}
 
