@@ -1,3 +1,3 @@
 export const formatCurrency = (value: number) => {
-  return "$" + Number(value.toFixed(2)).toLocaleString();
+  return "$" + value.toFixed(2);
 };

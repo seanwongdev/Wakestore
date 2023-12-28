@@ -97,7 +97,7 @@ export default function Index({ products }: { products: Product[] }) {
               {item.name}
             </Link>
             <span className="font-bold text-l ">
-              {formatCurrency(Number(item.price))}
+              {formatCurrency(parseFloat(item.price))}
             </span>
             <Button
               className="space-x-4 bg-gray-800"
