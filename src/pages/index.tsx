@@ -25,7 +25,7 @@ export default function Home() {
         </button> */}
       </div>
       <div className="text-center  mt-4">
-        <span className="font-bold">
+        <span data-testid="landing-message" className="font-bold">
           SHRED YOUR SORROWS AWAY WITH US - COME REDISCOVER YOURSELF!
         </span>
         <div className=" w-[90vw] mx-auto grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6 mt-6 h-auto">
