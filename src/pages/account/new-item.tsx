@@ -139,9 +139,15 @@ export default function NewItem({ category }: { category: Category[] }) {
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
               >
-                <option value="">Select Category</option>
+                <option className="text-sm md:text-base " value="">
+                  Select Category
+                </option>
                 {category.map((row) => (
-                  <option key={row.id} value={row.id}>
+                  <option
+                    className="text-sm md:text-base"
+                    key={row.id}
+                    value={row.id}
+                  >
                     {row.name}
                   </option>
                 ))}

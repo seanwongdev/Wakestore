@@ -59,31 +59,49 @@ const SideProfileNavBar: React.FC = () => {
         >
           {session?.user?.role === "admin" && (
             <>
-              <option className="text-sm" value="/account/new-item">
+              <option
+                className="text-sm md:text-base"
+                value="/account/new-item"
+              >
                 Add Product
               </option>
-              <option className="text-sm" value="/account/manage-items">
+              <option
+                className="text-sm md:text-base"
+                value="/account/manage-items"
+              >
                 Manage Products
               </option>
-              <option className="text-sm" value="/account/monthly-stats">
+              <option
+                className="text-sm md:text-base"
+                value="/account/monthly-stats"
+              >
                 Dashboard
               </option>
-              <option className="text-sm" value="/account/all-users">
+              <option
+                className="text-sm md:text-base"
+                value="/account/all-users"
+              >
                 All Users
               </option>
             </>
           )}
 
-          <option className="text-sm" value="/account">
+          <option className="text-sm md:text-base" value="/account">
             Personal Information
           </option>
-          <option className="text-sm" value="/account/view-orders">
+          <option className="text-sm md:text-base" value="/account/view-orders">
             View Orders
           </option>
-          <option className="text-sm" value="/account/my-purchases">
+          <option
+            className="text-sm md:text-base"
+            value="/account/my-purchases"
+          >
             My Purchases
           </option>
-          <option className="text-sm" value="/account/update-password">
+          <option
+            className="text-sm md:text-base"
+            value="/account/update-password"
+          >
             Update Password
           </option>
         </select>

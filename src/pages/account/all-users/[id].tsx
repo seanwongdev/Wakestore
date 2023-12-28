@@ -3,6 +3,8 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { User } from "next-auth";
 import { toast } from "react-toastify";
+import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons/faCircleChevronLeft";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import pool from "@/database/db";
 import ProfileLayout from "@/components/layout/ProfileLayout";
@@ -41,6 +43,9 @@ export default function EditPage({ user }: { user: User }) {
 
   return (
     <div>
+      <button className="mt-2 text-xl" onClick={() => router.back()}>
+        <FontAwesomeIcon className="text-xl mb-2" icon={faCircleChevronLeft} />
+      </button>
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div className="flex flex-col space-y-2">
@@ -79,7 +84,7 @@ export default function EditPage({ user }: { user: User }) {
           </div>
 
           <div className="flex justify-end">
-            <Button type="primary">Submit</Button>
+            <Button type="secondary">Submit</Button>
           </div>
         </div>
       </form>

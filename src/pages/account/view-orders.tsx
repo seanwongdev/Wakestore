@@ -63,12 +63,12 @@ export default function ViewOrders({ orders }: OrderProps) {
             onChange={(e) => setOrder(e.target.value)}
           >
             {" "}
-            <option className="text-sm" value="">
+            <option className="text-sm md:text-base" value="">
               Select an order below...
             </option>
             {orders?.map((order) => (
               <option
-                className="text-sm w-auto"
+                className="text-sm md:text-base w-auto"
                 key={order.guid}
                 value={order.guid}
               >
