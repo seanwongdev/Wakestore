@@ -26,7 +26,7 @@ const OrderItem = ({ data }: { data: OrderItemProps[] }) => {
     <div className="mt-10">
       {data.length > 0 ? (
         <Card>
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-col md:flex-row md:justify-between md:items-center">
             <CardTitle>Order {data[0]?.guid.toUpperCase()}</CardTitle>
             <CardDescription>
               {new Intl.DateTimeFormat("en-GB", dateOptions).format(
@@ -38,11 +38,19 @@ const OrderItem = ({ data }: { data: OrderItemProps[] }) => {
             <div className="space-y-3">
               {data.map((item) => (
                 <div key={item.name} className="flex justify-between">
-                  <span>{item.name}</span>
-                  <span>
-                    {item.quantity_ordered} X{" "}
-                    {formatCurrency(parseFloat(item.price))}
-                  </span>
+                  <div>
+                    <span>{item.name}</span>
+                    <span className="md:hidden">
+                      {" "}
+                      ({item.quantity_ordered})
+                    </span>
+                  </div>
+                  <div>
+                    <span className="hidden md:inline">
+                      {item.quantity_ordered} X{" "}
+                    </span>
+                    <span>{formatCurrency(parseFloat(item.price))}</span>
+                  </div>
                 </div>
               ))}
             </div>

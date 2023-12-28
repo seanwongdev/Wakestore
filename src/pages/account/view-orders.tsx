@@ -55,22 +55,30 @@ export default function ViewOrders({ orders }: OrderProps) {
   return (
     <>
       {orders.length > 0 ? (
-        <div className="space-x-4">
-          <span className="font-semibold">Which order?</span>
+        <div className=" flex flex-col">
+          <span className="font-semibold">Choose your order for viewing:</span>
           <select
             className="border border-gray-700 rounded p-2.5 "
             value={order}
             onChange={(e) => setOrder(e.target.value)}
           >
             {" "}
-            <option value="">Select an order below...</option>
+            <option className="text-sm" value="">
+              Select an order below...
+            </option>
             {orders?.map((order) => (
-              <option key={order.guid} value={order.guid}>
+              <option
+                className="text-sm w-auto"
+                key={order.guid}
+                value={order.guid}
+              >
                 {new Intl.DateTimeFormat("en-GB", dateOptions).format(
                   new Date(order.date)
                 )}{" "}
-                : {order.guid.toUpperCase()} -{" "}
-                {formatCurrency(parseFloat(order.total))}
+                : {order.guid.toUpperCase()}
+                {/* -{" "}
+                {formatCurrency(parseFloat(order.total))
+                } */}
               </option>
             ))}
           </select>
