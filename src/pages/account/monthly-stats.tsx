@@ -136,7 +136,7 @@ export default function MonthlyStats({
           <CardDescription>Overview of your store</CardDescription>
         </CardHeader>
       </Card>
-      <div className="mt-6 grid grid-cols-3 gap-10">
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-10">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-medium">Revenue</CardTitle>
