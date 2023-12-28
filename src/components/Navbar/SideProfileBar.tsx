@@ -60,31 +60,31 @@ const SideProfileNavBar: React.FC = () => {
           {session?.user?.role === "admin" && (
             <>
               <option className="text-sm" value="/account/new-item">
-                <span>Add Product</span>
+                Add Product
               </option>
               <option className="text-sm" value="/account/manage-items">
-                <span>Manage Products</span>
+                Manage Products
               </option>
               <option className="text-sm" value="/account/monthly-stats">
-                <span>Dashboard</span>
+                Dashboard
               </option>
               <option className="text-sm" value="/account/all-users">
-                <span>All Users</span>
+                All Users
               </option>
             </>
           )}
 
           <option className="text-sm" value="/account">
-            <span>Personal Information</span>
+            Personal Information
           </option>
           <option className="text-sm" value="/account/view-orders">
-            <span>View Orders</span>
+            View Orders
           </option>
           <option className="text-sm" value="/account/my-purchases">
-            <span>My Purchases</span>
+            My Purchases
           </option>
           <option className="text-sm" value="/account/update-password">
-            <span>Update Password</span>
+            Update Password
           </option>
         </select>
       </div>
