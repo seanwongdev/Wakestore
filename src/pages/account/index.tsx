@@ -34,7 +34,7 @@ export default function Account() {
     router.push(`/account/${session?.user.id}`);
   };
   return (
-    <div className="flex flex-col gap-14 ">
+    <div className="flex flex-col ms-6 gap-14 mt-10">
       <div className="flex gap-10 flex-wrap">
         {session?.user.image ? (
           <Image
