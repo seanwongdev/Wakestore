@@ -24,12 +24,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { id: string | number }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   users: TData[];
 }
 
-export function UserTable<TData, TValue>({
+export function UserTable<TData extends { id: string | number }, TValue>({
   columns,
   users,
 }: DataTableProps<TData, TValue>) {

@@ -24,12 +24,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { id: string | number }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   products: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string | number }, TValue>({
   columns,
   products,
 }: DataTableProps<TData, TValue>) {
@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
     meta: {
-      updateData: (rowIndex, columnId, value) =>
+      updateData: (rowIndex: number, columnId: string, value: TValue) =>
         setData((prev) =>
           prev.map((row, index) =>
             index === rowIndex

@@ -80,7 +80,9 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "total",
-    cell: (info) => <span>{formatCurrency(parseFloat(info.getValue()))}</span>,
+    cell: (info) => (
+      <span>{formatCurrency(parseFloat(info.getValue() as string))}</span>
+    ),
     header: ({ column }) => {
       return (
         <Button

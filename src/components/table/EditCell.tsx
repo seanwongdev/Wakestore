@@ -1,13 +1,21 @@
 import { Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Column, Row, Table } from "@tanstack/react-table";
 
-function EditCell({ getValue, row, column, table }) {
+interface EditCellProps {
+  getValue: () => any;
+  row: any;
+  column: any;
+  table: any;
+}
+
+function EditCell({ getValue, row, column, table }: EditCellProps) {
   const initValue = getValue();
   const [value, setValue] = useState(initValue);
   const { updateData } = table.options.meta;
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const isValidKey = /^\d$/.test(e.key);
 
     if (!isValidKey) {

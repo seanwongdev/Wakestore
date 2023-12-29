@@ -3,7 +3,12 @@ import Link from "next/link";
 
 import { Button } from "../ui/button";
 
-function EditImage({ getValue, row }) {
+interface EditImageProps {
+  getValue: () => any;
+  row: any;
+}
+
+function EditImage({ getValue, row }: EditImageProps) {
   const initValue = getValue();
 
   return (
