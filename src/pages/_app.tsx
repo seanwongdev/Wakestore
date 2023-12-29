@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import GlobalProvider from "@/GlobalProvider";
 import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 type ComponentWithPageLayout = AppProps & {
   Component: AppProps["Component"] & {
