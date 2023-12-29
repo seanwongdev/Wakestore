@@ -67,7 +67,7 @@ export const getStaticProps = (async (context) => {
 
     return {
       props: result.rows[0],
-      revalidate: 3600,
+      revalidate: 60,
     };
   } catch (err) {
     console.error("Error in getStaticProps:", err);

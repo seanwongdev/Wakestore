@@ -162,7 +162,7 @@ export const getStaticProps = (async (context) => {
     return {
       props: {
         products: [...result.rows],
-        revalidate: 3600,
+        revalidate: 60,
       },
     };
   } catch (err) {
