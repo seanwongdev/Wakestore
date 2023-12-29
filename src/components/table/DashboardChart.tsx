@@ -11,7 +11,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function DashboardChart({ data }) {
+interface DashboardChartProps {}
+
+export default function DashboardChart({ data }: any) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart

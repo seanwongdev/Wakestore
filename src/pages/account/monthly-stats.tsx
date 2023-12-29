@@ -39,12 +39,12 @@ interface salesByCollectionByMonth {
   total_sales: string;
 }
 
-interface ResultObject {
-  [key: string]: {
-    name: string;
-    [collectionName: string]: number;
-  };
-}
+// interface ResultObject {
+//   [key: string]: {
+//     name?: string;
+//     [collectionName: string]: number;
+//   };
+// }
 
 export default function MonthlyStats({
   orders,
@@ -78,11 +78,11 @@ export default function MonthlyStats({
 
   let maxQuantity: number = 0;
   let correspondingId: number;
-  Object.entries(totalSalesPerProduct).map((row) => {
-    const currentQuantity = parseInt(row[1], 10);
+  Object.entries(totalSalesPerProduct).map(([key, value]) => {
+    const currentQuantity = value as number;
     if (currentQuantity > maxQuantity) {
       maxQuantity = currentQuantity;
-      correspondingId = parseInt(row[0], 10);
+      correspondingId = parseInt(key, 10);
     }
   });
   const bestSeller = orderItems.find(
@@ -108,20 +108,25 @@ export default function MonthlyStats({
     return months[monthNumber - 1];
   };
 
-  const resultObject: ResultObject = {};
+  // const resultObject: ResultObject = {};
 
-  salesByCollectionByMonth.forEach((item) => {
-    const monthName = getMonthName(parseInt(item.name, 10));
-    const collectionName = item.collection_name;
-    const key = monthName;
-    if (!resultObject[key]) {
-      resultObject[key] = { name: key };
-    }
+  // salesByCollectionByMonth.forEach((item) => {
+  //   const monthName = getMonthName(parseInt(item.name, 10));
+  //   const collectionName = item.collection_name;
+  //   const key = monthName;
+  //   if (!resultObject[key]) {
+  //     resultObject[key] = {};
+  //   }
 
-    resultObject[key][collectionName] = parseFloat(item.total_sales);
-  });
+  //   resultObject[key].name = key;
+  //   if (!resultObject[key][collectionName]) {
+  //     resultObject[key][collectionName] = parseFloat(item.total_sales);
+  //   } else {
+  //     resultObject[key][collectionName] += parseFloat(item.total_sales);
+  //   }
+  // });
 
-  const finalOutput = Object.values(resultObject);
+  // const finalOutput = Object.values(resultObject);
 
   return (
     <div>
@@ -129,9 +134,9 @@ export default function MonthlyStats({
         <CardHeader>
           <div className="flex flex-row items-center justify-between">
             <CardTitle>Dashboard</CardTitle>
-            <Button onClick={() => setShowCharts((state) => !state)}>
+            {/* <Button onClick={() => setShowCharts((state) => !state)}>
               {showCharts ? "View Orders" : "View Charts"}
-            </Button>
+            </Button> */}
           </div>
           <CardDescription>Overview of your store</CardDescription>
         </CardHeader>
@@ -169,11 +174,11 @@ export default function MonthlyStats({
       </div>
 
       <div className="mt-6">
-        {showCharts ? (
+        {/* {showCharts ? (
           <DashboardChart data={finalOutput} />
-        ) : (
-          <OrderTable data={orders} columns={OrderColumns} />
-        )}
+        ) : ( */}
+        <OrderTable data={orders} columns={OrderColumns} />
+        {/* )} */}
       </div>
     </div>
   );
