@@ -6,7 +6,7 @@ import { Category } from "../layout/CollectionLayout";
 interface AccordionProps {
   data: Category[];
   collection: string;
-  category: string;
+  category?: string;
 }
 
 const Accordion: React.FC<AccordionProps> = ({

@@ -51,6 +51,8 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
     ...new Set(data.map((item) => item.collection_name)),
   ];
 
+  const currentCategory = Array.isArray(category) ? category[0] : category;
+
   return (
     <div className="flex flex-col font-semibold mt-8">
       <span className="font-bold text-xl italic border-b border-b-black py-2">
@@ -66,7 +68,7 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
               <Link
                 href={
                   data.find((item) => item.collection_name === row)
-                    ?.collection_url
+                    ?.collection_url ?? "/"
                 }
                 key={row}
                 className={` 
@@ -86,7 +88,11 @@ const SideNavbar: React.FC<SideNavbarProps> = ({ data }) => {
               <FontAwesomeIcon icon={faChevronDown} />
             </div>
             {isCollectionOpen[row] && (
-              <Accordion data={data} collection={row} category={category} />
+              <Accordion
+                data={data}
+                collection={row}
+                category={currentCategory}
+              />
             )}
           </>
         ))}

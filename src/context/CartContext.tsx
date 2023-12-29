@@ -28,7 +28,7 @@ export interface CartContext {
   removeFromCart: (id: number) => void;
   changeCartQuantity: (id: number, value: string) => void;
   toggleCart: () => void;
-  handleOverlayClick: (e: MouseEvent) => void;
+  handleOverlayClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   cartItems: CartItem[];
   isOpen: boolean;
 }
@@ -168,7 +168,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
   //   setCartToState();
   // };
 
-  const handleOverlayClick = (e: MouseEvent) => {
+  const handleOverlayClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (e.target === e.currentTarget) {
       setIsOpen(false);
       document.body.classList.toggle("overflow-hidden", !isOpen);

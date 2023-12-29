@@ -12,7 +12,7 @@ interface FooterProps {
   data: Collection[];
 }
 
-const Footer = ({ data }: { data: FooterProps }) => {
+const Footer = ({ data }: FooterProps) => {
   return (
     <div className="bg-footer bg-footer::before mt-4 h-auto">
       <div className="flex flex-col w-[90vw] mx-auto ">

@@ -3,7 +3,7 @@ import { MouseEvent, ReactNode } from "react";
 interface ButtonProps {
   children: ReactNode;
   type: "primary" | "secondary" | "checkout" | "submit";
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
