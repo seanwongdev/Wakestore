@@ -1,14 +1,14 @@
 import pool from "@/database/db";
 import { ProductAdmin } from "./index";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { uploadCloudinary } from "@/lib/utils/upload";
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
 export default function ProductImage({ product }: { product: ProductAdmin }) {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<File[]>([]);
   const router = useRouter();
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -48,7 +48,9 @@ export default function ProductImage({ product }: { product: ProductAdmin }) {
             id="file_input"
             type="file"
             multiple={true}
-            onChange={(e) => setImages(e.target.files)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setImages(Array.from(e.target.files || []))
+            }
           />
         </div>
         <div className="flex justify-end mt-4">
@@ -61,7 +63,7 @@ export default function ProductImage({ product }: { product: ProductAdmin }) {
 
 export const getStaticProps = (async (context) => {
   try {
-    const { id } = context.params;
+    const { id } = context.params as { id: string };
     const client = await pool.connect();
     const { rows } = await client.query(
       "SELECT * FROM product_items WHERE id = $1",
@@ -88,7 +90,7 @@ export const getStaticProps = (async (context) => {
   }
 }) satisfies GetStaticProps;
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
   try {
     const client = await pool.connect();
     const { rows } = await client.query("SELECT id FROM product_items");
@@ -105,6 +107,6 @@ export const getStaticPaths = (async () => {
     console.error("Error in getStaticPaths:", err);
     return { notFound: true };
   }
-}) satisfies GetStaticPaths;
+};
 
 ProductImage.PageLayout = ProfileLayout;

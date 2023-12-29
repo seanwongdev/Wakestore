@@ -31,13 +31,15 @@ const ShoppingCart = () => {
     fetchProductData();
   }, []);
 
-  const totalCost = cartItems?.reduce(
-    (acc, cur) =>
-      acc +
-      cur.quantity_ordered *
-        (data?.find((item) => item.id === cur.product_item_id)?.price || 0),
-    0
-  );
+  const totalCost = cartItems?.reduce((acc: number, cur) => {
+    const product = data?.find((item) => item.id === cur.product_item_id);
+
+    if (product) {
+      return acc + cur.quantity_ordered * +product.price;
+    }
+
+    return acc;
+  }, 0);
 
   const checkout = async () => {
     try {

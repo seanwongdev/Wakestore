@@ -57,6 +57,7 @@ export default function EditUser({ user }: { user: User }) {
 
       if (!isPasswordMatched) throw new Error("Invalid Password");
 
+      if (!formData.files) return;
       const data = await uploadCloudinary(formData.files[0]);
 
       const updatedUser = {
@@ -107,7 +108,7 @@ export default function EditUser({ user }: { user: User }) {
             type="text"
             id="email"
             className="border rounded border-gray-500 p-1.5 w-[350px] "
-            value={formData.email}
+            value={formData.email ?? ""}
             onChange={handleChange}
           />
         </div>
@@ -149,7 +150,7 @@ export default function EditUser({ user }: { user: User }) {
 
 export const getStaticProps = (async (context) => {
   try {
-    const { user } = context.params;
+    const { user } = context.params as { user: string };
     const client = await pool.connect();
     const { rows } = await client.query("SELECT * FROM users WHERE id = $1", [
       user,
@@ -173,7 +174,7 @@ export const getStaticProps = (async (context) => {
   }
 }) satisfies GetStaticProps;
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
   try {
     const client = await pool.connect();
     const { rows } = await client.query("SELECT id FROM users");
@@ -190,6 +191,6 @@ export const getStaticPaths = (async () => {
     console.error("Error in getStaticPaths:", err);
     return { notFound: true };
   }
-}) satisfies GetStaticPaths;
+};
 
 EditUser.PageLayout = ProfileLayout;

@@ -13,6 +13,7 @@ import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
 import Link from "next/link";
 import Image from "next/image";
+import React from "react";
 
 export default function Index({ products }: { products: Product[] }) {
   const router = useRouter();
@@ -66,7 +67,9 @@ export default function Index({ products }: { products: Product[] }) {
           name="resultsPerPage"
           id="resultsPerPage"
           className="border rounded border-gray-300 p-2 focus:outline-blue-500 "
-          onClick={(e) => handleSelectResults(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            handleSelectResults(Number(e.target.value))
+          }
         >
           <option value="9">9 products per page</option>
           <option value="18">18 products per page</option>
@@ -170,7 +173,7 @@ export const getStaticProps = (async (context) => {
   }
 }) satisfies GetStaticProps;
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
   try {
     const client = await pool.connect();
     const result = await client.query(
@@ -191,6 +194,6 @@ export const getStaticPaths = (async () => {
       notFound: true,
     };
   }
-}) satisfies GetStaticPaths;
+};
 
 Index.PageLayout = CollectionLayout;

@@ -28,7 +28,7 @@ export default async function handler(
     return;
   }
 
-  const session = event.data.object;
+  const session = event.data.object as Stripe.Checkout.Session;
 
   const address = session?.customer_details?.address;
   const addressComponents = [

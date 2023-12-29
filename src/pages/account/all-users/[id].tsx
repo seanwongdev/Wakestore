@@ -94,7 +94,7 @@ export default function EditPage({ user }: { user: User }) {
 
 export const getStaticProps = (async (context) => {
   try {
-    const { id } = context.params;
+    const { id } = context.params as { id: string };
     const client = await pool.connect();
     const { rows } = await client.query(
       "SELECT * from users WHERE role = 'user' AND  id = $1",
@@ -118,7 +118,7 @@ export const getStaticProps = (async (context) => {
   }
 }) satisfies GetStaticProps;
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
   try {
     const client = await pool.connect();
     const { rows } = await client.query(
@@ -137,6 +137,6 @@ export const getStaticPaths = (async () => {
     console.error("Error in getStaticPaths:", err);
     return { notFound: true };
   }
-}) satisfies GetStaticPaths;
+};
 
 EditPage.PageLayout = ProfileLayout;
