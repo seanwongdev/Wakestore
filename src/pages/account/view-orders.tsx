@@ -28,7 +28,11 @@ interface OrderProps {
 }
 
 export default function ViewOrders({ orders }: OrderProps) {
-  const dateOptions = { day: "numeric", month: "short", year: "numeric" };
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
   const [order, setOrder] = useState("");
   const [data, setData] = useState([]);
 

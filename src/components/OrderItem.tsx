@@ -21,7 +21,11 @@ interface OrderItemProps {
 }
 
 const OrderItem = ({ data }: { data: OrderItemProps[] }) => {
-  const dateOptions = { day: "numeric", month: "short", year: "numeric" };
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
   return (
     <div className="mt-10">
       {data.length > 0 ? (

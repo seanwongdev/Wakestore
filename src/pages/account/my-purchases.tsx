@@ -18,7 +18,11 @@ interface ItemProps {
 
 export default function MyPurchases({ items }: { items: ItemProps[] }) {
   const uniqueItems = [...new Set(items.map((item) => item.name))];
-  const dateOptions = { day: "numeric", month: "short", year: "numeric" };
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
   const uniqueArray = uniqueItems.map((product) => ({
     name: product,
     price: items.find((item) => item.name === product)?.price,
@@ -35,24 +39,31 @@ export default function MyPurchases({ items }: { items: ItemProps[] }) {
           key={item.name}
           className="flex gap-10 rounded hover:shadow hover:bg-gray-300"
         >
-          <Image
-            alt="product"
-            height={100}
-            width={200}
-            src={item.image[0]}
-          ></Image>
+          {" "}
+          {item.image && (
+            <Image
+              alt="product"
+              height={100}
+              width={200}
+              src={item.image[0]}
+            ></Image>
+          )}
           <div className="flex flex-col justify-evenly">
-            <span className="font-semibold">
-              Last purchased on{" "}
-              {new Intl.DateTimeFormat("en-GB", dateOptions).format(
-                new Date(item.date)
-              )}
-            </span>
+            {item.date && (
+              <span className="font-semibold">
+                Last purchased on{" "}
+                {new Intl.DateTimeFormat("en-GB", dateOptions).format(
+                  new Date(item.date)
+                )}
+              </span>
+            )}
 
             <span className="font-semibold">{item.name}</span>
-            <span className="font-semibold">
-              {formatCurrency(parseFloat(item.price))}
-            </span>
+            {item.price && (
+              <span className="font-semibold">
+                {formatCurrency(parseFloat(item.price))}
+              </span>
+            )}
           </div>
         </Link>
       ))}
