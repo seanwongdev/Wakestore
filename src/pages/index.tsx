@@ -88,8 +88,8 @@ export default function Home() {
               loading="lazy"
               sizes="50vw"
               quality={60}
-              className="w-auto h-auto object-cover"
-              src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703577768/big-nut_lptc3c.jpg"
+              className="w-auto h-3/4 object-contain"
+              src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703139516/dev_projects/qyq9ceotu7tj0dtzheme.jpg"
             ></Image>
             <div className="">
               <p className="text-center font-bold">ACCESSORIES</p>
