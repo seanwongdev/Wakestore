@@ -4,6 +4,7 @@ const nextConfig = {
     domains: ["res.cloudinary.com"],
   },
   reactStrictMode: true,
+  pageDataCollectionTimeout: 300000,
 };
 
 module.exports = nextConfig;
