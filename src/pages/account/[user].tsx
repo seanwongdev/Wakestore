@@ -164,7 +164,7 @@ export const getStaticProps = (async (context) => {
           img_url: rows[0].img_url,
         },
       },
-      revalidate: 60,
+      revalidate: 120,
     };
   } catch (err) {
     console.error("Error in getStaticProps:", err);
