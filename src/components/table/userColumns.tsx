@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "next-auth";
+import { AllUsersProps } from "@/pages/account/all-users";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,7 +11,7 @@ import Link from "next/link";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<AllUsersProps>[] = [
   {
     id: "select",
     header: ({ table }) => (

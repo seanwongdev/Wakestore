@@ -20,7 +20,7 @@ export default function NewItem({ category }: { category: Category[] }) {
   const [price, setPrice] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [url, setUrl] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<File[]>([]);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -182,7 +182,7 @@ export default function NewItem({ category }: { category: Category[] }) {
               id="file_input"
               type="file"
               multiple={true}
-              onChange={(e) => setImages(e.target.files)}
+              onChange={(e) => setImages(Array.from(e.target.files || []))}
             />
           </div>
           <div className="flex justify-end">

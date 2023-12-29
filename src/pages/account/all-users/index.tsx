@@ -1,11 +1,19 @@
 import type { GetServerSideProps } from "next";
-import { User } from "next-auth";
+
 import ProfileLayout from "@/components/layout/ProfileLayout";
 import pool from "@/database/db";
 import { UserTable } from "@/components/table/userTable";
 import { columns as userColumn } from "@/components/table/userColumns";
 
-export default function AllUsers({ users }: { users: User[] }) {
+export interface AllUsersProps {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  img_url: string;
+}
+
+export default function AllUsers({ users }: { users: AllUsersProps[] }) {
   return <UserTable users={users} columns={userColumn} />;
 }
 
