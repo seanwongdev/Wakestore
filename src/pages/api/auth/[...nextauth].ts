@@ -36,8 +36,19 @@ export const authOptions = {
   },
   providers: [
     CredentialsProvider({
-      async authorize(credentials: Record<string, string>, req) {
+      credentials: {
+        email: {
+          type: "text",
+        },
+        password: {
+          type: "password",
+        },
+      },
+      async authorize(credentials?: Record<string, string>) {
         try {
+          if (!credentials) {
+            throw new Error("Missing credentials");
+          }
           const { email, password } = credentials;
           const client = await pool.connect();
           const result = await client.query<User>(
@@ -51,10 +62,11 @@ export const authOptions = {
 
           const isPasswordMatched = await bcrypt.compare(
             password,
-            user.password
+            user.password || ""
           );
 
           if (!isPasswordMatched) throw new Error("Invalid Email or Password");
+
           return user;
         } catch (err) {
           console.error("Error in authorize:", err);

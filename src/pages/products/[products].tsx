@@ -12,7 +12,7 @@ export interface Product {
   url: string;
   description: string;
   quantity: number;
-  price: number;
+  price: string;
   image_url: string[];
 }
 
@@ -77,7 +77,7 @@ export const getStaticProps = (async (context) => {
   }
 }) satisfies GetStaticProps;
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = async () => {
   try {
     const client = await pool.connect();
     const result = await client.query("SELECT url FROM product_items");
@@ -96,4 +96,4 @@ export const getStaticPaths = (async () => {
       notFound: true,
     };
   }
-}) satisfies GetStaticPaths;
+};

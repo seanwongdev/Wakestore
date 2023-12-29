@@ -1,4 +1,4 @@
-export const uploadCloudinary = async (file) => {
+export const uploadCloudinary = async (file: File) => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", "devprojects");
