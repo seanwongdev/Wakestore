@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { Category } from "../layout/CollectionLayout";
 import Link from "next/link";
-import { toast } from "react-toastify";
+
+import { useCategory } from "@/context/CategoryContext";
 
 interface NavbarHoverProps {
   collection: string;
@@ -14,23 +13,9 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
   onMouseEnter,
   onMouseExit,
 }) => {
-  const [data, setData] = useState<Category[]>([]);
-  useEffect(() => {
-    const fetchCategoryData = async () => {
-      try {
-        const res = await fetch("/api/category");
-        if (!res.ok) throw new Error("Failed to fetch category data");
-        const { category } = await res.json();
-        setData(category);
-      } catch (err: any) {
-        console.error("Error fetching category data:", err);
-        toast.error(err.message);
-      }
-    };
-    fetchCategoryData();
-  }, []);
+  const { category } = useCategory();
 
-  const collectionId = data.find(
+  const collectionId = category.find(
     (item) => item.collection_name === collection
   )?.collection_id;
 
@@ -39,7 +24,7 @@ const NavbarHover: React.FC<NavbarHoverProps> = ({
       className="absolute z-100 top-10  rounded-md shadow w-[150px] flex-wrap bg-white text-black divide-y-1 divide-x-gray"
       style={collectionId ? { left: `${(collectionId - 1) * 30}%` } : {}}
     >
-      {data.map((row) =>
+      {category.map((row) =>
         row.collection_name === collection ? (
           <div
             onMouseEnter={onMouseEnter}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./Accordion.module.css"; // Import your CSS module for styling
-import { Category } from "../layout/CollectionLayout";
+import { Category } from "@/context/CategoryContext";
 
 interface AccordionProps {
   data: Category[];
