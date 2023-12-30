@@ -1,3 +1,8 @@
 export const formatCurrency = (value: number) => {
-  return "$" + value.toFixed(2);
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 };
