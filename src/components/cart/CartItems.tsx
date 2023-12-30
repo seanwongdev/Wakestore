@@ -12,9 +12,10 @@ import { toast } from "react-toastify";
 interface CartItemsProps {
   id: number;
   quantity: number;
+  productData: Product[];
 }
 
-const CartItems = ({ id, quantity }: CartItemsProps) => {
+const CartItems = ({ id, quantity, productData }: CartItemsProps) => {
   const quantityOptions: JSX.Element[] = [];
   for (let i = 1; i < 100; i++) {
     quantityOptions.push(
@@ -23,29 +24,14 @@ const CartItems = ({ id, quantity }: CartItemsProps) => {
       </option>
     );
   }
-  const [data, setData] = useState<Product[]>([]);
+
   const {
     removeFromCart,
 
     changeCartQuantity,
   } = useCart();
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const res = await fetch("/api/products");
-        if (!res.ok) throw new Error("Failed to fetch product data");
-        const { products } = await res.json();
 
-        setData(products);
-      } catch (err: any) {
-        console.error("Error in fetching product data:", err);
-        toast.error(err.message);
-      }
-    };
-    fetchProductData();
-  }, []);
-
-  const item = data?.find((item) => item.id === id);
+  const item = productData?.find((item) => item.id === id);
   if (item === null) return null;
 
   return (

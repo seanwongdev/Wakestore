@@ -98,6 +98,7 @@ const ShoppingCart = () => {
                     key={item.product_item_id}
                     id={item.product_item_id}
                     quantity={item.quantity_ordered}
+                    productData={data}
                   />
                 ))}
               </div>
