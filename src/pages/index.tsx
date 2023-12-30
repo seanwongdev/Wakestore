@@ -52,8 +52,13 @@ export default function Home() {
               src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703573657/BTG0721-WTF-Wakeboards-scaled_apz85d.jpg"
             ></Image>
             <div className="">
-              <p className="text-center font-bold">RIDING ESSENTIALS</p>
-              <p className="text-center">
+              <p
+                data-testid="collections-paragraph"
+                className="text-center font-bold"
+              >
+                RIDING ESSENTIALS
+              </p>
+              <p data-testid="collections-paragraph" className="text-center">
                 Get everything you need for wakeboarding here!
               </p>
             </div>
@@ -73,8 +78,15 @@ export default function Home() {
               src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703577325/t-shirt_v02yvl.jpg"
             ></Image>
             <div className="">
-              <p className="text-center font-bold">APPAREL</p>
-              <p className="text-center">Look good while feeling good!</p>
+              <p
+                data-testid="collections-paragraph"
+                className="text-center font-bold"
+              >
+                APPAREL
+              </p>
+              <p data-testid="collections-paragraph" className="text-center">
+                Look good while feeling good!
+              </p>
             </div>
           </Link>
           <Link
@@ -92,8 +104,13 @@ export default function Home() {
               src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703139516/dev_projects/qyq9ceotu7tj0dtzheme.jpg"
             ></Image>
             <div className="">
-              <p className="text-center font-bold">ACCESSORIES</p>
-              <p className="text-center">
+              <p
+                data-testid="collections-paragraph"
+                className="text-center font-bold"
+              >
+                ACCESSORIES
+              </p>
+              <p data-testid="collections-paragraph" className="text-center">
                 Miscellaneous items to complete your needs
               </p>
             </div>
@@ -113,8 +130,15 @@ export default function Home() {
               src="https://res.cloudinary.com/dleikmnsf/image/upload/v1703578682/wakeboardstarterpackageimpactbrickwithaquabuddy_wakeboard___1_700x_xtvwy2.webp"
             ></Image>
             <div className="">
-              <p className="text-center font-bold">KIDS</p>
-              <p className="text-center">For the little ones</p>
+              <p
+                data-testid="collections-paragraph"
+                className="text-center font-bold"
+              >
+                KIDS
+              </p>
+              <p data-testid="collections-paragraph" className="text-center">
+                For the little ones
+              </p>
             </div>
           </Link>
         </div>

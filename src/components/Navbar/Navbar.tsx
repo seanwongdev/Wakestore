@@ -22,12 +22,7 @@ export interface NavbarProps {
   data: Collection[];
 }
 
-const Navbar: React.FC<NavbarProps> = ({
-  onSignup,
-  onSignin,
-  onSearch,
-  data,
-}) => {
+const Navbar: React.FC<NavbarProps> = ({ onSignin, onSearch, data }) => {
   const { data: session, status } = useSession();
   const [showAccount, setShowAccount] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
