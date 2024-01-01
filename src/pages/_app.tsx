@@ -25,8 +25,8 @@ export default function App({
   const NestedLayout = Component.PageLayout || EmptyLayout;
   return (
     <>
-      <ChakraProvider>
-        <SessionProvider session={session}>
+      <SessionProvider session={session}>
+        <ChakraProvider>
           <GlobalProvider>
             <Layout>
               <NestedLayout>
@@ -34,8 +34,8 @@ export default function App({
               </NestedLayout>
             </Layout>
           </GlobalProvider>
-        </SessionProvider>
-      </ChakraProvider>
+        </ChakraProvider>
+      </SessionProvider>
     </>
   );
 }
