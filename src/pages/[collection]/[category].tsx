@@ -12,7 +12,7 @@ import CollectionLayout from "@/components/layout/CollectionLayout";
 import pool from "@/database/db";
 import Image from "next/image";
 import Link from "next/link";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 interface Product {
   id: number;
@@ -25,7 +25,7 @@ interface Product {
 }
 
 const Category = ({ products }: { products: Product[] }) => {
-  const { increaseCartQuantity } = useCart();
+  const { increaseCartQuantity, loadingStates } = useCart();
   const router = useRouter();
 
   const { page, collection, category, per_page } = router.query;
@@ -124,11 +124,15 @@ const Category = ({ products }: { products: Product[] }) => {
                 {formatCurrency(Number(product.price))}
               </span>
               <Button
-                className="space-x-4 bg-gray-800"
+                className={`space-x-4 bg-gray-800 disabled = ${
+                  loadingStates[product.id]
+                }`}
                 onClick={() => increaseCartQuantity(product.id)}
               >
                 <FontAwesomeIcon icon={faCartShopping} />
-                <span>ADD TO CART</span>
+                <span>
+                  {loadingStates[product.id] ? "Adding..." : "ADD TO CART"}
+                </span>
               </Button>
             </div>
           );

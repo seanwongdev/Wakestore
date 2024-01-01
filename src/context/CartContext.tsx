@@ -1,8 +1,7 @@
 import {
-  ChangeEvent,
   createContext,
-  FormEvent,
-  ReactNode,
+  Dispatch,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -24,6 +23,7 @@ import { ToastProvider } from "@chakra-ui/react";
 export interface CartContext {
   getItemQuantity: (id: number) => number;
   increaseCartQuantity: (id: number) => void;
+  loadingStates: { [key: number]: boolean };
 
   removeFromCart: (id: number) => void;
   changeCartQuantity: (id: number, value: string) => void;
@@ -46,6 +46,9 @@ export interface CartItem {
 const CartContext = createContext({} as CartContext);
 
 export const CartProvider = ({ children }: LayoutProps) => {
+  const [loadingStates, setLoadingStates] = useState<{
+    [key: number]: boolean;
+  }>({});
   const { data: session, status } = useSession();
 
   const setCartToState = async () => {
@@ -80,6 +83,10 @@ export const CartProvider = ({ children }: LayoutProps) => {
   };
 
   const increaseCartQuantity = async (productId: number) => {
+    setLoadingStates((prevLoadingStates) => ({
+      ...prevLoadingStates,
+      [productId]: true,
+    }));
     try {
       if (cartItems.length > 0) {
         const articleInCart = cartItems.find(
@@ -105,6 +112,8 @@ export const CartProvider = ({ children }: LayoutProps) => {
     } catch (err: any) {
       console.error("Error adding to cart:", err);
       toast.error(err.message);
+    } finally {
+      setLoadingStates({});
     }
   };
   // const increaseCartQuantity = (id: number) => {
@@ -182,6 +191,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
         cartItems,
         getItemQuantity,
         increaseCartQuantity,
+        loadingStates,
 
         removeFromCart,
         isOpen,
