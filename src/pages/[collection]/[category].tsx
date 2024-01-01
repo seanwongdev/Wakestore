@@ -124,14 +124,13 @@ const Category = ({ products }: { products: Product[] }) => {
                 {formatCurrency(Number(product.price))}
               </span>
               <Button
-                className={`space-x-4 bg-gray-800 disabled = ${
-                  loadingStates[product.id]
-                }`}
+                className="space-x-4 bg-gray-800"
+                disabled={loadingStates[product.id]}
                 onClick={() => increaseCartQuantity(product.id)}
               >
                 <FontAwesomeIcon icon={faCartShopping} />
                 <span>
-                  {loadingStates[product.id] ? "Adding..." : "ADD TO CART"}
+                  {loadingStates[product.id] ? "ADDING..." : "ADD TO CART"}
                 </span>
               </Button>
             </div>

@@ -17,7 +17,7 @@ export interface Product {
 }
 
 export default function Product(props: Product) {
-  const { increaseCartQuantity } = useCart();
+  const { increaseCartQuantity, loadingStates } = useCart();
   const { id, name, description, quantity, price, image_url } = props;
 
   return (
@@ -40,8 +40,12 @@ export default function Product(props: Product) {
         </div>
 
         <div>
-          <Button onClick={() => increaseCartQuantity(id)} type="secondary">
-            ADD TO CART
+          <Button
+            onClick={() => increaseCartQuantity(id)}
+            type="secondary"
+            disabled={loadingStates[id]}
+          >
+            {loadingStates[id] ? "ADDING..." : "ADD TO CART"}
           </Button>
         </div>
       </div>

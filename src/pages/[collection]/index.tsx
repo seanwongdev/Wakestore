@@ -17,7 +17,7 @@ import React from "react";
 
 export default function Index({ products }: { products: Product[] }) {
   const router = useRouter();
-  const { increaseCartQuantity } = useCart();
+  const { increaseCartQuantity, loadingStates } = useCart();
 
   const { page, collection, per_page } = router.query;
 
@@ -103,11 +103,14 @@ export default function Index({ products }: { products: Product[] }) {
               {formatCurrency(parseFloat(item.price))}
             </span>
             <Button
-              className="space-x-4 bg-gray-800"
+              className="space-x-4 bg-gray-800 "
               onClick={() => increaseCartQuantity(item.id)}
+              disabled={loadingStates[item.id]}
             >
               <FontAwesomeIcon icon={faCartShopping} />
-              <span>ADD TO CART</span>
+              <span>
+                {loadingStates[item.id] ? "ADDING..." : "ADD TO CART"}
+              </span>
             </Button>
           </div>
         ))}

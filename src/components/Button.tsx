@@ -4,9 +4,15 @@ interface ButtonProps {
   children: ReactNode;
   type: "primary" | "secondary" | "checkout" | "submit";
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  type,
+  onClick,
+  disabled,
+}) => {
   const styles = {
     primary: "font-semibold  hover:text-blue-300",
     secondary:
@@ -17,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
   };
 
   return (
-    <button onClick={onClick} className={styles[type]}>
+    <button onClick={onClick} className={styles[type]} disabled={disabled}>
       {children}
     </button>
   );
