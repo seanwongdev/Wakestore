@@ -16,6 +16,7 @@ const ShoppingCart = () => {
     useCart();
 
   const [data, setData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchProductData = async () => {
       try {
@@ -43,6 +44,7 @@ const ShoppingCart = () => {
   }, 0);
 
   const checkout = async () => {
+    setLoading(true);
     try {
       const res = await fetch("/api/checkout_sessions", {
         headers: {
@@ -62,6 +64,8 @@ const ShoppingCart = () => {
     } catch (err: any) {
       console.error("Error in checkout:", err);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,9 +124,9 @@ const ShoppingCart = () => {
                   <span className="font-bold">Grand Total: </span>
                   <span className="font-bold">{formatCurrency(totalCost)}</span>
                 </div>
-                <Button type="checkout" onClick={checkout}>
+                <Button type="checkout" onClick={checkout} disabled={loading}>
                   <FontAwesomeIcon icon={faCreditCard} />
-                  <span>CHECKOUT</span>
+                  <span>{loading ? "CHECKING OUT..." : "CHECKOUT"}</span>
                 </Button>
               </div>
             </>
