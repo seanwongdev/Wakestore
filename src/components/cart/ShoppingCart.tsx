@@ -52,6 +52,7 @@ const ShoppingCart = () => {
 
         body: JSON.stringify({ cartItems }),
       });
+      console.log(res);
       if (!res.ok) throw new Error("Failed to checkout");
       const { url } = await res.json();
       if (url) {

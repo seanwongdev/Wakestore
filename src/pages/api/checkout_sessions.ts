@@ -20,6 +20,7 @@ export default async function handler(
       });
 
       //check if cart is already in active products list
+      let stripeItems: any = [];
       for (const product of data) {
         const existingProd = getActive.data.find(
           (item: any) => item.name.toLowerCase() === product.name.toLowerCase()
@@ -34,6 +35,22 @@ export default async function handler(
               currency: "USD",
             },
           });
+
+          const createdMatchedItemId = createdProd.default_price;
+          console.log(createdProd, createdMatchedItemId);
+          const createdStripeItem = {
+            price: createdMatchedItemId,
+            quantity: product.quantity_ordered,
+          };
+          stripeItems.push(createdStripeItem);
+        } else {
+          const existingMatchedItemId = existingProd.default_price;
+          const existingStripeItem = {
+            price: existingMatchedItemId,
+            quantity: product.quantity_ordered,
+          };
+          console.log(existingProd, existingMatchedItemId);
+          stripeItems.push(existingStripeItem);
         }
       }
 
@@ -81,17 +98,7 @@ export default async function handler(
 
       client.release();
 
-      let stripeItems: any = [];
-      for (const product of data) {
-        const matchedItemId = getActive.data.find(
-          (item: any) => item.name.toLowerCase() === product.name.toLowerCase()
-        )?.default_price;
-        stripeItems.push({
-          price: matchedItemId,
-          quantity: product.quantity_ordered,
-        });
-      }
-
+      console.log(stripeItems);
       const session = await stripe.checkout.sessions.create({
         line_items: stripeItems,
         mode: "payment",
