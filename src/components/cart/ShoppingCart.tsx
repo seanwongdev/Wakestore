@@ -12,7 +12,8 @@ import { formatCurrency } from "@/lib/utils/formatCurrency";
 import { toast } from "react-toastify";
 
 const ShoppingCart = () => {
-  const { isOpen, toggleCart, cartItems, handleOverlayClick } = useCart();
+  const { isOpen, toggleCart, cartItems, handleOverlayClick, loadingStates } =
+    useCart();
 
   const [data, setData] = useState<Product[]>([]);
   useEffect(() => {
@@ -93,14 +94,21 @@ const ShoppingCart = () => {
           {cartItems?.length > 0 ? (
             <>
               <div className="  ">
-                {cartItems.map((item) => (
-                  <CartItems
-                    key={item.product_item_id}
-                    id={item.product_item_id}
-                    quantity={item.quantity_ordered}
-                    productData={data}
-                  />
-                ))}
+                {cartItems.map((item) =>
+                  loadingStates[item.product_item_id] ? (
+                    <div
+                      key={item.product_item_id}
+                      className="loading md:mx-40 my-6 mx-20"
+                    ></div>
+                  ) : (
+                    <CartItems
+                      key={item.product_item_id}
+                      id={item.product_item_id}
+                      quantity={item.quantity_ordered}
+                      productData={data}
+                    />
+                  )
+                )}
               </div>
               <div className="flex flex-col gap-2 mt-8">
                 <div className="flex justify-between">

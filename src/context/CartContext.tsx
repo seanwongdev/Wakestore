@@ -160,6 +160,7 @@ export const CartProvider = ({ children }: LayoutProps) => {
   //   }
   // };
   const removeFromCart = async (id: number) => {
+    setLoadingStates((prev) => ({ ...prev, [id]: true }));
     try {
       const cartItemId = cartItems.find((item) => item.product_item_id === id)
         ?.cartitems_id!;
@@ -168,6 +169,8 @@ export const CartProvider = ({ children }: LayoutProps) => {
     } catch (err: any) {
       console.error("Error removing from cart:", err);
       toast.error(err.message);
+    } finally {
+      setLoadingStates({});
     }
   };
 
