@@ -62,7 +62,7 @@ export default async function handler(
         .toFixed(2);
       const client = await pool.connect();
       const { rows } = await client.query(
-        "INSERT INTO orders(user_id, total, order_created_on,order_modified_at) VALUES($1, $2, $3, $4) RETURNING id",
+        "INSERT INTO orders(user_id, total, order_created_on,order_modified_at) VALUES($1, $2, $3, $4) RETURNING id, guid",
         [userId, total, createdOn, createdOn]
       );
       const order = rows[0];
@@ -108,7 +108,7 @@ export default async function handler(
         phone_number_collection: {
           enabled: true,
         },
-        success_url: `${req.headers.origin}/checkout/success`,
+        success_url: `${req.headers.origin}/checkout/success/${order.guid}`,
         cancel_url: `${req.headers.origin}/checkout/rejected`,
         metadata: {
           orderId: order.id,
