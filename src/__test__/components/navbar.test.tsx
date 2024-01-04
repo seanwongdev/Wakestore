@@ -2,10 +2,24 @@ import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import Navbar from "@/components/Navbar/Navbar";
 import { useSession } from "next-auth/react";
+import NavbarHover from "@/components/Navbar/NavbarHover";
 
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
+}));
+
+jest.mock("../../components/Navbar/NavbarHover.tsx", () => ({
+  __esModule: true,
+  default: jest.fn(({ collection, onMouseEnter, onMouseExit }) => (
+    <div
+      data-testid="mocked-navbar-hover"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseExit}
+    >
+      Mocked NavbarHover for {collection}
+    </div>
+  )),
 }));
 
 jest.mock("next-auth/react");
@@ -103,10 +117,13 @@ describe("Navbar - rendering", () => {
 
     render(<Navbar {...NavbarProps} />);
     const headerElement = screen.getByText("Mock Rider");
-    // await userEvent.hover(headerElement);
+    await userEvent.hover(headerElement);
 
-    // const navbarHoverEl = await screen.findByTestId("mocked-navbar-hover");
-    // expect(navbarHoverEl).toBeInTheDocument();
+    const navbarHoverEl = await screen.findByTestId("mocked-navbar-hover");
+    expect(navbarHoverEl).toBeInTheDocument();
+    expect(navbarHoverEl).toHaveTextContent(
+      "Mocked NavbarHover for Mock Rider"
+    );
   });
 
   it("should render search icon when rendered", () => {

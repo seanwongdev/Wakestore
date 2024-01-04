@@ -1,6 +1,4 @@
-import CollectionLayout from "@/components/layout/CollectionLayout";
 import LandingLayout from "@/components/layout/LandingLayout";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
