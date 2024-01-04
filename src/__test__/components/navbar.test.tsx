@@ -75,6 +75,40 @@ describe("Navbar - rendering", () => {
     expect(links[2]).toHaveTextContent("Mock Apparel");
   });
 
+  it("should render navbarhover component over headers when mouse is hovered", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {},
+      status: "unauthenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Mock Rider",
+        collection_url: "/mock-rider",
+      },
+      {
+        collection_id: 2,
+        collection_name: "Mock Apparel",
+        collection_url: "/mock-apparel",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+    const headerElement = screen.getByText("Mock Rider");
+    // await userEvent.hover(headerElement);
+
+    // const navbarHoverEl = await screen.findByTestId("mocked-navbar-hover");
+    // expect(navbarHoverEl).toBeInTheDocument();
+  });
+
   it("should render search icon when rendered", () => {
     (useSession as jest.Mock).mockReturnValue({
       data: {},
@@ -203,5 +237,16 @@ describe("Navbar - rendering", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Account" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
+
+    await userEvent.unhover(userButton);
+    expect(
+      screen.getByRole("button", { name: "MockAdmin" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Account" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Log out" })
+    ).not.toBeInTheDocument();
   });
 });

@@ -14,6 +14,7 @@ import Button from "../Button";
 import NavbarHover from "./NavbarHover";
 import { useRouter } from "next/router";
 import SideBarDropdown from "./SideBarDropdown";
+import Head from "next/head";
 
 export interface NavbarProps {
   onSignup: () => void;
@@ -66,6 +67,13 @@ const Navbar: React.FC<NavbarProps> = ({ onSignin, onSearch, data }) => {
 
   return (
     <div className="flex  w-full py-11 bg-[#302c2c] md:bg-transparent bg-navbar bg-navbar::before  text-white items-center">
+      <Head>
+        <title>ShredShop</title>
+        <link
+          rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏄‍♀️</text></svg>"
+        />
+      </Head>
       <div className="flex w-[90vw] mx-auto items-center justify-between">
         <div className="md:hidden text-xl relative">
           <FontAwesomeIcon
