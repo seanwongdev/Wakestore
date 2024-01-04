@@ -1,21 +1,16 @@
-import {
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import Navbar from "@/components/Navbar/Navbar";
 import { signOut, useSession } from "next-auth/react";
-
 import { useRouter } from "next/router";
+
+import Navbar from "@/components/Navbar/Navbar";
 
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
 
-jest.mock("../../components/Navbar/NavbarHover.tsx", () => ({
+jest.mock("../../../components/Navbar/NavbarHover.tsx", () => ({
   __esModule: true,
   default: jest.fn(({ collection, onMouseEnter, onMouseExit }) => (
     <div
