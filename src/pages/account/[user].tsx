@@ -77,6 +77,7 @@ export default function EditUser({ user }: { user: User }) {
       if (!res.ok) throw new Error("Failed to update user data");
 
       toast.success("Successfully updated personal info");
+      router.push("/account");
     } catch (err: any) {
       console.error("Error in updating user data:", err);
       setError(err.message);

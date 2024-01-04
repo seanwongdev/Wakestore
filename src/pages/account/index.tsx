@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Account() {
   const [image, setImage] = useState("");
+  const router = useRouter();
 
   const { data: session, status } = useSession();
   useEffect(() => {
@@ -27,9 +28,8 @@ export default function Account() {
       }
     };
     fetchUserData();
-  }, [session?.user?.id, status]);
+  }, [session?.user?.id, status, image]);
 
-  const router = useRouter();
   const handleUpdate = () => {
     router.push(`/account/${session?.user.id}`);
   };
