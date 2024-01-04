@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import Navbar from "@/components/Navbar/Navbar";
 import { useSession } from "next-auth/react";
 
@@ -158,11 +159,49 @@ describe("Navbar - rendering", () => {
     expect(
       screen.getByRole("button", { name: "MockAdmin" })
     ).toBeInTheDocument();
+  });
+
+  it("should render Account and Log out buttons upon mouse hover over user name when signed in", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {
+        user: {
+          username: "mockAdmin",
+        },
+      },
+      status: "authenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Riding Essentials",
+        collection_url: "/riding-essentials",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+
     expect(
       screen.queryByRole("button", { name: "Account" })
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Log out" })
     ).not.toBeInTheDocument();
+
+    const userButton = screen.getByRole("button", { name: "MockAdmin" });
+    await userEvent.hover(userButton);
+
+    expect(
+      screen.getByRole("button", { name: "MockAdmin" })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Account" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
   });
 });
