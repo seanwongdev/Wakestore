@@ -6,7 +6,8 @@ import {
 import { userEvent } from "@testing-library/user-event";
 import Navbar from "@/components/Navbar/Navbar";
 import { useSession } from "next-auth/react";
-import NavbarHover from "@/components/Navbar/NavbarHover";
+
+import { useRouter } from "next/router";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -321,5 +322,49 @@ describe("Navbar - rendering", () => {
     expect(
       screen.queryByRole("button", { name: "Log out" })
     ).not.toBeInTheDocument();
+  });
+
+  it("should navigate to '/account' and hide the account section when Account button is clicked", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {
+        user: {
+          username: "mockAdmin",
+        },
+      },
+      status: "authenticated",
+    });
+
+    const mockRouter = {
+      push: jest.fn(), // the component uses `router.push` only
+    };
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Riding Essentials",
+        collection_url: "/riding-essentials",
+      },
+      {
+        collection_id: 2,
+        collection_name: "Apparel",
+        collection_url: "/apparel",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+
+    const userButton = screen.getByRole("button", { name: "MockAdmin" });
+    await userEvent.hover(userButton);
+
+    await userEvent.click(screen.getByText("Account"));
+    expect(mockRouter.push).toHaveBeenCalledWith("/account");
   });
 });
