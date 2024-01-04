@@ -53,7 +53,7 @@ export default async function handler(
 
     if (userId) {
       const { rows } = await client.query(
-        "SELECT cart_id FROM carts WHERE user_id = $1",
+        "SELECT cart_id FROM carts WHERE user_id = $1 ORDER BY cart_id DESC limit 1",
         [userId]
       );
       const { cart_id } = rows[0];
