@@ -40,35 +40,89 @@ describe("Navbar - rendering", () => {
     expect(screen.getByRole("button", { name: "Log in" })).toBeInTheDocument();
   });
 
-  // it("should render headers properly regardless of session status", async () => {
-  //   (useSession as jest.Mock).mockReturnValueOnce({
-  //     data: {},
-  //     status: "unauthenticated",
-  //   });
+  it("should render headers properly regardless of session status", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {},
+      status: "unauthenticated",
+    });
 
-  //   const mockCollectionArr = [
-  //     {
-  //       collection_id: 1,
-  //       collection_name: "Riding Essentials",
-  //       collection_url: "/riding-essentials",
-  //     },
-  //     {
-  //       collection_id: 1,
-  //       collection_name: "Apparel",
-  //       collection_url: "/apparel",
-  //     },
-  //   ];
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Mock Rider",
+        collection_url: "/mock-rider",
+      },
+      {
+        collection_id: 2,
+        collection_name: "Mock Apparel",
+        collection_url: "/mock-apparel",
+      },
+    ];
 
-  //   const NavbarProps = {
-  //     onSignup: jest.fn(),
-  //     onSignin: jest.fn(),
-  //     onSearch: jest.fn(),
-  //     data: mockCollectionArr,
-  //   };
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
 
-  //   render(<Navbar {...NavbarProps} />);
-  //   expect(screen.getAllByRole("link").length).toBe(3);
-  // });
+    render(<Navbar {...NavbarProps} />);
+    const links = screen.getAllByRole("link");
+    expect(links.length).toBe(3);
+    expect(links[0]).toHaveTextContent("ShredShop");
+    expect(links[1]).toHaveTextContent("Mock Rider");
+    expect(links[2]).toHaveTextContent("Mock Apparel");
+  });
+
+  it("should render search icon when rendered", () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {},
+      status: "unauthenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Mock Rider",
+        collection_url: "/mock-rider",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+    expect(screen.getByTestId("button-search-icon")).toBeInTheDocument();
+  });
+
+  it("should render cart icon button when rendered", () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {},
+      status: "unauthenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Mock Rider",
+        collection_url: "/mock-rider",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+    expect(screen.getByTestId("button-cart-icon")).toBeInTheDocument();
+  });
 
   it("should render name of user button when signed in", async () => {
     (useSession as jest.Mock).mockReturnValue({
@@ -104,5 +158,11 @@ describe("Navbar - rendering", () => {
     expect(
       screen.getByRole("button", { name: "MockAdmin" })
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Account" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Log out" })
+    ).not.toBeInTheDocument();
   });
 });

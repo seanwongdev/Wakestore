@@ -104,6 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSignin, onSearch, data }) => {
         <div className="flex items-center gap-5 lg:gap-10 relative">
           <div>
             <FontAwesomeIcon
+              data-testid="button-search-icon"
               className="text-white hover:cursor-pointer"
               icon={faMagnifyingGlass}
               onClick={onSearch}
@@ -148,6 +149,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSignin, onSearch, data }) => {
           )}
 
           <FontAwesomeIcon
+            data-testid="button-cart-icon"
             icon={faCartShopping}
             onClick={toggleCart}
             className="cursor-pointer text-2xl"
