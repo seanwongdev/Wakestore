@@ -1,4 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import Navbar from "@/components/Navbar/Navbar";
 import { useSession } from "next-auth/react";
@@ -124,6 +128,58 @@ describe("Navbar - rendering", () => {
     expect(navbarHoverEl).toHaveTextContent(
       "Mocked NavbarHover for Mock Rider"
     );
+
+    await userEvent.unhover(headerElement);
+
+    expect(screen.queryByTestId("mocked-navbar-hover")).not.toBeInTheDocument();
+  });
+
+  it("should continue rendering navbarhover component when mouse is hovered over said component", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {},
+      status: "unauthenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Mock Rider",
+        collection_url: "/mock-rider",
+      },
+      {
+        collection_id: 2,
+        collection_name: "Mock Apparel",
+        collection_url: "/mock-apparel",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+    const headerElement = screen.getByText("Mock Rider");
+    await userEvent.hover(headerElement);
+
+    const navbarHoverEl = await screen.findByTestId("mocked-navbar-hover");
+    expect(navbarHoverEl).toBeInTheDocument();
+    expect(navbarHoverEl).toHaveTextContent(
+      "Mocked NavbarHover for Mock Rider"
+    );
+
+    await userEvent.hover(headerElement);
+
+    await userEvent.hover(navbarHoverEl);
+    expect(navbarHoverEl).toBeInTheDocument();
+    expect(navbarHoverEl).toHaveTextContent(
+      "Mocked NavbarHover for Mock Rider"
+    );
+
+    await userEvent.unhover(navbarHoverEl);
+    expect(screen.queryByTestId("mocked-navbar-hover")).not.toBeInTheDocument();
   });
 
   it("should render search icon when rendered", () => {
