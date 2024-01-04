@@ -1,7 +1,26 @@
 import { render, screen } from "@testing-library/react";
 import Navbar from "@/components/Navbar/Navbar";
-import { useSession } from "next-auth/react";
-jest.mock("next-auth/react");
+
+jest.mock("next/router", () => ({
+  __esModule: true,
+  useRouter: jest.fn(),
+}));
+
+jest.mock("next-auth/react", () => {
+  const originalModule = jest.requireActual("next-auth/react");
+  const mockSession = {
+    expires: new Date(Date.now() + 2 * 86400).toISOString(),
+    user: { username: "admin" },
+  };
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    useSession: jest.fn(() => {
+      return { data: mockSession, status: "authenticated" }; // return type is [] in v3 but changed to {} in v4
+    }),
+  };
+});
 
 describe("Navbar - rendering", () => {
   // it("should render a log in button when signed out", async () => {
@@ -64,16 +83,7 @@ describe("Navbar - rendering", () => {
   //   expect(screen.getAllByRole("link").length).toBe(3);
   // });
 
-  it("should render a log out button when signed in", async () => {
-    (useSession as jest.Mock).mockReturnValueOnce({
-      data: {
-        user: {
-          username: "admin",
-        },
-      },
-      status: "authenticated",
-    });
-
+  it("should render name of user button when signed in", async () => {
     const mockCollectionArr = [
       {
         collection_id: 1,
@@ -81,7 +91,7 @@ describe("Navbar - rendering", () => {
         collection_url: "/riding-essentials",
       },
       {
-        collection_id: 1,
+        collection_id: 2,
         collection_name: "Apparel",
         collection_url: "/apparel",
       },
@@ -95,6 +105,6 @@ describe("Navbar - rendering", () => {
     };
 
     render(<Navbar {...NavbarProps} />);
-    expect(screen.getByRole("button", { name: "admin" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Admin" })).toBeInTheDocument();
   });
 });
