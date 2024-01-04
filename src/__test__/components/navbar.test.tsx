@@ -1,11 +1,12 @@
 import {
   render,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import Navbar from "@/components/Navbar/Navbar";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
 
@@ -366,5 +367,50 @@ describe("Navbar - rendering", () => {
 
     await userEvent.click(screen.getByText("Account"));
     expect(mockRouter.push).toHaveBeenCalledWith("/account");
+  });
+
+  it("should call signOut when Log out button is clicked", async () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: {
+        user: {
+          username: "mockAdmin",
+        },
+      },
+      status: "authenticated",
+    });
+
+    const mockCollectionArr = [
+      {
+        collection_id: 1,
+        collection_name: "Riding Essentials",
+        collection_url: "/riding-essentials",
+      },
+      {
+        collection_id: 2,
+        collection_name: "Apparel",
+        collection_url: "/apparel",
+      },
+    ];
+
+    const NavbarProps = {
+      onSignup: jest.fn(),
+      onSignin: jest.fn(),
+      onSearch: jest.fn(),
+      data: mockCollectionArr,
+    };
+
+    render(<Navbar {...NavbarProps} />);
+
+    const userButton = screen.getByRole("button", { name: "MockAdmin" });
+    await userEvent.hover(userButton);
+
+    const logOutButton = screen.getByText("Log out");
+    await userEvent.click(logOutButton);
+
+    // Wait for any asynchronous tasks to complete
+    await waitFor(() => {});
+
+    // Expect that the signOut function is called with the correct parameters
+    expect(signOut).toHaveBeenCalledWith({ callbackUrl: "/" });
   });
 });
