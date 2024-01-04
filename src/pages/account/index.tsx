@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function Account() {
   const [image, setImage] = useState("");
@@ -29,6 +30,10 @@ export default function Account() {
     };
     fetchUserData();
   }, [session?.user?.id, status, image]);
+
+  const handleSignout = () => {
+    signOut({ callbackUrl: "/" });
+  };
 
   const handleUpdate = () => {
     router.push(`/account/${session?.user.id}`);
@@ -72,9 +77,12 @@ export default function Account() {
           </div>
         </div>
       </div>
-      <div className="w-[400px] flex justify-center">
-        <Button onClick={handleUpdate} className="w-[130px]">
+      <div className="w-[400px] flex justify-center gap-5">
+        <Button onClick={handleUpdate} className="bg-gray-600 w-[130px]">
           Update Profile
+        </Button>
+        <Button onClick={handleSignout} className="w-[130px]">
+          Log Out
         </Button>
       </div>
     </div>
